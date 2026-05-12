@@ -3,1110 +3,651 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LOCKDOWN — Student Hustle Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<title>LOCKDOWN // SMC Workstation v2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a0a;
-    --bg2: #111111;
-    --bg3: #181818;
-    --border: rgba(255,255,255,0.07);
-    --border2: rgba(255,255,255,0.13);
-    --green: #00ff88;
-    --green-dim: rgba(0,255,136,0.12);
-    --green-mid: rgba(0,255,136,0.25);
-    --amber: #ffb800;
-    --amber-dim: rgba(255,184,0,0.12);
-    --blue: #4da6ff;
-    --blue-dim: rgba(77,166,255,0.12);
-    --red: #ff4d6d;
-    --red-dim: rgba(255,77,109,0.12);
-    --text: #f0f0f0;
-    --muted: #666;
-    --muted2: #444;
+    --bg-base: #050506;
+    --bg-glass: rgba(16, 16, 20, 0.65);
+    --bg-glass-hover: rgba(26, 26, 32, 0.85);
+    --border-glass: rgba(255, 255, 255, 0.08);
+    --border-glow: rgba(0, 255, 136, 0.25);
+    
+    --accent-cyan: #00f0ff;
+    --accent-green: #00ff88;
+    --accent-electric: #2563eb;
+    --accent-amber: #f59e0b;
+    --accent-rose: #f43f5e;
+    
+    --text-main: #f3f4f6;
+    --text-muted: #9ca3af;
+    --text-dim: #4b5563;
   }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  
   body {
-    background: var(--bg);
-    color: var(--text);
+    background-color: var(--bg-base);
+    background-image: 
+      radial-gradient(at 10% 10%, rgba(37, 99, 235, 0.07) 0px, transparent 50%),
+      radial-gradient(at 90% 90%, rgba(0, 255, 136, 0.05) 0px, transparent 50%);
+    background-attachment: fixed;
+    color: var(--text-main);
     font-family: 'JetBrains Mono', monospace;
     min-height: 100vh;
     overflow-x: hidden;
   }
 
-  /* NOISE TEXTURE OVERLAY */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.5;
-  }
-
-  /* SCANLINES */
+  /* Scanlines Overlay */
   body::after {
     content: '';
     position: fixed;
     inset: 0;
-    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.05) 2px, rgba(0, 0, 0, 0.05) 4px);
     pointer-events: none;
-    z-index: 0;
+    z-index: 9999;
   }
 
-  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; position: relative; z-index: 1; }
+  /* Custom Scrollbars */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-base); }
+  ::-webkit-scrollbar-thumb { background: var(--text-dim); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent-cyan); }
 
-  /* HEADER */
-  header {
-    padding: 48px 0 32px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 40px;
+  .layout-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+    position: relative;
+    z-index: 1;
   }
-  .header-top {
+
+  /* =========================================
+     WELCOME BOOT SCREEN
+  ========================================= */
+  #boot-screen {
+    position: fixed;
+    inset: 0;
+    background: #030304;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s;
+    padding: 24px;
+  }
+  .terminal-box {
+    width: 100%;
+    max-width: 650px;
+    background: rgba(10, 10, 12, 0.9);
+    border: 1px solid var(--border-glass);
+    border-radius: 8px;
+    box-shadow: 0 0 40px rgba(0, 240, 255, 0.1);
+    padding: 24px;
+  }
+  .terminal-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    gap: 16px;
-    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border-glass);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+    font-size: 11px;
+    color: var(--accent-cyan);
   }
-  .header-label {
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    color: var(--green);
+  .terminal-lines {
+    min-height: 140px;
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--text-muted);
+  }
+  .line-active { color: var(--accent-green); font-weight: 500; }
+  .boot-btn {
+    margin-top: 24px;
+    background: transparent;
+    border: 1px solid var(--accent-cyan);
+    color: var(--accent-cyan);
+    padding: 10px 24px;
+    font-family: inherit;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+    display: none;
+  }
+  .boot-btn:hover {
+    background: var(--accent-cyan);
+    color: #000;
+    box-shadow: 0 0 15px var(--accent-cyan);
+  }
+
+  /* =========================================
+     HEADER & BRANDING
+  ========================================= */
+  header {
+    padding: 40px 0 24px;
+    border-bottom: 1px solid var(--border-glass);
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .brand-tag {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--accent-cyan);
     margin-bottom: 8px;
-    font-weight: 500;
+    display: inline-block;
+    background: rgba(0, 240, 255, 0.05);
+    padding: 2px 8px;
+    border-left: 2px solid var(--accent-cyan);
   }
   h1 {
     font-family: 'Syne', sans-serif;
-    font-size: clamp(36px, 6vw, 64px);
+    font-size: clamp(32px, 5vw, 56px);
     font-weight: 800;
     line-height: 1;
-    letter-spacing: -0.02em;
-    color: #fff;
+    letter-spacing: -0.03em;
+    background: linear-gradient(90deg, #fff, var(--text-muted));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
-  h1 span { color: var(--green); }
-  .header-sub {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 10px;
-    line-height: 1.6;
-    max-width: 420px;
+  h1 span {
+    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
-  .header-right { text-align: right; }
-  .date-display {
-    font-size: 11px;
-    color: var(--muted);
-    margin-bottom: 8px;
-  }
-  #clock {
-    font-size: 28px;
-    font-weight: 300;
-    color: var(--green);
-    letter-spacing: 0.05em;
-  }
-
-  /* PROGRESS BAR */
-  .master-progress {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 20px 24px;
-    margin-bottom: 32px;
+  
+  /* =========================================
+     FLIPPING CALENDAR & CLOCK
+  ========================================= */
+  .header-controls {
     display: flex;
-    align-items: center;
-    gap: 24px;
-    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 16px;
   }
-  .progress-label { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; min-width: 120px; }
-  .progress-bar-wrap { flex: 1; min-width: 200px; }
-  .progress-bar-bg {
-    background: var(--bg2);
-    border-radius: 2px;
-    height: 6px;
-    overflow: hidden;
-    border: 1px solid var(--border);
+  .flip-calendar {
+    perspective: 1000px;
+    width: 75px;
+    height: 80px;
+    flex-shrink: 0;
   }
-  .progress-bar-fill {
+  .flip-card {
+    width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, var(--green), #00ccff);
-    border-radius: 2px;
-    transition: width 0.4s ease;
-    box-shadow: 0 0 12px rgba(0,255,136,0.4);
-  }
-  .progress-pct {
-    font-size: 24px;
-    font-weight: 300;
-    color: var(--green);
-    min-width: 60px;
-    text-align: right;
-  }
-
-  /* TABS */
-  .tabs {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 28px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 0;
-    overflow-x: auto;
-  }
-  .tab-btn {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    padding: 10px 18px;
-    background: transparent;
-    border: none;
-    color: var(--muted);
-    cursor: pointer;
-    transition: color 0.2s;
-    white-space: nowrap;
     position: relative;
-    bottom: -1px;
-    border-bottom: 2px solid transparent;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-radius: 6px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
   }
-  .tab-btn:hover { color: var(--text); }
-  .tab-btn.active { color: var(--green); border-bottom-color: var(--green); }
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; }
-
-  /* SECTION HEADERS */
-  .section-head {
+  .flip-card.do-flip {
+    transform: rotateX(-180deg);
+  }
+  .flip-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-glass);
+    overflow: hidden;
+  }
+  .flip-front {
+    background: linear-gradient(135deg, rgba(25,25,30,0.9), rgba(10,10,15,0.9));
+  }
+  .flip-back {
+    background: linear-gradient(135deg, rgba(10,10,15,0.9), rgba(25,25,30,0.9));
+    transform: rotateX(180deg);
+  }
+  .cal-month {
+    background: rgba(0, 240, 255, 0.1);
+    color: var(--accent-cyan);
+    width: 100%;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 0;
+    letter-spacing: 0.1em;
+    border-bottom: 1px solid var(--border-glass);
+    text-transform: uppercase;
+  }
+  .cal-date {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+    flex-grow: 1;
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-    margin-top: 32px;
   }
-  .section-head:first-child { margin-top: 0; }
-  .section-tag {
-    font-size: 9px;
-    letter-spacing: 0.15em;
-    padding: 4px 10px;
-    border-radius: 2px;
-    font-weight: 500;
+  .time-wrapper {
+    background: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glass);
+    border-radius: 6px;
+    padding: 12px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
   }
-  .tag-green { background: var(--green-dim); color: var(--green); border: 1px solid rgba(0,255,136,0.2); }
-  .tag-amber { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(255,184,0,0.2); }
-  .tag-blue { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(77,166,255,0.2); }
-  .tag-red { background: var(--red-dim); color: var(--red); border: 1px solid rgba(255,77,109,0.2); }
-  .section-head h2 {
-    font-family: 'Syne', sans-serif;
-    font-size: 16px;
+  #digital-clock {
+    font-size: 24px;
     font-weight: 700;
-    color: #fff;
-    letter-spacing: -0.01em;
+    color: var(--accent-green);
+    letter-spacing: 0.05em;
+    line-height: 1.1;
   }
-  .section-divider {
-    flex: 1;
-    height: 1px;
-    background: var(--border);
+  .time-zone {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
   }
 
-  /* CHECKLIST CARDS */
-  .checklist { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
-  .check-item {
+  /* =========================================
+     GLASS STATS ROW
+  ========================================= */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .glass-card {
+    background: var(--bg-glass);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border-glass);
+    border-radius: 8px;
+    padding: 20px;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .glass-card:hover {
+    border-color: var(--border-glow);
+    transform: translateY(-2px);
+  }
+  .stat-title {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+  }
+  .txt-cyan { color: var(--accent-cyan); }
+  .txt-green { color: var(--accent-green); }
+  .txt-amber { color: var(--accent-amber); }
+  .txt-rose { color: var(--accent-rose); }
+  .stat-footer { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+
+  /* =========================================
+     NAVIGATION TABS
+  ========================================= */
+  .nav-tabs {
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid var(--border-glass);
+    margin-bottom: 32px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .tab-button {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-muted);
+    padding: 12px 20px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-radius: 6px 6px 0 0;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab-button:hover {
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .tab-button.active {
+    color: var(--accent-cyan);
+    background: var(--bg-glass);
+    border-color: var(--border-glass);
+    border-bottom-color: transparent;
+    box-shadow: 0 -4px 15px rgba(0, 240, 255, 0.05);
+  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; animation: fadeIn 0.3s ease-out; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* =========================================
+     DYNAMIC LINK PREVIEWER & EMBEDS
+  ========================================= */
+  .input-workspace {
+    background: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glass);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 32px;
+  }
+  .workspace-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: 16px; color: #fff; }
+  .embed-form { display: flex; gap: 12px; flex-wrap: wrap; }
+  .link-input {
+    flex: 1;
+    min-width: 250px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--border-glass);
+    border-radius: 6px;
+    padding: 12px 16px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .link-input:focus { border-color: var(--accent-cyan); }
+  .action-btn {
+    background: var(--accent-cyan);
+    color: #000;
+    border: none;
+    padding: 12px 24px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: opacity 0.2s, box-shadow 0.2s;
+  }
+  .action-btn:hover { opacity: 0.9; box-shadow: 0 0 15px var(--accent-cyan); }
+  
+  .preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+    margin-top: 24px;
+  }
+  .preview-card {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border-glass);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .preview-card iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: none;
+  }
+  .preview-meta { padding: 12px; font-size: 12px; }
+  .preview-meta a { color: var(--accent-cyan); text-decoration: none; word-break: break-all; font-size: 11px; }
+  .preview-meta a:hover { text-decoration: underline; }
+  .remove-embed {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    color: var(--accent-rose);
+    border: 1px solid var(--border-glass);
+    border-radius: 4px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 10px;
+    z-index: 10;
+  }
+
+  /* =========================================
+     SMC TRADING SUITE
+  ========================================= */
+  .chart-layout {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 24px;
+    align-items: stretch;
+  }
+  @media (max-width: 1024px) {
+    .chart-layout { grid-template-columns: 1fr; }
+  }
+  .tradingview-widget-container {
+    height: 600px;
+    border: 1px solid var(--border-glass);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .smc-execution-log {
+    background: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glass);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 600px;
+    overflow-y: auto;
+  }
+  .smc-item {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-glass);
+    padding: 12px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .smc-item:hover { border-color: var(--border-glow); }
+  .smc-item.active { border-left: 3px solid var(--accent-green); background: rgba(0, 255, 136, 0.05); }
+  .smc-header { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .smc-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+  /* =========================================
+     CHECKLISTS & GENERAL CONTENT
+  ========================================= */
+  .section-banner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 32px 0 16px;
+  }
+  .section-banner:first-child { margin-top: 0; }
+  .tag { font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 4px; letter-spacing: 0.1em; }
+  .tag-cyan { background: rgba(0, 240, 255, 0.1); color: var(--accent-cyan); border: 1px solid rgba(0, 240, 255, 0.2); }
+  .tag-green { background: rgba(0, 255, 136, 0.1); color: var(--accent-green); border: 1px solid rgba(0, 255, 136, 0.2); }
+  .section-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: #fff; }
+  .divider { flex: 1; height: 1px; background: var(--border-glass); }
+
+  .task-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+  .task-card {
+    background: var(--bg-glass);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border-glass);
+    border-radius: 6px;
+    padding: 14px 20px;
     display: flex;
     align-items: flex-start;
-    gap: 14px;
-    padding: 12px 16px;
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 4px;
+    gap: 16px;
     cursor: pointer;
-    transition: border-color 0.2s, background 0.2s;
-    user-select: none;
+    transition: all 0.2s;
   }
-  .check-item:hover { border-color: var(--border2); background: var(--bg3); }
-  .check-item.done { opacity: 0.45; }
-  .check-item.done .check-text { text-decoration: line-through; color: var(--muted); }
-  .checkbox {
-    width: 16px;
-    height: 16px;
-    border: 1.5px solid var(--muted2);
-    border-radius: 2px;
-    flex-shrink: 0;
+  .task-card:hover { border-color: rgba(255, 255, 255, 0.2); background: var(--bg-glass-hover); }
+  .task-card.completed { opacity: 0.5; border-color: transparent; }
+  .task-card.completed .task-text { text-decoration: line-through; color: var(--text-muted); }
+  .checkbox-custom {
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--text-dim);
+    border-radius: 4px;
     margin-top: 2px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: border-color 0.2s, background 0.2s;
-  }
-  .check-item.done .checkbox {
-    border-color: var(--green);
-    background: var(--green-dim);
-  }
-  .checkmark { display: none; color: var(--green); font-size: 11px; line-height: 1; }
-  .check-item.done .checkmark { display: block; }
-  .check-content { flex: 1; }
-  .check-text { font-size: 13px; line-height: 1.5; color: var(--text); }
-  .check-meta { font-size: 10px; color: var(--muted); margin-top: 3px; letter-spacing: 0.04em; }
-  .check-badge {
-    font-size: 9px;
-    padding: 2px 7px;
-    border-radius: 2px;
     flex-shrink: 0;
-    margin-top: 3px;
-    letter-spacing: 0.08em;
   }
+  .task-card.completed .checkbox-custom { background: var(--accent-green); border-color: var(--accent-green); }
+  .checkbox-custom::after { content: '✓'; color: #000; font-size: 12px; font-weight: 800; display: none; }
+  .task-card.completed .checkbox-custom::after { display: block; }
+  .task-details { flex: 1; }
+  .task-text { font-size: 13px; color: var(--text-main); line-height: 1.5; margin-bottom: 4px; }
+  .task-meta { font-size: 11px; color: var(--text-muted); }
 
-  /* WEEK GRID */
-  .week-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 6px;
-    margin-bottom: 8px;
-  }
-  .day-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 10px 8px;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color 0.2s;
-  }
-  .day-card:hover { border-color: var(--border2); }
-  .day-card.active-day { border-color: var(--green); background: var(--green-dim); }
-  .day-card .day-name { font-size: 9px; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 6px; }
-  .day-card .day-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted2); margin: 0 auto; }
-  .day-card.active-day .day-dot { background: var(--green); box-shadow: 0 0 8px var(--green); }
-
-  /* STAT CARDS */
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 10px;
-    margin-bottom: 28px;
-  }
-  .stat-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 16px;
-  }
-  .stat-label { font-size: 9px; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 8px; }
-  .stat-val { font-size: 26px; font-weight: 300; }
-  .stat-val.green { color: var(--green); }
-  .stat-val.amber { color: var(--amber); }
-  .stat-val.blue { color: var(--blue); }
-  .stat-sub { font-size: 10px; color: var(--muted); margin-top: 4px; }
-
-  /* REMINDER SECTION */
-  .reminder-box {
-    background: var(--bg2);
-    border: 1px solid var(--border2);
-    border-radius: 4px;
-    padding: 24px;
-    margin-bottom: 16px;
-  }
-  .reminder-box h3 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; margin-bottom: 8px; }
-  .reminder-box p { font-size: 12px; color: var(--muted); line-height: 1.7; margin-bottom: 16px; }
-  .input-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
-  .input-field {
-    background: var(--bg3);
-    border: 1px solid var(--border2);
-    border-radius: 4px;
-    color: var(--text);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    padding: 10px 14px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .input-field:focus { border-color: var(--green); }
-  .input-field.email-input { flex: 1; min-width: 200px; }
-  .btn {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    border: none;
-    transition: opacity 0.2s, transform 0.1s;
-  }
-  .btn:active { transform: scale(0.98); }
-  .btn-green { background: var(--green); color: #000; font-weight: 500; }
-  .btn-outline { background: transparent; border: 1px solid var(--border2); color: var(--muted); }
-  .btn-outline:hover { border-color: var(--green); color: var(--green); }
-
-  /* RESOURCE CARDS */
-  .resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin-bottom: 8px; }
-  .resource-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 16px;
-    transition: border-color 0.2s;
-  }
-  .resource-card:hover { border-color: var(--border2); }
-  .resource-name { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 4px; }
-  .resource-desc { font-size: 11px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
-  .resource-link {
-    font-size: 10px;
-    color: var(--green);
-    text-decoration: none;
-    letter-spacing: 0.05em;
-    border-bottom: 1px solid rgba(0,255,136,0.3);
-    padding-bottom: 1px;
-  }
-  .resource-link:hover { border-bottom-color: var(--green); }
-
-  /* NOTES */
-  .notes-area {
+  /* Persistent Note Pad */
+  .notepad {
     width: 100%;
-    min-height: 140px;
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    color: var(--text);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    padding: 16px;
-    resize: vertical;
+    height: 250px;
+    background: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glass);
+    border-radius: 8px;
+    padding: 20px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.6;
     outline: none;
-    line-height: 1.7;
+    resize: vertical;
   }
-  .notes-area:focus { border-color: var(--green); }
-  .notes-area::placeholder { color: var(--muted2); }
+  .notepad:focus { border-color: var(--accent-cyan); }
 
-  /* MOTIVATIONAL TICKER */
-  .ticker {
-    overflow: hidden;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: 10px 0;
-    margin-bottom: 32px;
-  }
-  .ticker-inner {
-    display: flex;
-    gap: 64px;
-    animation: ticker 30s linear infinite;
-    white-space: nowrap;
-  }
-  .ticker-item { font-size: 11px; color: var(--muted); letter-spacing: 0.12em; }
-  .ticker-item span { color: var(--green); }
-  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-  /* GMAIL REMINDER LINKS */
-  .reminder-links { display: flex; flex-direction: column; gap: 8px; }
-  .reminder-link-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 14px;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  .reminder-link-label { font-size: 12px; color: var(--text); }
-  .reminder-link-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
-  .reminder-link-item a { text-decoration: none; }
-
-  /* PHASE TIMELINE */
-  .phase-row { display: flex; gap: 0; margin-bottom: 28px; }
-  .phase-block {
-    flex: 1;
-    padding: 14px 16px;
-    border: 1px solid var(--border);
-    border-right: none;
-    position: relative;
-  }
-  .phase-block:last-child { border-right: 1px solid var(--border); }
-  .phase-block.current { border-color: var(--green); background: var(--green-dim); }
-  .phase-num { font-size: 9px; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 4px; }
-  .phase-title { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 4px; }
-  .phase-dates { font-size: 9px; color: var(--muted); }
-  .phase-block.current .phase-dates { color: var(--green); }
-
-  /* TOAST */
-  .toast {
+  /* Toast Notification */
+  #toast-msg {
     position: fixed;
-    bottom: 24px;
-    right: 24px;
-    background: var(--bg3);
-    border: 1px solid var(--green);
-    border-radius: 4px;
-    padding: 12px 20px;
+    bottom: 32px;
+    right: 32px;
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--accent-cyan);
+    color: var(--accent-cyan);
+    padding: 14px 24px;
+    border-radius: 6px;
     font-size: 12px;
-    color: var(--green);
-    z-index: 1000;
-    transform: translateY(80px);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transform: translateY(100px);
     opacity: 0;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    pointer-events: none;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s;
+    z-index: 10000;
   }
-  .toast.show { transform: translateY(0); opacity: 1; }
-
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 4px; height: 4px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--muted2); border-radius: 2px; }
-
-  @media (max-width: 600px) {
-    .phase-row { flex-direction: column; }
-    .phase-block { border-right: 1px solid var(--border); border-bottom: none; }
-    .phase-block:last-child { border-bottom: 1px solid var(--border); }
-    .week-grid { grid-template-columns: repeat(7, 1fr); }
-    .day-card .day-name { font-size: 7px; }
-  }
+  #toast-msg.visible { transform: translateY(0); opacity: 1; }
 </style>
 </head>
 <body>
 
-<div class="container">
+<div id="boot-screen">
+  <div class="terminal-box">
+    <div class="terminal-header">
+      <span>SYSTEM BOOT INITIALIZER</span>
+      <span>SECURE PORT: 443</span>
+    </div>
+    <div class="terminal-lines" id="terminal-lines"></div>
+    <button class="boot-btn" id="bypass-btn" onclick="terminateBootSequence()">INITIALIZE WORKSPACE</button>
+  </div>
+</div>
 
-  <!-- HEADER -->
+<div class="layout-wrapper">
   <header>
-    <div class="header-top">
-      <div>
-        <div class="header-label">// STUDENT HUSTLE SYSTEM v1.0 — NAIROBI, KE</div>
-        <h1>LOCK<span>DOWN</span></h1>
-        <div class="header-sub">Your May–September 2025 blueprint. Trading + Ethical Hacking + Income. No excuses. Track everything, ship every day.</div>
+    <div>
+      <div class="brand-tag">// LOCKDOWN SYSTEM v2.0</div>
+      <h1>SMC<span>WORKSPACE</span></h1>
+    </div>
+    
+    <div class="header-controls">
+      <div class="flip-calendar" onclick="triggerCalendarFlip()">
+        <div class="flip-card" id="cal-flip-card">
+          <div class="flip-face flip-front">
+            <div class="cal-month" id="cal-month-front">MAY</div>
+            <div class="cal-date" id="cal-date-front">12</div>
+          </div>
+          <div class="flip-face flip-back">
+            <div class="cal-month" id="cal-month-back">MAY</div>
+            <div class="cal-date" id="cal-date-back">13</div>
+          </div>
+        </div>
       </div>
-      <div class="header-right">
-        <div class="date-display" id="date-display">Loading...</div>
-        <div id="clock">00:00:00</div>
-        <div style="font-size:10px; color:var(--muted); margin-top:6px;">EAT (UTC+3)</div>
+      
+      <div class="time-wrapper">
+        <div id="digital-clock">00:00:00</div>
+        <div class="time-zone">EAT (UTC+3)</div>
       </div>
     </div>
   </header>
 
-  <!-- TICKER -->
-  <div class="ticker">
-    <div class="ticker-inner">
-      <span class="ticker-item">FOCUS ON THE PROCESS <span>—</span></span>
-      <span class="ticker-item">SKILLS COMPOUND LIKE INTEREST <span>—</span></span>
-      <span class="ticker-item">PAPER TRADE BEFORE REAL MONEY <span>—</span></span>
-      <span class="ticker-item">TRYHACKME DAILY <span>—</span></span>
-      <span class="ticker-item">FIVERR PROFILE = PASSIVE INCOME FUNNEL <span>—</span></span>
-      <span class="ticker-item">NAIROBI TECH SCENE IS GROWING <span>—</span></span>
-      <span class="ticker-item">YOUR FUTURE SELF WILL THANK YOU <span>—</span></span>
-      <span class="ticker-item">FOCUS ON THE PROCESS <span>—</span></span>
-      <span class="ticker-item">SKILLS COMPOUND LIKE INTEREST <span>—</span></span>
-      <span class="ticker-item">PAPER TRADE BEFORE REAL MONEY <span>—</span></span>
-      <span class="ticker-item">TRYHACKME DAILY <span>—</span></span>
-      <span class="ticker-item">FIVERR PROFILE = PASSIVE INCOME FUNNEL <span>—</span></span>
-      <span class="ticker-item">NAIROBI TECH SCENE IS GROWING <span>—</span></span>
-      <span class="ticker-item">YOUR FUTURE SELF WILL THANK YOU <span>—</span></span>
+  <div class="stats-grid">
+    <div class="glass-card">
+      <div class="stat-title">DAILY STREAK <span style="color:var(--accent-cyan)">🔥</span></div>
+      <div class="stat-value txt-cyan" id="ui-streak">0</div>
+      <div class="stat-footer" id="streak-status">Checking synchronization...</div>
+    </div>
+    <div class="glass-card">
+      <div class="stat-title">COMPLETION RATIO</div>
+      <div class="stat-value txt-green" id="ui-ratio">0%</div>
+      <div class="stat-footer"><span id="ui-done">0</span> / <span id="ui-total">0</span> Tasks Verified</div>
+    </div>
+    <div class="glass-card">
+      <div class="stat-title">SMC PROTOCOL</div>
+      <div class="stat-value txt-amber">ACTIVE</div>
+      <div class="stat-footer">Institutional Focus</div>
+    </div>
+    <div class="glass-card">
+      <div class="stat-title">MARKET SENTIMENT</div>
+      <div class="stat-value txt-rose" id="mkt-sentiment">PARSING</div>
+      <div class="stat-footer">Live RSS Monitor</div>
     </div>
   </div>
 
-  <!-- MASTER PROGRESS -->
-  <div class="master-progress">
-    <div class="progress-label">OVERALL PROGRESS</div>
-    <div class="progress-bar-wrap">
-      <div class="progress-bar-bg">
-        <div class="progress-bar-fill" id="master-fill" style="width: 0%"></div>
-      </div>
+  <div class="input-workspace">
+    <div class="workspace-title">INTEGRATED RESOURCE INGESTION MODULE</div>
+    <div class="embed-form">
+      <input type="text" id="url-ingest" class="link-input" placeholder="Paste YouTube link, Bloomberg article, or external resource URL...">
+      <button class="action-btn" onclick="processIngestedURL()">RENDER EMBED</button>
     </div>
-    <div class="progress-pct" id="master-pct">0%</div>
-  </div>
-
-  <!-- STATS -->
-  <div class="stats-row">
-    <div class="stat-card">
-      <div class="stat-label">TASKS DONE</div>
-      <div class="stat-val green" id="stat-done">0</div>
-      <div class="stat-sub">of <span id="stat-total">0</span> total</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">DAYS LEFT</div>
-      <div class="stat-val amber" id="stat-days">—</div>
-      <div class="stat-sub">until Sep 1, 2025</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">STREAK</div>
-      <div class="stat-val blue" id="stat-streak">0</div>
-      <div class="stat-sub">days checked in</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">TODAY</div>
-      <div class="stat-val green" id="stat-today">—</div>
-      <div class="stat-sub" id="stat-today-sub">—</div>
-    </div>
-  </div>
-
-  <!-- PHASE TIMELINE -->
-  <div class="phase-row">
-    <div class="phase-block current" id="phase1">
-      <div class="phase-num">PHASE 01</div>
-      <div class="phase-title">FOUNDATION</div>
-      <div class="phase-dates">May — Jun 15</div>
-    </div>
-    <div class="phase-block" id="phase2">
-      <div class="phase-num">PHASE 02</div>
-      <div class="phase-title">BUILD & EARN</div>
-      <div class="phase-dates">Jun 15 — Jul 31</div>
-    </div>
-    <div class="phase-block" id="phase3">
-      <div class="phase-num">PHASE 03</div>
-      <div class="phase-title">SCALE UP</div>
-      <div class="phase-dates">Aug 1 — Sep 1</div>
-    </div>
-  </div>
-
-  <!-- TABS -->
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('income', this)">💸 INCOME NOW</button>
-    <button class="tab-btn" onclick="switchTab('trading', this)">📈 TRADING</button>
-    <button class="tab-btn" onclick="switchTab('hacking', this)">🔐 ETHICAL HACKING</button>
-    <button class="tab-btn" onclick="switchTab('schedule', this)">📅 SCHEDULE</button>
-    <button class="tab-btn" onclick="switchTab('finance', this)">💰 FINANCE</button>
-    <button class="tab-btn" onclick="switchTab('reminders', this)">🔔 REMINDERS</button>
-    <button class="tab-btn" onclick="switchTab('resources', this)">📚 RESOURCES</button>
-    <button class="tab-btn" onclick="switchTab('notes', this)">📝 NOTES</button>
-  </div>
-
-  <!-- ===== INCOME NOW ===== -->
-  <div id="tab-income" class="tab-panel active">
-
-    <div class="section-head">
-      <span class="section-tag tag-green">WEEK 1 — DO THIS FIRST</span>
-      <h2>Immediate income setup</h2>
-      <div class="section-divider"></div>
-    </div>
-    <div class="checklist" id="cl-income-week1">
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Create a Fiverr account and complete your profile 100%</div><div class="check-meta">Profile pic + bio + skills — first impression matters. Use a real photo.</div></div><span class="check-badge tag-amber">DAY 1</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Create a free Upwork account and pass the readiness test</div><div class="check-meta">Takes ~30 min. Upwork is higher paying but more competitive than Fiverr.</div></div><span class="check-badge tag-amber">DAY 1</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Post your first 3 Fiverr gigs (writing, data entry, or social media)</div><div class="check-meta">Title your gigs with keywords people actually search. Check top sellers for formatting.</div></div><span class="check-badge tag-amber">DAY 2-3</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Create a Remotasks or Appen account for micro-task income</div><div class="check-meta">remotasks.com — complete qualification tests first. Pays in USD via PayPal or Wave.</div></div><span class="check-badge tag-amber">DAY 2</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Set up PayPal (or Payoneer) account for receiving international payments</div><div class="check-meta">Payoneer is more Kenya-friendly. Links to Equity or KCB easily.</div></div><span class="check-badge tag-amber">DAY 1</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Identify 5 local businesses that have weak or no social media presence</div><div class="check-meta">Walk around your area or search Google Maps. These are your first potential clients.</div></div><span class="check-badge tag-amber">DAY 3-5</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Write a simple pitch message and send to 3 local businesses</div><div class="check-meta">Offer to manage their IG/Facebook for Ksh 8,000–15,000/month. One yes changes everything.</div></div><span class="check-badge tag-amber">DAY 5-7</span></div>
-    </div>
-
-    <div class="section-head">
-      <span class="section-tag tag-green">FREELANCING</span>
-      <h2>Fiverr & Upwork grind</h2>
-      <div class="section-divider"></div>
-    </div>
-    <div class="checklist" id="cl-income-freelance">
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Study the top 10 sellers in your niche on Fiverr — analyse their gig titles, descriptions, and pricing</div><div class="check-meta">Don't copy. Understand what works and do it better.</div></div><span class="check-badge tag-blue">WEEK 1</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Complete your first order (even free/very cheap) to get your first review</div><div class="check-meta">First review is your ticket to visibility. Do one gig at low price to unlock the algorithm.</div></div><span class="check-badge tag-blue">WEEK 2</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Deliver every order on time — Fiverr's ranking is heavily based on completion and response rate</div><div class="check-meta">Set phone notifications. Respond within 1 hour of messages.</div></div><span class="check-badge tag-blue">ONGOING</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Apply to 5 Upwork jobs per day in your category</div><div class="check-meta">Write custom proposals — never use templates. Reference something specific in their job post.</div></div><span class="check-badge tag-blue">ONGOING</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Build a simple portfolio page (use GitHub Pages or Carrd.co — free)</div><div class="check-meta">3–5 sample works even if self-created. Shows professionalism immediately.</div></div><span class="check-badge tag-blue">WEEK 2</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Join Kenya Freelancers Facebook groups and WhatsApp communities</div><div class="check-meta">Search "Kenya Freelancers Network" — local gigs often pay faster and are easier to land.</div></div><span class="check-badge tag-blue">WEEK 1</span></div>
-    </div>
-
-    <div class="section-head">
-      <span class="section-tag tag-amber">TUTORING</span>
-      <h2>Academic tutoring hustle</h2>
-      <div class="section-divider"></div>
-    </div>
-    <div class="checklist">
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">List your top 3 strongest subjects you can teach</div><div class="check-meta">Maths, English, Sciences, Computer studies — high school demand is always there.</div></div><span class="check-badge tag-amber">DAY 1</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Post your tutoring service on social media, notice boards and local WhatsApp groups</div><div class="check-meta">Ksh 500–1,500 per hour. Offer a free first session. One student brings three more via referral.</div></div><span class="check-badge tag-amber">WEEK 1</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Register on Preply or iTalki if you're strong in English (teaches foreigners)</div><div class="check-meta">Pays in USD. Set up and optimise your profile with a recorded intro video.</div></div><span class="check-badge tag-amber">WEEK 2</span></div>
-    </div>
-  </div>
-
-  <!-- ===== TRADING ===== -->
-  <div id="tab-trading" class="tab-panel">
-
-    <div class="section-head">
-      <span class="section-tag tag-green">PHASE 1 — MONTH 1</span>
-      <h2>Trading fundamentals</h2>
-      <div class="section-divider"></div>
-    </div>
-    <div class="checklist">
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Complete BabyPips School of Pipsology — Preschool through to Sophomore</div><div class="check-meta">babypips.com — free and the best structured forex beginner course on the internet.</div></div><span class="check-badge tag-green">WEEK 1-2</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Create a free TradingView account and learn to read charts</div><div class="check-meta">Practice identifying: support/resistance, trend lines, candlestick patterns (doji, engulfing, hammer)</div></div><span class="check-badge tag-green">WEEK 1</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Learn these 5 core concepts: trends, support/resistance, risk:reward ratio, position sizing, stop-loss</div><div class="check-meta">You cannot trade safely without understanding ALL five. Non-negotiable foundation.</div></div><span class="check-badge tag-green">WEEK 2</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Open a free demo/paper trading account (Exness, XM, or TradingView paper mode)</div><div class="check-meta">Kenya-friendly brokers: Exness and XM accept Kenyan clients and M-Pesa deposits.</div></div><span class="check-badge tag-green">WEEK 2</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Start a trading journal (Google Sheet) — log every demo trade with entry, exit, reason, outcome</div><div class="check-meta">Date | Pair | Direction | Entry | SL | TP | Result | What I learned. Review weekly.</div></div><span class="check-badge tag-green">WEEK 2</span></div>
-    </div>
-
-    <div class="section-head">
-      <span class="section-tag tag-amber">PHASE 2 — MONTH 2</span>
-      <h2>Strategy building</h2>
-      <div class="section-divider"></div>
-    </div>
-    <div class="checklist">
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Pick ONE trading strategy and backtest it on TradingView for 100 historical trades</div><div class="check-meta">Don't strategy-hop. Pick: MA crossover, breakout, or price action and test it thoroughly.</div></div><span class="check-badge tag-amber">MONTH 2</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Learn Fundamental analysis — how news events move markets (forex factory.com economic calendar)</div><div class="check-meta">High impact news events like US NFP, CPI, Fed meetings move markets dramatically.</div></div><span class="check-badge tag-amber">MONTH 2</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Paper trade live for 30 consecutive days — track your win rate and average R:R</div><div class="check-meta">Target: 50%+ win rate with 1:2 R:R minimum before considering real money.</div></div><span class="check-badge tag-amber">MONTH 2</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Learn about Kenya's NSE (Nairobi Securities Exchange) — consider local stocks too</div><div class="check-meta">Safaricom, Equity Group, KCB — you can buy shares via Dyer Blair or Standard Investment Bank.</div></div><span class="check-badge tag-amber">MONTH 2</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Understand leverage and margin — CRITICAL before using real money</div><div class="check-meta">Most beginners blow accounts because of leverage misuse. Know your margin level at all times.</div></div><span class="check-badge tag-amber">MONTH 2</span></div>
-    </div>
-
-    <div class="section-head">
-      <span class="section-tag tag-red">PHASE 3 — MONTH 3</span>
-      <h2>Going live (with discipline)</h2>
-      <div class="section-divider"></div>
-    </div>
-    <div class="checklist">
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Only go live when you have 2+ months of profitable paper trading data</div><div class="check-meta">If not profitable on demo, you will not be profitable with real money. Be honest with yourself.</div></div><span class="check-badge tag-red">MONTH 3</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Start with a maximum of Ksh 5,000–10,000 as real capital — no more</div><div class="check-meta">This is tuition money, not profit money. Risk only what you can afford to lose completely.</div></div><span class="check-badge tag-red">MONTH 3</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Set a hard daily loss limit: never lose more than 2% of account per day</div><div class="check-meta">If you hit it, close your platform and do something else. Emotions after losses = account blowup.</div></div><span class="check-badge tag-red">MONTH 3</span></div>
-    </div>
-  </div>
-
-  <!-- ===== ETHICAL HACKING ===== -->
-  <div id="tab-hacking" class="tab-panel">
-
-    <div class="section-head">
-      <span class="section-tag tag-purple" style="background:rgba(120,100,255,0.12); color:#a090ff; border:1px solid rgba(120,100,255,0.2)">PHASE 1 — MONTH 1</span>
-      <h2>Foundations of cybersecurity</h2>
-      <div class="section-divider"></div>
-    </div>
-    <div class="checklist">
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Create a TryHackMe account and start the "Pre-Security" learning path</div><div class="check-meta">tryhackme.com — free path covers networking, Linux, web fundamentals. ~40 hours total.</div></div><span class="check-badge tag-blue">WEEK 1</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Complete TryHackMe: Linux Fundamentals Parts 1, 2, and 3</div><div class="check-meta">Linux is the operating system of hackers. Know file system, permissions, bash commands cold.</div></div><span class="check-badge tag-blue">WEEK 1-2</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Learn basic networking: IP addresses, TCP/IP, DNS, HTTP, ports, subnets</div><div class="check-meta">TryHackMe "How The Web Works" room covers this. You cannot hack what you don't understand.</div></div><span class="check-badge tag-blue">WEEK 2</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Install Kali Linux (dual-boot or VirtualBox on your laptop)</div><div class="check-meta">kali.org — free. VirtualBox is easier for beginners. Kali has all hacking tools pre-installed.</div></div><span class="check-badge tag-blue">WEEK 2</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Learn basic Python scripting — loops, functions, reading files, making HTTP requests</div><div class="check-meta">Python is the language of security tools. Automate everything you do repeatedly.</div></div><span class="check-badge tag-blue">WEEK 3-4</span></div>
-    </div>
-
-    <div class="section-head">
-      <span class="section-tag tag-amber">PHASE 2 — MONTH 2</span>
-      <h2>Core attack techniques (ethical)</h2>
-      <div class="section-divider"></div>
-    </div>
-    <div class="checklist">
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Complete TryHackMe "Jr Penetration Tester" path</div><div class="check-meta">Covers: web app attacks, network scanning, privilege escalation, metasploit. Gold standard path.</div></div><span class="check-badge tag-amber">MONTH 2</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Learn the OWASP Top 10 web vulnerabilities (SQLi, XSS, IDOR, CSRF, etc.)</div><div class="check-meta">owasp.org — these are the most common real-world vulnerabilities. Know all 10 deeply.</div></div><span class="check-badge tag-amber">MONTH 2</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Practice on DVWA (Damn Vulnerable Web App) — set it up locally and exploit every vulnerability</div><div class="check-meta">Legal, intentionally broken web app for practice. Shows you what real vulnerabilities look like.</div></div><span class="check-badge tag-amber">MONTH 2</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Master Nmap — network scanning, port discovery, OS detection, service versioning</div><div class="check-meta">Every pentest starts with reconnaissance. Nmap is the first tool you'll always reach for.</div></div><span class="check-badge tag-amber">MONTH 2</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Learn Burp Suite basics — intercept, modify, and replay HTTP requests</div><div class="check-meta">Free Community Edition is enough. Essential for web app hacking and bug bounty work.</div></div><span class="check-badge tag-amber">MONTH 2</span></div>
-    </div>
-
-    <div class="section-head">
-      <span class="section-tag tag-green">PHASE 3 — MONTH 3</span>
-      <h2>Bug bounty & real-world practice</h2>
-      <div class="section-divider"></div>
-    </div>
-    <div class="checklist">
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Create a HackerOne account and read the bug bounty hunting guide</div><div class="check-meta">hackerone.com — start with programs that have wide scope and beginner-friendly policies.</div></div><span class="check-badge tag-green">MONTH 3</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Solve 10 HackTheBox machines (start with "easy" rated)</div><div class="check-meta">hackthebox.com — only attack after completing TryHackMe paths. Document every step.</div></div><span class="check-badge tag-green">MONTH 3</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Write detailed write-ups for each machine you hack and post them publicly</div><div class="check-meta">GitHub or Medium — writeups build your portfolio and get you noticed by employers and programs.</div></div><span class="check-badge tag-green">MONTH 3</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Begin studying for CompTIA Security+ (exam: ~Ksh 30,000 — save for it)</div><div class="check-meta">Professor Messer's free Security+ course on YouTube. Internationally recognised, career-changing cert.</div></div><span class="check-badge tag-green">MONTH 3</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Join Nairobi hacker/tech communities: OWASP Kenya, iHub Nairobi events</div><div class="check-meta">Network with professionals. iHub is Nairobi's tech hub — attend meetups and hackathons.</div></div><span class="check-badge tag-green">MONTH 3</span></div>
-    </div>
-  </div>
-
-  <!-- ===== SCHEDULE ===== -->
-  <div id="tab-schedule" class="tab-panel">
-
-    <div class="section-head">
-      <span class="section-tag tag-blue">DAILY CHECK-IN</span>
-      <h2>Check in today</h2>
-      <div class="section-divider"></div>
-    </div>
-
-    <div class="week-grid" id="week-grid"></div>
-
-    <div style="margin-bottom: 28px;">
-      <button class="btn btn-green" onclick="checkInToday()" style="margin-right:10px">CHECK IN TODAY ✓</button>
-      <button class="btn btn-outline" onclick="resetStreak()">RESET STREAK</button>
-    </div>
-
-    <div class="section-head">
-      <span class="section-tag tag-green">MON–FRI SCHEDULE</span>
-      <h2>Daily time blocks</h2>
-      <div class="section-divider"></div>
-    </div>
-    <div class="checklist">
-      <div class="check-item" style="cursor:default; border-left: 3px solid var(--green)"><div class="check-content"><div class="check-text">6:00 – 7:00am — Wake + market check + news</div><div class="check-meta">Check Forex Factory economic calendar. Read TechCabal or Business Daily (Kenya) headlines.</div></div><span class="check-badge tag-green">MORNING</span></div>
-      <div class="check-item" style="cursor:default; border-left: 3px solid var(--green)"><div class="check-content"><div class="check-text">7:00 – 8:00am — Exercise + breakfast (no phone)</div><div class="check-meta">Physical health directly affects cognitive performance. Non-negotiable.</div></div><span class="check-badge tag-green">MORNING</span></div>
-      <div class="check-item" style="cursor:default; border-left: 3px solid var(--amber)"><div class="check-content"><div class="check-text">8:00 – 11:00am — INCOME WORK BLOCK (Fiverr / Upwork / client work)</div><div class="check-meta">This is your money-making window. No distractions. Phone on silent. This pays your bills NOW.</div></div><span class="check-badge tag-amber">DEEP WORK</span></div>
-      <div class="check-item" style="cursor:default; border-left: 3px solid var(--amber)"><div class="check-content"><div class="check-text">11:00am – 1:00pm — TRADING STUDY (BabyPips / TradingView / demo trades)</div><div class="check-meta">Study one concept, then apply it on demo immediately. Read → Do → Journal.</div></div><span class="check-badge tag-amber">DEEP WORK</span></div>
-      <div class="check-item" style="cursor:default; border-left: 3px solid var(--muted)"><div class="check-content"><div class="check-text">1:00 – 2:00pm — Lunch + rest (step away from screens)</div><div class="check-meta">Your brain needs recovery time to consolidate learning. Eat properly.</div></div><span class="check-badge tag-blue">BREAK</span></div>
-      <div class="check-item" style="cursor:default; border-left: 3px solid var(--blue)"><div class="check-content"><div class="check-text">2:00 – 5:00pm — ETHICAL HACKING STUDY (TryHackMe / HackTheBox / labs)</div><div class="check-meta">Do one full TryHackMe room per session. Take notes. Build your own reference document.</div></div><span class="check-badge tag-blue">DEEP WORK</span></div>
-      <div class="check-item" style="cursor:default; border-left: 3px solid var(--blue)"><div class="check-content"><div class="check-text">5:00 – 7:00pm — Projects + portfolio + community</div><div class="check-meta">Build GitHub portfolio, write blog posts, join Discord communities, do a second income session.</div></div><span class="check-badge tag-blue">BUILD</span></div>
-      <div class="check-item" style="cursor:default; border-left: 3px solid var(--muted)"><div class="check-content"><div class="check-text">7:00 – 9:00pm — Review + plan tomorrow + reading</div><div class="check-meta">Update trading journal. Check checklist progress. Write tomorrow's 3 key tasks. Then relax.</div></div><span class="check-badge tag-blue">WIND DOWN</span></div>
-    </div>
-
-    <div class="section-head">
-      <span class="section-tag tag-amber">WEEKEND RULES</span>
-      <h2>Saturday & Sunday</h2>
-      <div class="section-divider"></div>
-    </div>
-    <div class="checklist">
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Saturday morning: Weekly review — what did I complete? What did I miss? Why?</div><div class="check-meta">Honest review with no judgment. Adjust plan for next week based on what actually worked.</div></div></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Saturday afternoon: One "challenge" session (harder HTB machine, advanced trading concept)</div><div class="check-meta">Push slightly past your comfort zone once a week. This is where growth happens fastest.</div></div></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Sunday: Rest and social battery recharge — no deep work</div><div class="check-meta">Sustainable pace > burnout sprint. You have 4 months. Protect your energy.</div></div></div>
-    </div>
-  </div>
-
-  <!-- ===== FINANCE ===== -->
-  <div id="tab-finance" class="tab-panel">
-
-    <div class="section-head">
-      <span class="section-tag tag-green">SETUP</span>
-      <h2>Financial infrastructure</h2>
-      <div class="section-divider"></div>
-    </div>
-    <div class="checklist">
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Open M-Shwari account (via M-Pesa menu → Financial Services → M-Shwari)</div><div class="check-meta">Automatic savings with interest. Set a lock savings target — money you cannot touch.</div></div><span class="check-badge tag-green">WEEK 1</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Set up KCB M-Pesa Goal Savings — separate pot for your trading capital fund</div><div class="check-meta">Label it "TRADING CAPITAL" — psychological barrier stops you spending it on other things.</div></div><span class="check-badge tag-green">WEEK 1</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Create a Google Sheet budget tracker — income in, expenses out, balance, savings rate</div><div class="check-meta">Track every single shilling for the first month. The data will shock you. Then fix it.</div></div><span class="check-badge tag-green">WEEK 1</span></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Set up Payoneer account (payoneer.com) — for receiving USD from Upwork/Fiverr</div><div class="check-meta">Lower withdrawal fees than PayPal in Kenya. Links directly to your Kenyan bank account.</div></div><span class="check-badge tag-green">WEEK 1</span></div>
-    </div>
-
-    <div class="section-head">
-      <span class="section-tag tag-amber">RULES</span>
-      <h2>Money management rules</h2>
-      <div class="section-divider"></div>
-    </div>
-    <div class="checklist">
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">The 50/30/10/10 rule: 50% needs, 30% savings, 10% trading, 10% tools & self-investment</div><div class="check-meta">Automate transfers on payday. What leaves your account automatically gets saved.</div></div></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">NEVER borrow money to trade. Ever. Under any circumstances.</div><div class="check-meta">Leverage + borrowed money = account blowup + debt. This rule has no exceptions.</div></div></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Build a 1-month expense emergency fund before touching trading capital</div><div class="check-meta">What is your monthly bare minimum expense? Multiply by 1.5. That's your target emergency fund.</div></div></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Reinvest 50% of freelance profits into tools, courses, and self-development in month 1–2</div><div class="check-meta">A Ksh 3,000 Udemy course that doubles your earning rate is a 10x return investment.</div></div></div>
-      <div class="check-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><div class="check-content"><div class="check-text">Explore Sacco membership — even student savings Saccos build credit history and loan eligibility</div><div class="check-meta">Stima Sacco, Mwalimu National, or university-affiliated Saccos. Long-term wealth tool.</div></div></div>
-    </div>
-  </div>
-
-  <!-- ===== REMINDERS ===== -->
-  <div id="tab-reminders" class="tab-panel">
-
-    <div class="section-head">
-      <span class="section-tag tag-amber">GMAIL REMINDERS</span>
-      <h2>Send yourself scheduled reminders</h2>
-      <div class="section-divider"></div>
-    </div>
-
-    <div class="reminder-box">
-      <h3>How it works</h3>
-      <p>Click any reminder button below to open a pre-filled Gmail compose window. The email will be sent to yourself. Once received, use Gmail's "Schedule send" or Boomerang (free Chrome extension) to have it resurface on a specific date. You can also forward these to a friend who holds you accountable.</p>
-      <div class="input-row">
-        <input type="email" class="input-field email-input" id="email-input" placeholder="your@gmail.com" />
-        <button class="btn btn-green" onclick="saveEmail()">SAVE EMAIL</button>
-      </div>
-      <div id="email-saved" style="font-size:11px; color:var(--green); display:none; margin-top:4px;">✓ Email saved — reminder links below will use this address</div>
-    </div>
-
-    <div class="reminder-links" id="reminder-links">
-      <div class="reminder-link-item">
-        <div>
-          <div class="reminder-link-label">📅 Week 1 Check-in — Have you set up Fiverr, Upwork & Payoneer?</div>
-          <div class="reminder-link-sub">Send now → schedule to arrive in 7 days</div>
+    <div class="preview-grid" id="embed-render-hub">
+      <div class="preview-card" style="padding:16px;">
+        <div style="font-size:11px; color:var(--accent-cyan); margin-bottom:8px; font-weight:700;">BLOOMBERG TERMINAL FEED</div>
+        <div style="font-size:13px; line-height:1.6; color:#fff; margin-bottom:12px;">
+          • USD/CHF structural liquidity run targeted.<br>
+          • Fed rate positioning pricing dynamic realignments.<br>
+          • High timeframe premium arrays active.
         </div>
-        <a id="r1" href="#" onclick="openReminder(1)" class="btn btn-outline">OPEN IN GMAIL ↗</a>
-      </div>
-      <div class="reminder-link-item">
-        <div>
-          <div class="reminder-link-label">📅 Month 1 Check-in — Have you completed BabyPips & TryHackMe Pre-Security?</div>
-          <div class="reminder-link-sub">Send now → schedule to arrive in 30 days</div>
-        </div>
-        <a id="r2" href="#" onclick="openReminder(2)" class="btn btn-outline">OPEN IN GMAIL ↗</a>
-      </div>
-      <div class="reminder-link-item">
-        <div>
-          <div class="reminder-link-label">📅 Month 2 Check-in — Are you paper trading? First Upwork income yet?</div>
-          <div class="reminder-link-sub">Send now → schedule to arrive in 60 days</div>
-        </div>
-        <a id="r3" href="#" onclick="openReminder(3)" class="btn btn-outline">OPEN IN GMAIL ↗</a>
-      </div>
-      <div class="reminder-link-item">
-        <div>
-          <div class="reminder-link-label">📅 Month 3 — Pre-campus review. What did I achieve this holiday?</div>
-          <div class="reminder-link-sub">Send now → schedule to arrive in 85 days</div>
-        </div>
-        <a id="r4" href="#" onclick="openReminder(4)" class="btn btn-outline">OPEN IN GMAIL ↗</a>
-      </div>
-      <div class="reminder-link-item">
-        <div>
-          <div class="reminder-link-label">📅 Daily study reminder — "Open TryHackMe and TradingView NOW."</div>
-          <div class="reminder-link-sub">Set up as a recurring daily alarm or calendar event</div>
-        </div>
-        <a id="r5" href="#" onclick="openReminder(5)" class="btn btn-outline">OPEN IN GMAIL ↗</a>
-      </div>
-    </div>
-
-    <div style="margin-top: 20px;" class="reminder-box">
-      <h3>Google Calendar setup (recommended)</h3>
-      <p>For recurring daily reminders, Google Calendar is more reliable than email. Here's your exact setup:</p>
-      <div style="display:flex; flex-direction:column; gap:8px;">
-        <a href="https://calendar.google.com/calendar/r/eventedit?text=LOCKDOWN+Daily+Study+Block&details=Open+TryHackMe+and+TradingView.+No+excuses.&recur=RRULE:FREQ%3DDAILY&dates=20250514T080000Z/20250514T110000Z" target="_blank" class="btn btn-green" style="display:inline-block; text-align:center; text-decoration:none; width:fit-content">CREATE DAILY STUDY BLOCK IN GOOGLE CALENDAR ↗</a>
-        <a href="https://calendar.google.com/calendar/r/eventedit?text=LOCKDOWN+Weekly+Review&details=Review+your+checklist+progress.+Update+trading+journal.+Plan+next+week.&recur=RRULE:FREQ%3DWEEKLY;BYDAY%3DSA&dates=20250517T080000Z/20250517T090000Z" target="_blank" class="btn btn-outline" style="display:inline-block; text-align:center; text-decoration:none; width:fit-content">CREATE WEEKLY REVIEW IN GOOGLE CALENDAR ↗</a>
+        <div class="preview-meta" style="padding:0; border:none;"><a href="https://www.bloomberg.com/markets" target="_blank">Launch Official Portal ↗</a></div>
       </div>
     </div>
   </div>
 
-  <!-- ===== RESOURCES ===== -->
-  <div id="tab-resources" class="tab-panel">
-
-    <div class="section-head">
-      <span class="section-tag tag-green">FREE RESOURCES</span>
-      <h2>Trading</h2>
-      <div class="section-divider"></div>
-    </div>
-    <div class="resource-grid">
-      <div class="resource-card"><div class="resource-name">BabyPips</div><div class="resource-desc">The complete free forex education curriculum. Start at preschool, work through to graduation.</div><a href="https://www.babypips.com/learn/forex" target="_blank" class="resource-link">babypips.com →</a></div>
-      <div class="resource-card"><div class="resource-name">TradingView</div><div class="resource-desc">Free charting platform. Paper trading built in. Use for live practice and backtesting strategies.</div><a href="https://www.tradingview.com" target="_blank" class="resource-link">tradingview.com →</a></div>
-      <div class="resource-card"><div class="resource-name">Forex Factory</div><div class="resource-desc">Economic calendar — shows all high-impact news events that move markets. Check every morning.</div><a href="https://www.forexfactory.com/calendar" target="_blank" class="resource-link">forexfactory.com →</a></div>
-      <div class="resource-card"><div class="resource-name">Exness (Kenya)</div><div class="resource-desc">Regulated broker accepting Kenyan clients. M-Pesa deposits. Good for small accounts.</div><a href="https://www.exness.com" target="_blank" class="resource-link">exness.com →</a></div>
-      <div class="resource-card"><div class="resource-name">NSE Kenya</div><div class="resource-desc">Nairobi Securities Exchange. Buy local stocks. Start with Safaricom, Equity, EABL.</div><a href="https://www.nse.co.ke" target="_blank" class="resource-link">nse.co.ke →</a></div>
-      <div class="resource-card"><div class="resource-name">Investopedia</div><div class="resource-desc">Financial dictionary + courses. Look up any term you don't understand immediately.</div><a href="https://www.investopedia.com" target="_blank" class="resource-link">investopedia.com →</a></div>
-    </div>
-
-    <div class="section-head">
-      <span class="section-tag tag-blue">FREE RESOURCES</span>
-      <h2>Ethical hacking</h2>
-      <div class="section-divider"></div>
-    </div>
-    <div class="resource-grid">
-      <div class="resource-card"><div class="resource-name">TryHackMe</div><div class="resource-desc">Best beginner cybersecurity platform. Free rooms. Start: Pre-Security → Jr Pentester path.</div><a href="https://tryhackme.com" target="_blank" class="resource-link">tryhackme.com →</a></div>
-      <div class="resource-card"><div class="resource-name">HackTheBox</div><div class="resource-desc">Real machine-based challenges. Graduate here from TryHackMe. Documents your skill level.</div><a href="https://www.hackthebox.com" target="_blank" class="resource-link">hackthebox.com →</a></div>
-      <div class="resource-card"><div class="resource-name">PortSwigger Web Academy</div><div class="resource-desc">Free web app hacking labs from the makers of Burp Suite. Best SQLi/XSS/IDOR training anywhere.</div><a href="https://portswigger.net/web-security" target="_blank" class="resource-link">portswigger.net →</a></div>
-      <div class="resource-card"><div class="resource-name">NetworkChuck (YouTube)</div><div class="resource-desc">Entertaining and technically accurate cybersecurity content. CEH, Kali Linux, networking explained well.</div><a href="https://www.youtube.com/@NetworkChuck" target="_blank" class="resource-link">youtube.com →</a></div>
-      <div class="resource-card"><div class="resource-name">HackerOne</div><div class="resource-desc">Bug bounty platform. Create account now, start reading disclosed reports to learn real techniques.</div><a href="https://www.hackerone.com" target="_blank" class="resource-link">hackerone.com →</a></div>
-      <div class="resource-card"><div class="resource-name">Prof. Messer Security+</div><div class="resource-desc">Free CompTIA Security+ course on YouTube. 100% aligned to the exam. Better than paid courses.</div><a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/sy0-701-comptia-security-plus-course/" target="_blank" class="resource-link">professormesser.com →</a></div>
-    </div>
-
-    <div class="section-head">
-      <span class="section-tag tag-amber">FREE RESOURCES</span>
-      <h2>Freelancing & income</h2>
-      <div class="section-divider"></div>
-    </div>
-    <div class="resource-grid">
-      <div class="resource-card"><div class="resource-name">Fiverr</div><div class="resource-desc">Start here. Create 3 gigs in writing, data, or social media. First review unlocks visibility.</div><a href="https://www.fiverr.com" target="_blank" class="resource-link">fiverr.com →</a></div>
-      <div class="resource-card"><div class="resource-name">Upwork</div><div class="resource-desc">Higher quality clients and rates than Fiverr. More competitive. Write custom proposals only.</div><a href="https://www.upwork.com" target="_blank" class="resource-link">upwork.com →</a></div>
-      <div class="resource-card"><div class="resource-name">Remotasks</div><div class="resource-desc">AI data labelling tasks. Pays in USD. Complete qualification tests first. Instant micro-income.</div><a href="https://www.remotasks.com" target="_blank" class="resource-link">remotasks.com →</a></div>
-      <div class="resource-card"><div class="resource-name">Payoneer</div><div class="resource-desc">Best international payment receiver for Kenya. Lower fees than PayPal. Links to local banks.</div><a href="https://www.payoneer.com" target="_blank" class="resource-link">payoneer.com →</a></div>
-      <div class="resource-card"><div class="resource-name">Carrd.co</div><div class="resource-desc">Free one-page portfolio website. Set up in 30 min. Links to your Fiverr and Upwork profiles.</div><a href="https://carrd.co" target="_blank" class="resource-link">carrd.co →</a></div>
-      <div class="resource-card"><div class="resource-name">iHub Nairobi</div><div class="resource-desc">Nairobi's main tech hub. Attend meetups, hackathons, and startup events. Network in person.</div><a href="https://ihub.co.ke" target="_blank" class="resource-link">ihub.co.ke →</a></div>
-    </div>
+  <div class="nav-tabs">
+    <button class="tab-button active" onclick="activateModuleTab('trading', this)">📈 SMC TRADING SUITE</button>
+    <button class="tab-button" onclick="activateModuleTab('income', this)">💸 IMMEDIATE INCOME</button>
+    <button class="tab-button" onclick="activateModuleTab('cyber', this)">🔐 ETHICAL HACKING</button>
+    <button class="tab-button" onclick="activateModuleTab('notes', this)">📝 PERSISTENT LEDGER</button>
   </div>
 
-  <!-- ===== NOTES ===== -->
-  <div id="tab-notes" class="tab-panel">
-    <div class="section-head">
-      <span class="section-tag tag-blue">NOTES</span>
-      <h2>Your private notes</h2>
-      <div class="section-divider"></div>
-    </div>
-    <p style="font-size:12px; color:var(--muted); margin-bottom:16px;">Notes save in your browser's localStorage. They persist between sessions on this device.</p>
-    <textarea class="notes-area" id="notes-area" placeholder="// Write anything here — trade ideas, hacking notes, client contacts, daily reflections...
-
-Today I learned:
-- 
-- 
-
-Tomorrow I will:
-- 
--
-
-Income this week: Ksh ___
-Savings total: Ksh ___
-TryHackMe rooms completed: ___
-Demo trades logged: ___
-" oninput="saveNotes()"></textarea>
-    <div style="display:flex; gap:10px; margin-top:10px; align-items:center;">
-      <button class="btn btn-outline" onclick="clearNotes()">CLEAR NOTES</button>
-      <span id="notes-status" style="font-size:11px; color:var(--muted)"></span>
-    </div>
-  </div>
-
-</div>
-
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
-
-<script>
-  // ============ CLOCK ============
-  function updateClock() {
-    const now = new Date();
-    const eat = new Date(now.toLocaleString("en-US", {timeZone: "Africa/Nairobi"}));
-    document.getElementById('clock').textContent = eat.toTimeString().slice(0,8);
-    document.getElementById('date-display').textContent = eat.toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long', year:'numeric', timeZone:'Africa/Nairobi'});
-    updatePhase(eat);
-  }
-  setInterval(updateClock, 1000);
-  updateClock();
-
-  // ============ PHASE ============
-  function updatePhase(now) {
-    const d = now;
-    const p1end = new Date('2025-06-15');
-    const p2end = new Date('2025-07-31');
-    document.querySelectorAll('.phase-block').forEach(p => p.classList.remove('current'));
-    if (d < p1end) document.getElementById('phase1').classList.add('current');
-    else if (d < p2end) document.getElementById('phase2').classList.add('current');
-    else document.getElementById('phase3').classList.add('current');
-  }
-
-  // ============ DAYS LEFT ============
-  function daysLeft() {
-    const now = new Date();
-    const target = new Date('2025-09-01');
-    const diff = Math.ceil((target - now) / (1000*60*60*24));
-    document.getElementById('stat-days').textContent = Math.max(0, diff);
-  }
-  daysLeft();
-
-  // ============ CHECK ITEMS ============
-  function toggleCheck(el) {
-    el.classList.toggle('done');
-    const id = el.parentElement.id || el.parentElement.parentElement.id || 'task';
-    const text = el.querySelector('.check-text').textContent.slice(0,30);
-    const key = 'ck_' + btoa(text.replace(/\s/g,'')).slice(0,20);
-    if (el.classList.contains('done')) {
-      localStorage.setItem(key, '1');
-      showToast('✓ Task complete');
-    } else {
-      localStorage.removeItem(key);
-    }
-    updateStats();
-  }
-
-  function restoreChecks() {
-    document.querySelectorAll('.check-item[onclick]').forEach(el => {
-      const text = el.querySelector('.check-text').textContent.slice(0,30);
-      const key = 'ck_' + btoa(text.replace(/\s/g,'')).slice(0,20);
-      if (localStorage.getItem(key) === '1') el.classList.add('done');
-    });
-    updateStats();
-  }
-
-  function updateStats() {
-    const all = document.querySelectorAll('.check-item[onclick]').length;
-    const done = document.querySelectorAll('.check-item.done').length;
-    const pct = all > 0 ? Math.round((done/all)*100) : 0;
-    document.getElementById('stat-done').textContent = done;
-    document.getElementById('stat-total').textContent = all;
-    document.getElementById('master-fill').style.width = pct + '%';
-    document.getElementById('master-pct').textContent = pct + '%';
-  }
-
-  // ============ TABS ============
-  function switchTab(id, btn) {
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('tab-' + id).classList.add('active');
-    btn.classList.add('active');
-    updateStats();
-  }
-
-  // ============ WEEK GRID ============
-  const days = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
-  function buildWeekGrid() {
-    const grid = document.getElementById('week-grid');
-    const checkins = JSON.parse(localStorage.getItem('checkins') || '[]');
-    const today = new Date();
-    const todayStr = today.toISOString().slice(0,10);
-    const todayDay = (today.getDay() + 6) % 7;
-    grid.innerHTML = '';
-    for (let i = 0; i < 7; i++) {
-      const d = new Date(today);
-      d.setDate(d.getDate() - todayDay + i);
-      const ds = d.toISOString().slice(0,10);
-      const div = document.createElement('div');
-      div.className = 'day-card' + (checkins.includes(ds) ? ' active-day' : '');
-      div.innerHTML = `<div class="day-name">${days[i]}</div><div class="day-dot"></div><div style="font-size:9px;color:var(--muted);margin-top:4px">${d.getDate()}</div>`;
-      grid.appendChild(div);
-    }
-    const streak = calcStreak(checkins);
-    document.getElementById('stat-streak').textContent = streak;
-    document.getElementById('stat-today').textContent = checkins.includes(todayStr) ? 'IN ✓' : 'NOT IN';
-    document.getElementById('stat-today-sub').textContent = checkins.includes(todayStr) ? 'checked in today' : 'tap check in below';
-  }
-
-  function calcStreak(checkins) {
-    if (!checkins.length) return 0;
-    const sorted = checkins.sort().reverse();
-    let streak = 0;
-    let d = new Date();
-    for (let i = 0; i < 90; i++) {
-      const ds = d.toISOString().slice(0,10);
-      if (sorted.includes(ds)) { streak++; d.setDate(d.getDate()-1); }
-      else if (i === 0) { d.setDate(d.getDate()-1); }
-      else break;
-    }
-    return streak;
-  }
-
-  function checkInToday() {
-    const today = new Date().toISOString().slice(0,10);
-    const checkins = JSON.parse(localStorage.getItem('checkins') || '[]');
-    if (!checkins.includes(today)) {
-      checkins.push(today);
-      localStorage.setItem('checkins', JSON.stringify(checkins));
-      showToast('🔥 Checked in! Keep the streak alive.');
-    } else {
-      showToast('Already checked in today. Beast mode.');
-    }
-    buildWeekGrid();
-  }
-
-  function resetStreak() {
-    if (confirm('Reset streak? This cannot be undone.')) {
-      localStorage.removeItem('checkins');
-      buildWeekGrid();
-    }
-  }
-
-  // ============ NOTES ============
-  function saveNotes() {
-    localStorage.setItem('lockdown_notes', document.getElementById('notes-area').value);
-    document.getElementById('notes-status').textContent = 'Saved ' + new Date().toTimeString().slice(0,5);
-  }
-  function clearNotes() {
-    if (confirm('Clear all notes?')) {
-      document.getElementById('notes-area').value = '';
-      localStorage.removeItem('lockdown_notes');
-      document.getElementById('notes-status').textContent = 'Cleared';
-    }
-  }
-  function restoreNotes() {
-    const n = localStorage.getItem('lockdown_notes');
-    if (n) document.getElementById('notes-area').value = n;
-  }
-
-  // ============ EMAIL REMINDERS ============
-  const reminderData = [
-    { subject: "LOCKDOWN Week 1 Check-in", body: "Hey — it's been 7 days.\n\nHave you:\n☐ Created your Fiverr account?\n☐ Set up Payoneer?\n☐ Created your Upwork profile?\n☐ Started BabyPips School of Pipsology?\n☐ Created your TryHackMe account and started Pre-Security?\n\nIf not — open this dashboard and get to work. No more delays.\n\nYou started this for a reason. Don't let week 1-you down.\n\n— Your LOCKDOWN system" },
-    { subject: "LOCKDOWN Month 1 Check-in", body: "30 days in. Where are you?\n\nTRADING:\n☐ Completed BabyPips preschool–sophomore?\n☐ Paper trading account active?\n☐ Trading journal started?\n\nETHICAL HACKING:\n☐ TryHackMe Pre-Security path done?\n☐ Kali Linux installed?\n☐ At least 2 rooms completed per week?\n\nINCOME:\n☐ First Fiverr or Upwork income received?\n☐ At least 1 freelance client contacted?\n\nBe honest. Adjust the plan. Keep moving.\n\n— Your LOCKDOWN system" },
-    { subject: "LOCKDOWN Month 2 Check-in", body: "60 days. Halfway through your holiday.\n\nThe question is simple: are you ahead or behind on your plan?\n\nCheck your LOCKDOWN dashboard. Review every tab.\n\nRemember why you started. You said you were tired of your situation. That feeling should still be fuel.\n\nIf you're ahead: go harder.\nIf you're behind: don't spiral — pick ONE thing and do it today.\n\n— Your LOCKDOWN system" },
-    { subject: "LOCKDOWN Final Review — Back to Campus Soon", body: "The holiday is nearly over.\n\nLook at what you built:\n- Income skills: Did you earn anything online?\n- Trading: Are you paper trading profitably?\n- Hacking: How many TryHackMe rooms? HackTheBox machines?\n\nWhatever the result — you put in the work. Document your wins, no matter how small.\n\nNow set your targets for next holiday. The compounding has already started.\n\n— Your LOCKDOWN system" },
-    { subject: "LOCKDOWN Daily Reminder", body: "Open TryHackMe. Open TradingView. Do your income work.\n\nToday. Right now. No tomorrow.\n\n— Your LOCKDOWN system" }
-  ];
-
-  function saveEmail() {
-    const e = document.getElementById('email-input').value;
-    if (e && e.includes('@')) {
-      localStorage.setItem('user_email', e);
-      document.getElementById('email-saved').style.display = 'block';
-      showToast('Email saved ✓');
-    }
-  }
-
-  function openReminder(n) {
-    const email = localStorage.getItem('user_email') || document.getElementById('email-input').value || '';
-    const r = reminderData[n-1];
-    const mailto = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(r.subject)}&body=${encodeURIComponent(r.body)}`;
-    window.location.href = mailto;
-  }
-
-  function loadEmail() {
-    const saved = localStorage.getItem('user_email');
-    if (saved) {
-      document.getElementById('email-input').value = saved;
-      document.getElementById('email-saved').style.display = 'block';
-    }
-  }
-
-  // ============ TOAST ============
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2500);
-  }
-
-  // ============ INIT ============
-  restoreChecks();
-  restoreNotes();
-  buildWeekGrid();
-  loadEmail();
-  updateStats();
-</script>
-</body>
-</html>
+  <div id="tab-trading" class="tab-content active">
+    <div class="chart-layout">
+      <div class="tradingview-widget-container">
+        <div id="tradingview_advanced"></div>
+      </div>
+      
+      <div class="smc-execution-log">
+        <div style="font-size:11px; color:var(--accent-cyan); font-weight:700; letter
