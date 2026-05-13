@@ -3,1272 +3,1073 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LOCKDOWN — Student Hustle OS</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<title>LOCKDOWN OS — Student Hustle System</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #020408;
-  --bg2: #060d14;
-  --bg3: #0a1520;
-  --panel: rgba(10,25,40,0.85);
-  --cyan: #00f5ff;
-  --cyan2: #00c8d4;
-  --cyan-dim: rgba(0,245,255,0.08);
-  --cyan-mid: rgba(0,245,255,0.18);
-  --gold: #ffd700;
-  --gold-dim: rgba(255,215,0,0.1);
-  --green: #00ff88;
-  --green-dim: rgba(0,255,136,0.08);
-  --red: #ff3860;
-  --red-dim: rgba(255,56,96,0.1);
-  --border: rgba(0,245,255,0.12);
-  --border2: rgba(0,245,255,0.25);
-  --text: #e8f4f8;
-  --muted: rgba(232,244,248,0.45);
-  --muted2: rgba(232,244,248,0.2);
-  --glow: 0 0 20px rgba(0,245,255,0.3);
-  --glow2: 0 0 40px rgba(0,245,255,0.15);
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --void:#00000a;--deep:#03080f;--panel:#06111e;
+  --glass:rgba(6,17,30,0.75);--glass2:rgba(255,255,255,0.03);
+  --c:#00e5ff;--c2:#00b4d8;--cg:rgba(0,229,255,0.15);--cg2:rgba(0,229,255,0.05);
+  --gold:#f5c518;--goldg:rgba(245,197,24,0.15);
+  --green:#39ff14;--greeng:rgba(57,255,20,0.12);
+  --red:#ff2d55;--redg:rgba(255,45,85,0.12);
+  --orange:#ff6b2b;
+  --b:rgba(0,229,255,0.1);--b2:rgba(0,229,255,0.22);--b3:rgba(0,229,255,0.4);
+  --text:#ddeeff;--t2:rgba(221,238,255,0.6);--t3:rgba(221,238,255,0.28);
+  --fd:'Bebas Neue',sans-serif;--fb:'Barlow Condensed',sans-serif;--fm:'IBM Plex Mono',monospace;
+  --expo:cubic-bezier(0.16,1,0.3,1);--spring:cubic-bezier(0.34,1.56,0.64,1);
 }
-*{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
+body{background:var(--void);color:var(--text);font-family:var(--fb);min-height:100vh;overflow-x:hidden;cursor:none;-webkit-font-smoothing:antialiased;}
 
-/* CUSTOM CURSOR */
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:'Rajdhani',sans-serif;
-  min-height:100vh;
-  overflow-x:hidden;
-  cursor:none;
-}
-#cursor{
-  position:fixed;width:8px;height:8px;background:var(--cyan);border-radius:50%;
-  pointer-events:none;z-index:99999;transform:translate(-50%,-50%);
-  box-shadow:0 0 10px var(--cyan),0 0 20px var(--cyan);transition:transform 0.1s;
-}
-#cursor-ring{
-  position:fixed;width:32px;height:32px;border:1px solid rgba(0,245,255,0.4);border-radius:50%;
-  pointer-events:none;z-index:99998;transform:translate(-50%,-50%);
-  transition:all 0.15s ease;
-}
+/* CURSOR */
+#CUR{position:fixed;z-index:99999;pointer-events:none;mix-blend-mode:difference;}
+#CUR .dot{width:6px;height:6px;background:#fff;border-radius:50%;transform:translate(-50%,-50%);}
+#CUR .ring{position:absolute;top:0;left:0;width:36px;height:36px;border:1px solid rgba(255,255,255,0.5);border-radius:50%;transform:translate(-50%,-50%);transition:width .3s var(--expo),height .3s var(--expo),border-color .3s,transform .08s linear;}
+body.hov #CUR .ring{width:56px;height:56px;border-color:rgba(0,229,255,0.9);}
+body.clk #CUR .dot{transform:translate(-50%,-50%) scale(3);}
 
-/* STAR FIELD */
-#stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
+/* BG CANVAS */
+#bgC{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
-/* GRID OVERLAY */
-body::after{
-  content:'';position:fixed;inset:0;
-  background-image:
-    linear-gradient(rgba(0,245,255,0.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,245,255,0.025) 1px,transparent 1px);
-  background-size:60px 60px;
-  pointer-events:none;z-index:0;
-}
+/* OVERLAYS */
+.noise{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");}
+.vign{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,10,.7) 100%);}
+.grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,229,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.018) 1px,transparent 1px);background-size:80px 80px;}
 
-/* ============ WELCOME SCREEN ============ */
-#welcome{
-  position:fixed;inset:0;z-index:9000;
-  background:var(--bg);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:0;
-}
-.welcome-glitch{
-  font-family:'Orbitron',monospace;
-  font-size:clamp(40px,8vw,100px);
-  font-weight:900;
-  color:#fff;
-  letter-spacing:0.08em;
-  position:relative;
-  animation:welcome-in 0.8s ease forwards;
-  opacity:0;
-}
-.welcome-glitch::before,.welcome-glitch::after{
-  content:attr(data-text);
-  position:absolute;inset:0;
-}
-.welcome-glitch::before{
-  color:var(--cyan);
-  animation:glitch1 3s infinite;
-  clip-path:polygon(0 20%,100% 20%,100% 40%,0 40%);
-}
-.welcome-glitch::after{
-  color:var(--red);
-  animation:glitch2 3s infinite;
-  clip-path:polygon(0 60%,100% 60%,100% 75%,0 75%);
-}
-@keyframes glitch1{0%,90%{transform:translate(0)}91%{transform:translate(-3px,1px)}93%{transform:translate(3px,-1px)}95%{transform:translate(-2px,0)}100%{transform:translate(0)}}
-@keyframes glitch2{0%,88%{transform:translate(0)}89%{transform:translate(3px,2px)}91%{transform:translate(-3px,-1px)}93%{transform:translate(2px,0)}100%{transform:translate(0)}}
-@keyframes welcome-in{from{opacity:0;transform:translateY(30px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+/* ====== WELCOME ====== */
+#welcome{position:fixed;inset:0;z-index:9999;background:var(--void);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 1s ease,transform 1s var(--expo);}
+#welcome.exit{opacity:0;transform:scale(1.05);}
+.w-scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,229,255,.015) 0,rgba(0,229,255,.015) 1px,transparent 1px,transparent 3px);animation:scanM 8s linear infinite;}
+@keyframes scanM{0%{background-position:0 0}100%{background-position:0 300px}}
+.w-ring{position:absolute;width:600px;height:600px;border:1px solid rgba(0,229,255,.07);border-radius:50%;animation:rPulse 4s ease-in-out infinite;}
+.w-ring:nth-child(2){width:400px;height:400px;animation-delay:-1.3s;border-color:rgba(245,197,24,.05);}
+.w-ring:nth-child(3){width:250px;height:250px;animation-delay:-2.6s;border-color:rgba(57,255,20,.04);}
+@keyframes rPulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.04);opacity:1}}
+.w-logo{font-family:var(--fd);font-size:clamp(70px,14vw,160px);letter-spacing:.06em;color:#fff;position:relative;z-index:2;opacity:0;transform:translateY(40px);animation:wIn 1s .2s var(--expo) forwards;text-align:center;line-height:.9;}
+.w-logo .acc{color:var(--c);text-shadow:0 0 60px rgba(0,229,255,.8),0 0 120px rgba(0,229,255,.4);}
+.w-logo .sub{font-size:.42em;letter-spacing:.3em;color:var(--t2);display:block;font-family:var(--fm);margin-top:8px;}
+.w-tag{font-family:var(--fm);font-size:clamp(11px,1.5vw,14px);color:var(--c);letter-spacing:.25em;margin-top:24px;opacity:0;animation:wIn .8s .6s var(--expo) forwards;text-align:center;}
+.w-greet{max-width:520px;text-align:center;font-size:clamp(14px,2vw,18px);color:var(--t2);line-height:1.7;letter-spacing:.04em;margin-top:20px;opacity:0;animation:wIn .8s .9s var(--expo) forwards;padding:0 24px;}
+.w-greet strong{color:var(--gold);}
+.w-line{width:1px;height:60px;background:linear-gradient(var(--c),transparent);margin:24px auto 0;opacity:0;animation:wIn .6s 1.1s ease forwards;}
+.w-btn{margin-top:32px;opacity:0;animation:wIn .8s 1.3s var(--expo) forwards;}
+.w-btn-i{display:flex;align-items:center;gap:14px;font-family:var(--fd);font-size:20px;letter-spacing:.15em;color:#000;background:var(--c);padding:16px 48px;cursor:none;clip-path:polygon(12px 0,100% 0,calc(100% - 12px) 100%,0 100%);position:relative;overflow:hidden;transition:background .3s,box-shadow .3s,transform .2s;box-shadow:0 0 40px rgba(0,229,255,.3),0 0 80px rgba(0,229,255,.1);}
+.w-btn-i:hover{background:var(--gold);box-shadow:0 0 50px rgba(245,197,24,.5);transform:scale(1.03);}
+.w-btn-i::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);transform:translateX(-150%);animation:shim 2.5s 2s ease-in-out infinite;}
+@keyframes shim{to{transform:translateX(200%)}}
+.w-status{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);font-family:var(--fm);font-size:10px;color:var(--t3);letter-spacing:.2em;opacity:0;animation:wIn .6s 1.8s ease forwards;display:flex;align-items:center;gap:8px;}
+.w-status::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 1.2s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes wIn{to{opacity:1;transform:none}}
 
-.welcome-sub{
-  font-family:'Share Tech Mono',monospace;
-  font-size:clamp(12px,2vw,16px);
-  color:var(--cyan);
-  letter-spacing:0.25em;
-  margin-top:16px;
-  opacity:0;
-  animation:welcome-in 0.8s 0.4s ease forwards;
-}
-.welcome-line{
-  width:200px;height:1px;
-  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
-  margin:28px auto;
-  opacity:0;
-  animation:welcome-in 0.5s 0.7s ease forwards;
-}
-.welcome-greeting{
-  font-family:'Rajdhani',sans-serif;
-  font-size:clamp(14px,2vw,18px);
-  color:var(--muted);
-  letter-spacing:0.1em;
-  text-align:center;
-  max-width:500px;
-  padding:0 24px;
-  opacity:0;
-  animation:welcome-in 0.8s 0.9s ease forwards;
-  line-height:1.8;
-}
-.welcome-enter{
-  margin-top:40px;
-  font-family:'Orbitron',monospace;
-  font-size:13px;
-  font-weight:600;
-  letter-spacing:0.2em;
-  color:#000;
-  background:var(--cyan);
-  border:none;
-  padding:14px 48px;
-  cursor:none;
-  position:relative;
-  overflow:hidden;
-  opacity:0;
-  animation:welcome-in 0.8s 1.2s ease forwards;
-  clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);
-}
-.welcome-enter::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);
-  transform:translateX(-100%);
-  animation:shimmer 2s 2s infinite;
-}
-@keyframes shimmer{to{transform:translateX(100%)}}
-.welcome-enter:hover{background:var(--gold);box-shadow:0 0 30px rgba(255,215,0,0.5);}
+/* ====== APP ====== */
+#app{position:relative;z-index:2;opacity:0;transition:opacity 1s ease;max-width:1400px;margin:0 auto;padding:0 28px 100px;}
+#app.show{opacity:1;}
 
-.welcome-scan{
-  position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(0deg,transparent 0%,rgba(0,245,255,0.04) 50%,transparent 100%);
-  background-size:100% 8px;
-  animation:scan 8s linear infinite;
-}
-@keyframes scan{from{background-position:0 0}to{background-position:0 100vh}}
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:24px 0 20px;border-bottom:1px solid var(--b);gap:20px;flex-wrap:wrap;position:sticky;top:0;z-index:100;background:linear-gradient(var(--void),rgba(0,0,10,.95));backdrop-filter:blur(12px);margin-left:-28px;margin-right:-28px;padding-left:28px;padding-right:28px;}
+.nav-logo{font-family:var(--fd);font-size:clamp(22px,3.5vw,34px);letter-spacing:.12em;display:flex;align-items:baseline;gap:6px;}
+.nav-logo .l1{color:#fff;}.nav-logo .l2{color:var(--c);text-shadow:0 0 20px rgba(0,229,255,.6);}
+.nav-logo .ver{font-family:var(--fm);font-size:10px;color:var(--t3);letter-spacing:.1em;margin-left:4px;}
+.nav-stats{display:flex;gap:24px;flex-wrap:wrap;}
+.ns{text-align:right;}
+.ns-v{font-family:var(--fd);font-size:22px;letter-spacing:.05em;line-height:1;}
+.ns-v.c{color:var(--c);}.ns-v.g{color:var(--green);}.ns-v.gold{color:var(--gold);}
+.ns-l{font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:.15em;margin-top:2px;}
+#clock{font-family:var(--fm);font-size:22px;color:var(--c);letter-spacing:.08em;}
+#navdate{font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:.12em;margin-top:2px;}
 
-/* ============ MAIN LAYOUT ============ */
-#app{
-  position:relative;z-index:1;
-  max-width:1280px;margin:0 auto;
-  padding:0 24px 80px;
-  opacity:0;transition:opacity 0.8s ease;
-}
-#app.visible{opacity:1;}
+/* HERO */
+.hero{display:grid;grid-template-columns:1fr 200px;gap:40px;padding:60px 0 48px;border-bottom:1px solid var(--b);align-items:start;}
+@media(max-width:680px){.hero{grid-template-columns:1fr;}}
+.hero-brow{font-family:var(--fm);font-size:11px;color:var(--c);letter-spacing:.25em;display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.hero-brow::before{content:'';width:40px;height:1px;background:var(--c);}
+.hero-brow::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--b),transparent);}
+.hero-h1{font-family:var(--fd);font-size:clamp(52px,9vw,110px);line-height:.88;letter-spacing:.04em;margin-bottom:24px;}
+.hero-h1 .l1{color:#fff;display:block;}
+.hero-h1 .l2{color:transparent;-webkit-text-stroke:1px var(--c);display:block;position:relative;}
+.hero-h1 .l2::after{content:attr(data-text);position:absolute;left:0;top:0;color:var(--c);-webkit-text-stroke:0;clip-path:polygon(0 0,0% 0,0% 100%,0 100%);animation:tReveal 3s 1.5s ease forwards;text-shadow:0 0 40px rgba(0,229,255,.5);}
+@keyframes tReveal{to{clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}}
+.hero-desc{font-size:16px;color:var(--t2);line-height:1.7;max-width:540px;letter-spacing:.03em;margin-bottom:28px;}
+.hero-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{font-family:var(--fm);font-size:10px;letter-spacing:.12em;padding:6px 14px;border:1px solid var(--b2);color:var(--c);background:var(--cg2);clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);transition:all .3s var(--expo);cursor:default;}
+.chip:hover{background:var(--cg);border-color:var(--c);box-shadow:0 0 20px var(--cg);}
+.chip.gold{color:var(--gold);border-color:rgba(245,197,24,.3);background:var(--goldg);}
 
-/* TOP BAR */
-.topbar{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:20px 0;
-  border-bottom:1px solid var(--border);
-  margin-bottom:0;
-  flex-wrap:wrap;gap:12px;
-}
-.topbar-logo{
-  font-family:'Orbitron',monospace;
-  font-size:clamp(18px,3vw,26px);
-  font-weight:900;
-  letter-spacing:0.12em;
-  color:#fff;
-}
-.topbar-logo span{color:var(--cyan);}
-.topbar-right{display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
-.topbar-stat{text-align:center;}
-.topbar-stat-val{font-family:'Orbitron',monospace;font-size:18px;font-weight:700;color:var(--cyan);}
-.topbar-stat-label{font-size:10px;color:var(--muted);letter-spacing:0.15em;margin-top:2px;}
+/* FLIP CAL */
+.calw{display:flex;flex-direction:column;align-items:center;gap:10px;}
+.flip-o{width:180px;height:200px;perspective:800px;filter:drop-shadow(0 0 24px rgba(0,229,255,.25));}
+.flip-i{width:100%;height:100%;position:relative;transform-style:preserve-3d;}
+.flip-f{position:absolute;inset:0;background:linear-gradient(160deg,#0d2035,#061522);border:1px solid var(--b2);border-top:3px solid var(--c);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 0 60px rgba(0,229,255,.04),0 20px 60px rgba(0,0,0,.5);}
+.f-month{font-family:var(--fm);font-size:10px;letter-spacing:.25em;color:var(--c);margin-bottom:4px;}
+.f-day{font-family:var(--fd);font-size:88px;color:#fff;line-height:1;text-shadow:0 0 40px rgba(0,229,255,.35);}
+.f-wd{font-family:var(--fb);font-weight:600;font-size:12px;letter-spacing:.2em;color:var(--t2);margin-top:4px;}
+.f-yr{font-family:var(--fm);font-size:9px;color:var(--t3);margin-top:2px;}
+.flip-hinge{position:absolute;top:50%;left:0;right:0;height:1px;background:rgba(0,229,255,.25);z-index:5;box-shadow:0 0 8px rgba(0,229,255,.4);}
+.flip-bolt{position:absolute;top:50%;width:10px;height:10px;border-radius:50%;border:1px solid var(--c2);background:var(--deep);transform:translateY(-50%);}
+.flip-bolt.l{left:12px;}.flip-bolt.r{right:12px;}
+.cal-sub{font-family:var(--fm);font-size:10px;color:var(--t3);letter-spacing:.1em;text-align:center;}
+.cal-sub span{color:var(--c);}
 
-/* HERO SECTION */
-.hero{
-  display:grid;grid-template-columns:1fr auto;gap:32px;
-  padding:40px 0 32px;
-  align-items:start;
-  border-bottom:1px solid var(--border);
-  margin-bottom:32px;
-}
-@media(max-width:700px){.hero{grid-template-columns:1fr;}}
-.hero-title{
-  font-family:'Orbitron',monospace;
-  font-size:clamp(32px,6vw,72px);
-  font-weight:900;
-  line-height:1;
-  letter-spacing:-0.02em;
-}
-.hero-title .t1{color:#fff;display:block;}
-.hero-title .t2{color:var(--cyan);display:block;text-shadow:var(--glow);}
-.hero-sub{
-  font-size:15px;color:var(--muted);
-  margin-top:16px;line-height:1.7;max-width:520px;
-  letter-spacing:0.04em;
-}
-.hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;}
-.hero-tag{
-  font-family:'Share Tech Mono',monospace;
-  font-size:10px;letter-spacing:0.12em;
-  padding:5px 12px;
-  border:1px solid var(--border2);
-  color:var(--cyan);
-  background:var(--cyan-dim);
-  clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);
-}
+/* MASTER BAR */
+.master{margin:32px 0;background:var(--glass);border:1px solid var(--b);padding:24px 32px;display:flex;align-items:center;gap:28px;flex-wrap:wrap;position:relative;overflow:hidden;backdrop-filter:blur(8px);}
+.master::before{content:'MISSION PROGRESS';position:absolute;top:10px;right:20px;font-family:var(--fm);font-size:8px;color:var(--t3);letter-spacing:.2em;}
+.master::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,229,255,.02),transparent 60%);pointer-events:none;}
+.ml{font-family:var(--fm);font-size:10px;color:var(--t3);letter-spacing:.15em;min-width:90px;}
+.mtrack{flex:1;min-width:200px;}
+.mbg{height:10px;background:rgba(255,255,255,.04);border:1px solid var(--b);position:relative;overflow:visible;}
+.mfill{height:100%;position:relative;background:linear-gradient(90deg,var(--c),var(--green),var(--c));background-size:200% 100%;animation:gShift 3s linear infinite;transition:width .8s var(--expo);box-shadow:0 0 16px var(--c),0 0 32px rgba(0,229,255,.3);}
+@keyframes gShift{0%{background-position:0% 0%}100%{background-position:200% 0%}}
+.mfill::after{content:'';position:absolute;right:-1px;top:-3px;bottom:-3px;width:3px;background:#fff;box-shadow:0 0 12px var(--c),0 0 24px var(--c);animation:pW 1.5s ease-in-out infinite;}
+@keyframes pW{0%,100%{opacity:1}50%{opacity:.4}}
+.mpct{font-family:var(--fd);font-size:40px;color:var(--c);min-width:80px;text-align:right;letter-spacing:.05em;text-shadow:0 0 20px rgba(0,229,255,.4);}
 
-/* FLIP CALENDAR */
-.flip-cal-wrap{
-  display:flex;flex-direction:column;align-items:center;gap:8px;
-  min-width:160px;
-}
-.flip-cal{
-  width:160px;height:180px;
-  perspective:600px;
-  position:relative;
-}
-.flip-card{
-  width:100%;height:100%;
-  transform-style:preserve-3d;
-  position:relative;
-  animation:none;
-}
-.flip-face{
-  position:absolute;inset:0;
-  background:linear-gradient(160deg,var(--bg3),var(--bg2));
-  border:1px solid var(--border2);
-  border-top:3px solid var(--cyan);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  backface-visibility:hidden;
-  box-shadow:var(--glow2),inset 0 0 40px rgba(0,245,255,0.05);
-}
-.flip-month{
-  font-family:'Share Tech Mono',monospace;
-  font-size:11px;letter-spacing:0.2em;
-  color:var(--cyan);
-  margin-bottom:8px;
-}
-.flip-day{
-  font-family:'Orbitron',monospace;
-  font-size:72px;font-weight:900;
-  color:#fff;line-height:1;
-  text-shadow:0 0 30px rgba(0,245,255,0.5);
-}
-.flip-weekday{
-  font-family:'Rajdhani',sans-serif;
-  font-size:13px;letter-spacing:0.2em;
-  color:var(--muted);margin-top:8px;
-}
-.flip-year{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted2);margin-top:4px;}
-.flip-hinge{
-  position:absolute;top:50%;left:0;right:0;height:1px;
-  background:rgba(0,245,255,0.3);z-index:10;
-  box-shadow:0 0 6px var(--cyan);
-}
-.flip-screw{
-  position:absolute;top:50%;width:8px;height:8px;border-radius:50%;
-  background:var(--bg3);border:1px solid var(--cyan2);
-  transform:translateY(-50%);
-}
-.flip-screw.l{left:10px;} .flip-screw.r{right:10px;}
-.cal-progress{
-  font-family:'Share Tech Mono',monospace;font-size:10px;
-  color:var(--muted);letter-spacing:0.1em;text-align:center;
-}
-.cal-progress span{color:var(--cyan);}
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:28px;}
+.sc{background:var(--glass);border:1px solid var(--b);padding:22px 20px;position:relative;overflow:hidden;transition:all .4s var(--expo);backdrop-filter:blur(8px);cursor:default;}
+.sc::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c),transparent);opacity:0;transition:opacity .3s;}
+.sc::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,var(--cg),transparent 70%);opacity:0;transition:opacity .4s;}
+.sc:hover{border-color:var(--b2);transform:translateY(-3px);}.sc:hover::before{opacity:1;}.sc:hover::after{opacity:1;}
+.sc-l{font-family:var(--fm);font-size:8px;letter-spacing:.22em;color:var(--t3);margin-bottom:12px;}
+.sc-v{font-family:var(--fd);font-size:42px;line-height:1;letter-spacing:.03em;}
+.sc-v.c{color:var(--c);text-shadow:0 0 20px rgba(0,229,255,.3);}
+.sc-v.g{color:var(--green);text-shadow:0 0 20px rgba(57,255,20,.3);}
+.sc-v.gold{color:var(--gold);text-shadow:0 0 20px rgba(245,197,24,.3);}
+.sc-s{font-size:11px;color:var(--t3);margin-top:6px;letter-spacing:.04em;}
 
-/* MASTER PROGRESS */
-.master-bar{
-  background:var(--panel);
-  border:1px solid var(--border);
-  padding:20px 28px;
-  display:flex;align-items:center;gap:24px;
-  margin-bottom:28px;
-  flex-wrap:wrap;gap:16px;
-  position:relative;overflow:hidden;
-}
-.master-bar::before{
-  content:'MISSION PROGRESS';
-  position:absolute;top:8px;right:16px;
-  font-family:'Share Tech Mono',monospace;font-size:9px;
-  color:var(--muted2);letter-spacing:0.2em;
-}
-.mb-label{font-size:11px;color:var(--muted);letter-spacing:0.15em;font-family:'Share Tech Mono',monospace;min-width:100px;}
-.mb-bar{flex:1;min-width:180px;}
-.mb-bg{height:8px;background:rgba(255,255,255,0.05);border:1px solid var(--border);position:relative;overflow:hidden;}
-.mb-fill{
-  height:100%;
-  background:linear-gradient(90deg,var(--cyan),var(--green));
-  transition:width 0.6s cubic-bezier(0.4,0,0.2,1);
-  position:relative;
-}
-.mb-fill::after{
-  content:'';position:absolute;right:0;top:0;bottom:0;width:3px;
-  background:#fff;box-shadow:0 0 8px var(--cyan);
-  animation:pulse-bar 1.5s ease-in-out infinite;
-}
-@keyframes pulse-bar{0%,100%{opacity:1}50%{opacity:0.3}}
-.mb-scan{
-  position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,rgba(0,245,255,0.15),transparent);
-  animation:scan-h 2s linear infinite;
-  width:30%;
-}
-@keyframes scan-h{from{left:-30%}to{left:100%}}
-.mb-pct{font-family:'Orbitron',monospace;font-size:28px;font-weight:700;color:var(--cyan);min-width:70px;text-align:right;}
+/* STREAK */
+.stk{background:var(--glass);border:1px solid var(--b);padding:28px 32px;margin-bottom:28px;display:flex;align-items:center;gap:36px;flex-wrap:wrap;backdrop-filter:blur(8px);position:relative;overflow:hidden;}
+.stk::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(245,197,24,.05),transparent 60%);pointer-events:none;}
+.stk-fw{position:relative;flex-shrink:0;}
+.stk-fl{font-size:52px;animation:fDance 1.2s ease-in-out infinite;display:block;filter:drop-shadow(0 0 12px rgba(255,140,0,.8));}
+@keyframes fDance{0%,100%{transform:scaleY(1) rotate(-3deg)}33%{transform:scaleY(1.08) rotate(2deg)}66%{transform:scaleY(.95) rotate(-1deg)}}
+.stk-ring{position:absolute;inset:-8px;border-radius:50%;border:2px solid rgba(245,197,24,.3);animation:sRing 2s ease-in-out infinite;}
+@keyframes sRing{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.1);opacity:.9}}
+.stk-num{font-family:var(--fd);font-size:72px;color:var(--gold);line-height:1;letter-spacing:.03em;text-shadow:0 0 40px rgba(245,197,24,.5),0 0 80px rgba(245,197,24,.2);}
+.stk-lbl{font-family:var(--fm);font-size:10px;color:var(--t3);letter-spacing:.2em;margin-top:2px;}
+.stk-best{font-family:var(--fm);font-size:10px;color:var(--t3);margin-top:4px;}
+.stk-best span{color:var(--gold);}
+.stk-cal{flex:1;min-width:260px;}
+.sc-head{font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:.18em;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+.sc-head span{color:var(--c);}
+.sc-dh{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px;}
+.sc-dh div{font-family:var(--fm);font-size:8px;color:var(--t3);text-align:center;padding:2px 0;}
+#stk-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.sc-cell{aspect-ratio:1;border-radius:2px;background:rgba(255,255,255,.04);border:1px solid transparent;transition:all .2s;}
+.sc-cell.hit{background:rgba(245,197,24,.5);border-color:rgba(245,197,24,.6);box-shadow:0 0 6px rgba(245,197,24,.3);}
+.sc-cell.today{border-color:var(--c);box-shadow:0 0 8px rgba(0,229,255,.4);animation:tPulse 2s ease-in-out infinite;}
+.sc-cell.hit.today{background:rgba(57,255,20,.5);border-color:var(--green);box-shadow:0 0 10px rgba(57,255,20,.5);}
+@keyframes tPulse{0%,100%{box-shadow:0 0 8px rgba(0,229,255,.4)}50%{box-shadow:0 0 16px rgba(0,229,255,.7)}}
+.stk-acts{display:flex;flex-direction:column;gap:10px;align-items:flex-end;}
+.stk-btn{font-family:var(--fd);font-size:16px;letter-spacing:.12em;padding:12px 28px;cursor:none;border:none;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);transition:all .3s var(--expo);position:relative;overflow:hidden;}
+.stk-btn.p{background:var(--c);color:#000;}
+.stk-btn.p:hover{background:var(--gold);box-shadow:0 0 30px rgba(245,197,24,.4);transform:scale(1.04);}
+.stk-btn.p::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transform:translateX(-150%);transition:transform .4s;}
+.stk-btn.p:hover::before{transform:translateX(150%);}
+.stk-btn.done{background:var(--green);color:#000;}
+.stk-btn.s{background:transparent;border:1px solid var(--b2);color:var(--t3);font-size:12px;padding:8px 16px;font-family:var(--fm);}
+.stk-btn.s:hover{border-color:var(--c);color:var(--c);}
 
-/* STATS ROW */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:28px;}
-.stat{
-  background:var(--panel);border:1px solid var(--border);
-  padding:20px 18px;position:relative;overflow:hidden;
-}
-.stat::before{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
-  opacity:0;transition:opacity 0.3s;
-}
-.stat:hover::before{opacity:1;}
-.stat-label{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:0.2em;color:var(--muted);margin-bottom:10px;}
-.stat-num{font-family:'Orbitron',monospace;font-size:32px;font-weight:700;line-height:1;}
-.stat-num.c{color:var(--cyan);}
-.stat-num.g{color:var(--green);}
-.stat-num.gold{color:var(--gold);}
-.stat-num.r{color:var(--red);}
-.stat-sub{font-size:11px;color:var(--muted);margin-top:6px;letter-spacing:0.05em;}
-.stat-bar{height:2px;background:rgba(255,255,255,0.05);margin-top:10px;}
-.stat-bar-fill{height:100%;background:var(--cyan);transition:width 0.6s ease;}
-
-/* STREAK DISPLAY */
-.streak-wrap{
-  background:var(--panel);border:1px solid var(--border);
-  padding:24px 28px;margin-bottom:28px;
-  display:flex;align-items:center;gap:32px;flex-wrap:wrap;
-}
-.streak-flame{font-size:36px;animation:flicker 1.5s ease-in-out infinite;}
-@keyframes flicker{0%,100%{transform:scale(1) rotate(-2deg)}50%{transform:scale(1.1) rotate(2deg)}}
-.streak-num{font-family:'Orbitron',monospace;font-size:56px;font-weight:900;color:var(--gold);line-height:1;text-shadow:0 0 30px rgba(255,215,0,0.5);}
-.streak-label{font-size:12px;color:var(--muted);letter-spacing:0.15em;font-family:'Share Tech Mono',monospace;margin-top:4px;}
-.streak-dots{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;}
-.streak-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid var(--border);transition:all 0.3s;}
-.streak-dot.hit{background:var(--gold);border-color:var(--gold);box-shadow:0 0 8px var(--gold);}
-.streak-dot.today{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 12px var(--cyan);animation:pulse-dot 1s ease-in-out infinite;}
-@keyframes pulse-dot{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
-.streak-checkin{
-  margin-left:auto;
-  font-family:'Orbitron',monospace;font-size:11px;font-weight:600;letter-spacing:0.15em;
-  background:transparent;border:1px solid var(--gold);color:var(--gold);
-  padding:12px 24px;cursor:none;
-  clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);
-  transition:all 0.2s;
-}
-.streak-checkin:hover{background:var(--gold);color:#000;}
-.streak-checkin.done{border-color:var(--green);color:var(--green);}
-.streak-checkin.done:hover{background:var(--green);color:#000;}
-
-/* PHASE BAR */
-.phases{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-bottom:28px;background:var(--border);}
-.phase{background:var(--bg2);padding:16px 20px;position:relative;overflow:hidden;}
-.phase.now{background:var(--cyan-dim);}
-.phase.now::after{content:'▶ NOW';position:absolute;top:10px;right:12px;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--cyan);letter-spacing:0.15em;}
-.phase-n{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:0.2em;margin-bottom:6px;}
-.phase-t{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;color:#fff;}
-.phase-d{font-size:11px;color:var(--muted);margin-top:4px;letter-spacing:0.05em;}
+/* PHASES */
+.phases{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-bottom:32px;border:1px solid var(--b);overflow:hidden;}
+.ph{padding:18px 22px;border-right:1px solid var(--b);position:relative;overflow:hidden;transition:all .3s;}
+.ph:last-child{border-right:none;}
+.ph::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--b);transition:background .3s;}
+.ph.now{background:linear-gradient(135deg,rgba(0,229,255,.06),transparent);}
+.ph.now::after{background:linear-gradient(90deg,var(--c),transparent);}
+.ph-n{font-family:var(--fm);font-size:8px;color:var(--t3);letter-spacing:.2em;margin-bottom:6px;display:flex;justify-content:space-between;}
+.ph-nt{color:var(--c);}
+.ph-t{font-family:var(--fd);font-size:16px;letter-spacing:.08em;color:#fff;margin-bottom:4px;}
+.ph-d{font-family:var(--fm);font-size:10px;color:var(--t3);}
+@media(max-width:600px){.phases{grid-template-columns:1fr;}.ph{border-right:none;border-bottom:1px solid var(--b);}}
 
 /* TABS */
-.tabs{display:flex;gap:2px;margin-bottom:24px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+.tabs{display:flex;gap:0;margin-bottom:28px;border-bottom:1px solid var(--b);overflow-x:auto;scrollbar-width:none;}
 .tabs::-webkit-scrollbar{display:none;}
-.tab{
-  font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:0.1em;
-  padding:10px 20px;background:transparent;
-  border:1px solid var(--border);color:var(--muted);
-  cursor:none;white-space:nowrap;transition:all 0.2s;
-  clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);
-}
-.tab:hover{color:var(--text);border-color:var(--border2);}
-.tab.on{background:var(--cyan-dim);border-color:var(--cyan);color:var(--cyan);}
-.panel{display:none;animation:fade-in 0.3s ease;}
+.tab{font-family:var(--fm);font-size:10px;letter-spacing:.12em;padding:12px 22px;background:transparent;border:none;color:var(--t3);cursor:none;white-space:nowrap;position:relative;bottom:-1px;border-bottom:2px solid transparent;transition:all .25s;}
+.tab:hover{color:var(--t2);}.tab.on{color:var(--c);border-bottom-color:var(--c);}
+.panel{display:none;animation:pIn .35s var(--expo);}
 .panel.on{display:block;}
-@keyframes fade-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-/* SECTION HEADERS */
-.sh{display:flex;align-items:center;gap:12px;margin:32px 0 14px;}
+/* SECTION HEADS */
+.sh{display:flex;align-items:center;gap:14px;margin:36px 0 16px;}
 .sh:first-child{margin-top:0;}
-.sh-tag{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:0.18em;padding:4px 10px;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%);}
-.sh-tag.c{background:var(--cyan-dim);color:var(--cyan);border:1px solid rgba(0,245,255,0.25);}
-.sh-tag.g{background:var(--green-dim);color:var(--green);border:1px solid rgba(0,255,136,0.25);}
-.sh-tag.gold{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(255,215,0,0.25);}
-.sh-tag.r{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,56,96,0.25);}
-.sh h2{font-family:'Orbitron',monospace;font-size:15px;font-weight:700;color:#fff;letter-spacing:0.05em;}
-.sh-line{flex:1;height:1px;background:var(--border);}
+.sh-tag{font-family:var(--fm);font-size:9px;letter-spacing:.15em;padding:5px 12px;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);flex-shrink:0;}
+.sh-tag.c{background:rgba(0,229,255,.12);color:var(--c);border:1px solid rgba(0,229,255,.25);}
+.sh-tag.gold{background:rgba(245,197,24,.12);color:var(--gold);border:1px solid rgba(245,197,24,.3);}
+.sh-tag.g{background:rgba(57,255,20,.1);color:var(--green);border:1px solid rgba(57,255,20,.25);}
+.sh-tag.r{background:rgba(255,45,85,.1);color:var(--red);border:1px solid rgba(255,45,85,.25);}
+.sh h2{font-family:var(--fd);font-size:22px;letter-spacing:.06em;color:#fff;}
+.sh-line{flex:1;height:1px;background:var(--b);}
 
 /* CHECKLIST */
-.cl{display:flex;flex-direction:column;gap:5px;margin-bottom:6px;}
-.ci{
-  display:flex;align-items:flex-start;gap:14px;
-  padding:13px 16px;
-  background:var(--bg2);border:1px solid var(--border);
-  cursor:none;transition:all 0.2s;
-  position:relative;overflow:hidden;
-}
-.ci::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--border2);transition:background 0.2s;}
-.ci:hover{border-color:var(--border2);background:var(--bg3);}
-.ci:hover::before{background:var(--cyan);}
-.ci.done{opacity:0.4;}
-.ci.done::before{background:var(--green);}
-.ci.done .ct{text-decoration:line-through;color:var(--muted);}
-.cb{
-  width:16px;height:16px;border:1.5px solid rgba(0,245,255,0.3);
-  flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;
-  transition:all 0.2s;
-}
-.ci.done .cb{border-color:var(--green);background:var(--green-dim);}
-.ck{display:none;color:var(--green);font-size:11px;}
-.ci.done .ck{display:block;}
+.cl{display:flex;flex-direction:column;gap:4px;margin-bottom:4px;}
+.ci{display:flex;align-items:flex-start;gap:14px;padding:14px 18px;background:rgba(6,17,30,.5);border:1px solid var(--b);cursor:none;transition:all .3s var(--expo);position:relative;overflow:hidden;}
+.ci::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--b);transition:background .3s,box-shadow .3s;}
+.ci::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--cg2),transparent);opacity:0;transition:opacity .3s;pointer-events:none;}
+.ci:hover{border-color:var(--b2);background:rgba(6,17,30,.85);transform:translateX(4px);}
+.ci:hover::before{background:var(--c);box-shadow:0 0 8px var(--c);}
+.ci:hover::after{opacity:1;}
+.ci.done{opacity:.38;}.ci.done::before{background:var(--green);}
+.ci.done .ct{text-decoration:line-through;color:var(--t3);}
+.cb{width:18px;height:18px;flex-shrink:0;border:1.5px solid rgba(0,229,255,.3);display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .25s;}
+.ci.done .cb{border-color:var(--green);background:rgba(57,255,20,.15);}
+.ck{display:none;color:var(--green);font-size:12px;}.ci.done .ck{display:block;}
 .cc{flex:1;}
-.ct{font-size:13px;line-height:1.5;color:var(--text);letter-spacing:0.02em;}
-.cm{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5;font-family:'Share Tech Mono',monospace;}
-.ctag{font-family:'Share Tech Mono',monospace;font-size:9px;padding:3px 8px;letter-spacing:0.1em;flex-shrink:0;margin-top:3px;clip-path:polygon(3px 0,100% 0,calc(100% - 3px) 100%,0 100%);}
-.ctag.c{background:var(--cyan-dim);color:var(--cyan);}
-.ctag.g{background:var(--green-dim);color:var(--green);}
-.ctag.gold{background:var(--gold-dim);color:var(--gold);}
-.ctag.r{background:var(--red-dim);color:var(--red);}
+.ct{font-size:14px;letter-spacing:.02em;line-height:1.4;font-weight:600;}
+.cm{font-family:var(--fm);font-size:10px;color:var(--t3);margin-top:4px;line-height:1.6;}
+.ctag{font-family:var(--fm);font-size:8px;padding:3px 9px;letter-spacing:.1em;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%);flex-shrink:0;margin-top:2px;}
+.ctag.gold{background:rgba(245,197,24,.12);color:var(--gold);border:1px solid rgba(245,197,24,.3);}
+.ctag.c{background:var(--cg2);color:var(--c);border:1px solid var(--b2);}
+.ctag.g{background:rgba(57,255,20,.08);color:var(--green);border:1px solid rgba(57,255,20,.25);}
+.ctag.r{background:rgba(255,45,85,.1);color:var(--red);border:1px solid rgba(255,45,85,.3);}
 
-/* RESOURCE GRID */
-.rg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-bottom:12px;}
-.rc{
-  background:var(--bg2);border:1px solid var(--border);padding:16px 18px;
-  transition:all 0.2s;position:relative;overflow:hidden;
-}
-.rc:hover{border-color:var(--border2);transform:translateY(-2px);}
-.rc::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,245,255,0.03),transparent);pointer-events:none;}
-.rc-icon{font-size:24px;margin-bottom:8px;}
-.rc-name{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;letter-spacing:0.05em;}
-.rc-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:12px;}
-.rc-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
-.rc-tag{font-size:10px;padding:2px 8px;border-radius:0;background:var(--cyan-dim);color:var(--cyan);font-family:'Share Tech Mono',monospace;letter-spacing:0.08em;}
-.rc-tag.gold{background:var(--gold-dim);color:var(--gold);}
-.rc-tag.g{background:var(--green-dim);color:var(--green);}
-.rc-link{
-  display:inline-flex;align-items:center;gap:6px;
-  font-family:'Share Tech Mono',monospace;font-size:10px;
-  color:var(--cyan);text-decoration:none;letter-spacing:0.1em;
-  border-bottom:1px solid rgba(0,245,255,0.3);padding-bottom:2px;
-  transition:all 0.2s;
-}
-.rc-link:hover{color:var(--gold);border-color:var(--gold);}
-.rc-link.yt{color:#ff4444;border-color:rgba(255,68,68,0.4);}
-.rc-link.yt:hover{color:#ff6666;}
+/* SMC CARDS */
+.smc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-bottom:8px;}
+.smc-card{background:var(--glass);border:1px solid var(--b);padding:18px;border-left:3px solid var(--c);transition:all .35s var(--expo);position:relative;overflow:hidden;cursor:default;}
+.smc-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--cg2),transparent);opacity:0;transition:opacity .3s;pointer-events:none;}
+.smc-card:hover{border-color:var(--b2);border-left-color:var(--gold);transform:translateY(-3px) translateX(3px);box-shadow:0 10px 40px rgba(0,0,0,.3),-3px 0 0 var(--gold);}
+.smc-card:hover::after{opacity:1;}
+.smc-card h4{font-family:var(--fd);font-size:16px;letter-spacing:.08em;color:var(--c);margin-bottom:8px;}
+.smc-card:hover h4{color:var(--gold);}
+.smc-card p{font-family:var(--fm);font-size:11px;color:var(--t2);line-height:1.65;}
 
-/* YOUTUBE THUMBNAIL CARDS */
-.yt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:12px;}
-.yt-card{
-  background:var(--bg2);border:1px solid var(--border);
-  overflow:hidden;transition:all 0.25s;cursor:pointer;
-  display:flex;flex-direction:column;
-  text-decoration:none;color:inherit;
-}
-.yt-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,0.4);}
-.yt-card:hover .yt-play{opacity:1;transform:translate(-50%,-50%) scale(1);}
-.yt-thumb-wrap{position:relative;width:100%;padding-bottom:56.25%;overflow:hidden;background:#0a0a0a;}
-.yt-thumb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 0.3s ease;filter:brightness(0.85);}
-.yt-card:hover .yt-thumb{transform:scale(1.04);filter:brightness(1);}
-.yt-play{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.85);
-  width:48px;height:48px;background:rgba(255,0,0,0.9);border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  opacity:0;transition:all 0.25s;
-  box-shadow:0 0 20px rgba(255,0,0,0.5);
-}
-.yt-play::after{content:'';border-left:18px solid #fff;border-top:11px solid transparent;border-bottom:11px solid transparent;margin-left:4px;}
-.yt-badge{
-  position:absolute;top:8px;left:8px;
-  font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:0.1em;
-  padding:3px 8px;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%);
-}
-.yt-badge.smc{background:rgba(255,215,0,0.9);color:#000;}
-.yt-badge.hack{background:rgba(0,245,255,0.9);color:#000;}
-.yt-badge.macro{background:rgba(255,56,96,0.9);color:#fff;}
-.yt-badge.income{background:rgba(0,255,136,0.9);color:#000;}
-.yt-body{padding:12px 14px;flex:1;display:flex;flex-direction:column;gap:6px;}
-.yt-channel{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:0.12em;}
-.yt-title{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;color:#fff;line-height:1.3;}
-.yt-desc{font-size:11px;color:var(--muted);line-height:1.55;flex:1;}
-.yt-footer{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);}
-.yt-subs{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted2);}
-.yt-open{font-family:'Share Tech Mono',monospace;font-size:9px;color:#ff4444;letter-spacing:0.1em;}
-.yt-thumb-fallback{
-  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:linear-gradient(135deg,var(--bg3),var(--bg2));
-  font-size:32px;gap:6px;
-}
-.yt-thumb-fallback span{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.1em;}
+/* SCHEDULE */
+.sched{display:flex;flex-direction:column;gap:3px;}
+.sb{display:flex;align-items:stretch;border:1px solid var(--b);overflow:hidden;transition:all .3s var(--expo);position:relative;}
+.sb::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:var(--cg2);transition:width .3s;}
+.sb:hover{border-color:var(--b2);}.sb:hover::before{width:100%;}
+.sb.nb{border-color:var(--c);box-shadow:0 0 20px rgba(0,229,255,.1);}
+.sb.nb .sb-time{background:rgba(0,229,255,.1);color:var(--c);}
+.sb-time{font-family:var(--fm);font-size:11px;color:var(--t3);padding:14px 18px;background:rgba(255,255,255,.02);border-right:1px solid var(--b);min-width:110px;display:flex;align-items:center;letter-spacing:.04em;transition:all .3s;position:relative;z-index:1;}
+.sb-body{padding:14px 18px;flex:1;position:relative;z-index:1;}
+.sb-title{font-size:14px;font-weight:700;letter-spacing:.03em;color:var(--text);}
+.sb-desc{font-family:var(--fm);font-size:10px;color:var(--t3);margin-top:3px;line-height:1.5;}
+.sb-badge{font-family:var(--fm);font-size:9px;padding:0 14px;letter-spacing:.1em;display:flex;align-items:center;flex-shrink:0;margin:8px 12px;border:1px solid;position:relative;z-index:1;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%);}
+.sb-badge.income{color:var(--gold);border-color:rgba(245,197,24,.3);background:rgba(245,197,24,.08);}
+.sb-badge.trade{color:var(--green);border-color:rgba(57,255,20,.3);background:rgba(57,255,20,.08);}
+.sb-badge.hack{color:var(--c);border-color:var(--b2);background:var(--cg2);}
+.sb-badge.rest{color:var(--t3);border-color:rgba(255,255,255,.1);background:transparent;}
+
+/* YOUTUBE CARDS */
+.yt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-bottom:16px;}
+.yt-card{background:var(--glass);border:1px solid var(--b);overflow:hidden;cursor:none;transition:all .4s var(--expo);text-decoration:none;color:inherit;display:flex;flex-direction:column;position:relative;}
+.yt-card::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(135deg,rgba(0,229,255,.06),transparent 50%,rgba(0,0,0,.3));opacity:0;transition:opacity .4s;pointer-events:none;}
+.yt-card:hover{border-color:var(--b3);transform:translateY(-6px) scale(1.01);box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 1px rgba(0,229,255,.15),0 0 40px rgba(0,229,255,.08);}
+.yt-card:hover::before{opacity:1;}
+.yt-card:hover .yt-th{transform:scale(1.06);filter:brightness(1.1);}
+.yt-card:hover .yt-pb{opacity:1;transform:translate(-50%,-50%) scale(1);}
+.yt-card:hover .yt-glow{opacity:1;}
+.yt-tw{position:relative;padding-bottom:56.25%;overflow:hidden;background:#020810;}
+.yt-th{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s var(--expo),filter .4s;filter:brightness(.8) saturate(.9);}
+.yt-pb{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.8);width:54px;height:54px;border-radius:50%;background:rgba(220,20,20,.92);display:flex;align-items:center;justify-content:center;opacity:0;transition:all .3s var(--spring);box-shadow:0 0 30px rgba(220,20,20,.6);z-index:2;}
+.yt-pb::after{content:'▶';font-size:20px;color:#fff;margin-left:4px;}
+.yt-badge{position:absolute;top:10px;left:10px;z-index:2;font-family:var(--fm);font-size:9px;letter-spacing:.12em;padding:4px 10px;clip-path:polygon(5px 0,100% 0,calc(100% - 5px) 100%,0 100%);}
+.yt-badge.smc{background:rgba(245,197,24,.92);color:#000;}
+.yt-badge.hack{background:rgba(0,229,255,.92);color:#000;}
+.yt-badge.macro{background:rgba(255,45,85,.92);color:#fff;}
+.yt-badge.mentor{background:rgba(57,255,20,.92);color:#000;}
+.yt-glow{position:absolute;bottom:0;left:0;right:0;height:60%;z-index:1;background:linear-gradient(transparent,rgba(0,0,0,.7));opacity:.6;transition:opacity .4s;pointer-events:none;}
+.yt-fall{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#0a1a2e,#03080f);font-size:40px;gap:8px;}
+.yt-fall span{font-family:var(--fm);font-size:10px;color:var(--t3);letter-spacing:.15em;}
+.yt-body{padding:16px 18px;flex:1;display:flex;flex-direction:column;gap:6px;position:relative;z-index:2;}
+.yt-ch{font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:.15em;}
+.yt-title{font-family:var(--fd);font-size:17px;letter-spacing:.04em;color:#fff;line-height:1.2;}
+.yt-desc{font-size:12px;color:var(--t2);line-height:1.6;flex:1;letter-spacing:.02em;}
+.yt-foot{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid var(--b);}
+.yt-subs{font-family:var(--fm);font-size:9px;color:var(--t3);}
+.yt-cta{font-family:var(--fm);font-size:9px;color:#dc1414;letter-spacing:.1em;display:flex;align-items:center;gap:4px;}
+.yt-cta::before{content:'▶';font-size:8px;}
+
+/* MENTOR CARD */
+.mentor-card{background:var(--glass);border:1px solid rgba(57,255,20,.3);overflow:hidden;cursor:none;transition:all .4s var(--expo);text-decoration:none;color:inherit;display:grid;grid-template-columns:1fr 1fr;position:relative;margin-bottom:16px;box-shadow:0 0 40px rgba(57,255,20,.05);}
+.mentor-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(57,255,20,.04),transparent);pointer-events:none;}
+.mentor-card:hover{border-color:rgba(57,255,20,.6);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.4),0 0 40px rgba(57,255,20,.1);}
+.mentor-card:hover .yt-th{transform:scale(1.05);}
+.mentor-card:hover .yt-pb{opacity:1;transform:translate(-50%,-50%) scale(1);}
+.mentor-thumb{position:relative;overflow:hidden;min-height:220px;}
+.mentor-thumb .yt-th{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s var(--expo);}
+.mentor-body{padding:24px;display:flex;flex-direction:column;justify-content:center;gap:12px;}
+.mentor-tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--fm);font-size:9px;letter-spacing:.15em;color:var(--green);padding:4px 10px;border:1px solid rgba(57,255,20,.3);clip-path:polygon(5px 0,100% 0,calc(100% - 5px) 100%,0 100%);width:fit-content;}
+.mentor-tag::before{content:'★';font-size:10px;}
+.mentor-name{font-family:var(--fd);font-size:28px;color:#fff;letter-spacing:.05em;line-height:1.1;}
+.mentor-sub{font-family:var(--fm);font-size:10px;color:var(--green);letter-spacing:.1em;}
+.mentor-desc{font-size:13px;color:var(--t2);line-height:1.6;}
+.mentor-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
+.mentor-chip{font-family:var(--fm);font-size:9px;padding:3px 8px;border:1px solid rgba(57,255,20,.2);color:var(--green);background:rgba(57,255,20,.06);letter-spacing:.08em;}
+.mentor-link{display:inline-flex;align-items:center;gap:8px;font-family:var(--fm);font-size:10px;color:var(--green);letter-spacing:.1em;padding:8px 16px;border:1px solid rgba(57,255,20,.4);width:fit-content;transition:all .3s;clip-path:polygon(5px 0,100% 0,calc(100% - 5px) 100%,0 100%);text-decoration:none;}
+.mentor-link:hover{background:rgba(57,255,20,.12);}
+@media(max-width:600px){.mentor-card{grid-template-columns:1fr;}.mentor-thumb{height:200px;}}
+
+/* RC GRID */
+.rc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:12px;}
+.rc{background:var(--glass);border:1px solid var(--b);padding:18px;cursor:none;transition:all .35s var(--expo);position:relative;overflow:hidden;text-decoration:none;color:inherit;display:block;}
+.rc::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at var(--mx,50%) var(--my,50%),rgba(0,229,255,.06),transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none;}
+.rc:hover{border-color:var(--b2);transform:translateY(-3px);}.rc:hover::after{opacity:1;}
+.rc-icon{font-size:26px;margin-bottom:10px;}
+.rc-name{font-family:var(--fd);font-size:18px;letter-spacing:.05em;color:#fff;margin-bottom:5px;}
+.rc-desc{font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:12px;}
+.rc-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+.rc-chip{font-family:var(--fm);font-size:9px;padding:2px 7px;letter-spacing:.08em;}
+.rc-chip.c{color:var(--c);border:1px solid rgba(0,229,255,.25);background:var(--cg2);}
+.rc-chip.gold{color:var(--gold);border:1px solid rgba(245,197,24,.25);background:var(--goldg);}
+.rc-chip.g{color:var(--green);border:1px solid rgba(57,255,20,.25);background:var(--greeng);}
+.rc-link{font-family:var(--fm);font-size:10px;color:var(--c);letter-spacing:.08em;border-bottom:1px solid rgba(0,229,255,.25);padding-bottom:1px;text-decoration:none;}
+
+/* FINANCE */
+.fsplit{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:20px;}
+.fc{background:var(--glass);border:1px solid var(--b);padding:20px 16px;text-align:center;transition:all .35s var(--expo);cursor:default;position:relative;overflow:hidden;}
+.fc::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;transition:all .3s;}
+.fc:hover{transform:translateY(-4px);}
+.fc:nth-child(1)::before{background:var(--c);}
+.fc:nth-child(2)::before{background:var(--green);}
+.fc:nth-child(3)::before{background:var(--gold);}
+.fc:nth-child(4)::before{background:var(--red);}
+.fc-lbl{font-family:var(--fm);font-size:8px;letter-spacing:.2em;color:var(--t3);margin-bottom:10px;}
+.fc-pct{font-family:var(--fd);font-size:48px;line-height:1;}
+.fc-desc{font-family:var(--fm);font-size:9px;color:var(--t3);margin-top:6px;line-height:1.4;}
 
 /* NOTES */
-.notes-ta{
-  width:100%;min-height:200px;
-  background:var(--bg2);border:1px solid var(--border);
-  color:var(--text);font-family:'Share Tech Mono',monospace;font-size:12px;
-  padding:18px;resize:vertical;outline:none;line-height:1.8;
-  transition:border-color 0.2s;
-}
-.notes-ta:focus{border-color:var(--cyan);}
-.notes-ta::placeholder{color:var(--muted2);}
+.notes-area{width:100%;min-height:240px;background:rgba(6,17,30,.6);border:1px solid var(--b);color:var(--text);font-family:var(--fm);font-size:12px;padding:20px;resize:vertical;outline:none;line-height:1.8;transition:border-color .3s;}
+.notes-area:focus{border-color:var(--c);box-shadow:0 0 20px rgba(0,229,255,.08);}
+.notes-area::placeholder{color:var(--t3);}
 
-/* REMINDER BOX */
-.rem-box{background:var(--bg2);border:1px solid var(--border);padding:24px;margin-bottom:14px;}
-.rem-box h3{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;margin-bottom:8px;letter-spacing:0.05em;}
-.rem-box p{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:16px;font-family:'Share Tech Mono',monospace;}
-.ir{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
-.inf{
-  background:var(--bg3);border:1px solid var(--border2);
-  color:var(--text);font-family:'Share Tech Mono',monospace;font-size:12px;
-  padding:10px 14px;outline:none;transition:border-color 0.2s;flex:1;min-width:200px;
-}
-.inf:focus{border-color:var(--cyan);}
-.btn{
-  font-family:'Orbitron',monospace;font-size:10px;font-weight:600;letter-spacing:0.15em;
-  padding:10px 22px;cursor:none;border:none;transition:all 0.2s;
-  clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);
-}
-.btn-c{background:var(--cyan);color:#000;}
-.btn-c:hover{background:var(--gold);box-shadow:0 0 20px rgba(255,215,0,0.3);}
-.btn-o{background:transparent;border:1px solid var(--border2);color:var(--muted);}
-.btn-o:hover{border-color:var(--cyan);color:var(--cyan);}
-
+/* REMINDERS */
+.rem-box{background:var(--glass);border:1px solid var(--b);padding:26px;margin-bottom:14px;backdrop-filter:blur(8px);}
+.rem-box h3{font-family:var(--fd);font-size:20px;letter-spacing:.06em;margin-bottom:8px;}
+.rem-box p{font-family:var(--fm);font-size:11px;color:var(--t2);line-height:1.7;margin-bottom:18px;}
+.ir{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+.inf{flex:1;min-width:220px;background:rgba(6,17,30,.8);border:1px solid var(--b2);color:var(--text);font-family:var(--fm);font-size:12px;padding:11px 16px;outline:none;transition:border-color .3s;}
+.inf:focus{border-color:var(--c);}
+.btn{font-family:var(--fd);font-size:14px;letter-spacing:.12em;padding:11px 24px;cursor:none;border:none;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);transition:all .3s var(--expo);}
+.btn-c{background:var(--c);color:#000;}.btn-c:hover{background:var(--gold);box-shadow:0 0 24px rgba(245,197,24,.4);}
+.btn-o{background:transparent;border:1px solid var(--b2);color:var(--t2);}.btn-o:hover{border-color:var(--c);color:var(--c);}
 .rl{display:flex;flex-direction:column;gap:8px;}
-.rli{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:12px 16px;background:var(--bg3);border:1px solid var(--border);
-  gap:12px;flex-wrap:wrap;
-}
-.rli-label{font-size:12px;color:var(--text);letter-spacing:0.03em;}
-.rli-sub{font-size:10px;color:var(--muted);margin-top:2px;font-family:'Share Tech Mono',monospace;}
+.rli{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:rgba(6,17,30,.4);border:1px solid var(--b);gap:14px;flex-wrap:wrap;transition:border-color .3s;}
+.rli:hover{border-color:var(--b2);}
+.rli-lbl{font-size:13px;font-weight:600;letter-spacing:.02em;}
+.rli-sub{font-family:var(--fm);font-size:10px;color:var(--t3);margin-top:2px;}
 
 /* TICKER */
-.ticker{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:10px 0;margin-bottom:28px;}
-.ticker-inner{display:flex;gap:64px;animation:ticker 40s linear infinite;white-space:nowrap;}
-.ti{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.15em;}
-.ti b{color:var(--cyan);}
-@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker{overflow:hidden;border-top:1px solid var(--b);border-bottom:1px solid var(--b);padding:11px 0;margin:0 0 32px;position:relative;}
+.ticker::before{content:'';position:absolute;left:0;top:0;bottom:0;width:80px;background:linear-gradient(90deg,var(--void),transparent);z-index:2;}
+.ticker::after{content:'';position:absolute;right:0;top:0;bottom:0;width:80px;background:linear-gradient(270deg,var(--void),transparent);z-index:2;}
+.tick-inner{display:flex;gap:56px;animation:tick 50s linear infinite;white-space:nowrap;}
+.ti{font-family:var(--fm);font-size:10px;color:var(--t3);letter-spacing:.15em;}
+.ti b{color:var(--c);}.ti.gold b{color:var(--gold);}.ti.green b{color:var(--green);}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* TOAST */
-#toast{
-  position:fixed;bottom:28px;right:28px;
-  background:var(--bg3);border:1px solid var(--cyan);
-  padding:12px 22px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyan);
-  z-index:9999;letter-spacing:0.1em;
-  transform:translateY(80px);opacity:0;transition:all 0.3s ease;pointer-events:none;
-  clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);
-  box-shadow:var(--glow);
-}
+#toast{position:fixed;bottom:28px;right:28px;background:var(--deep);border:1px solid var(--c);padding:13px 24px;z-index:99990;font-family:var(--fm);font-size:11px;color:var(--c);letter-spacing:.12em;clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);box-shadow:0 0 30px rgba(0,229,255,.2),0 8px 32px rgba(0,0,0,.5);transform:translateY(80px);opacity:0;transition:all .4s var(--expo);pointer-events:none;}
 #toast.show{transform:translateY(0);opacity:1;}
 
-/* SCHEDULE BLOCKS */
-.sched{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;}
-.sb{
-  display:flex;align-items:stretch;gap:0;
-  border:1px solid var(--border);overflow:hidden;
-}
-.sb-time{
-  font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyan);
-  padding:12px 16px;background:var(--bg3);border-right:1px solid var(--border);
-  min-width:100px;display:flex;align-items:center;letter-spacing:0.05em;
-}
-.sb-body{padding:12px 16px;flex:1;}
-.sb-title{font-size:13px;font-weight:600;color:var(--text);letter-spacing:0.03em;}
-.sb-desc{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5;font-family:'Share Tech Mono',monospace;}
-.sb-badge{font-family:'Share Tech Mono',monospace;font-size:9px;padding:2px 8px;letter-spacing:0.1em;margin:auto 12px;flex-shrink:0;clip-path:polygon(3px 0,100% 0,calc(100% - 3px) 100%,0 100%);}
-.sb-badge.income{background:var(--gold-dim);color:var(--gold);}
-.sb-badge.trade{background:var(--green-dim);color:var(--green);}
-.sb-badge.hack{background:var(--cyan-dim);color:var(--cyan);}
-.sb-badge.rest{background:rgba(255,255,255,0.05);color:var(--muted);}
-.sb.now{border-color:var(--cyan);box-shadow:0 0 12px rgba(0,245,255,0.1);}
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s var(--expo),transform .6s var(--expo);}
+.reveal.visible{opacity:1;transform:none;}
 
-/* FINANCE SPLIT */
-.fsplit{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px;}
-.fc{
-  background:var(--bg2);border:1px solid var(--border);padding:18px 16px;
-  text-align:center;position:relative;overflow:hidden;
-}
-.fc-pct{font-family:'Orbitron',monospace;font-size:36px;font-weight:700;margin:8px 0;}
-.fc-label{font-size:11px;color:var(--muted);letter-spacing:0.1em;font-family:'Share Tech Mono',monospace;}
-.fc-sub{font-size:10px;color:var(--muted2);margin-top:4px;}
-
-/* SMC specific */
-.smc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:8px;}
-.smc-card{
-  background:var(--bg2);border:1px solid var(--border);padding:16px;
-  border-left:3px solid var(--cyan);transition:all 0.2s;
-}
-.smc-card:hover{border-left-color:var(--gold);background:var(--bg3);}
-.smc-card h4{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;color:var(--cyan);margin-bottom:6px;letter-spacing:0.05em;}
-.smc-card p{font-size:11px;color:var(--muted);line-height:1.6;font-family:'Share Tech Mono',monospace;}
-
-/* ANIM DELAYS */
-.d1{animation-delay:0.1s}.d2{animation-delay:0.2s}.d3{animation-delay:0.3s}.d4{animation-delay:0.4s}
-
-@media(max-width:600px){
-  .phases{grid-template-columns:1fr;}
-  .streak-num{font-size:40px;}
-  .sb-time{min-width:80px;}
-}
+@media(max-width:760px){.yt-grid{grid-template-columns:1fr;}.smc-grid{grid-template-columns:1fr;}.stats{grid-template-columns:repeat(2,1fr);}.stk{gap:20px;}.stk-num{font-size:52px;}}
 </style>
 </head>
 <body>
 
-<!-- CURSOR -->
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
+<div id="CUR"><div class="dot"></div><div class="ring"></div></div>
+<canvas id="bgC"></canvas>
+<div class="noise"></div><div class="vign"></div><div class="grid"></div>
 
-<!-- STARS -->
-<canvas id="stars"></canvas>
-
-<!-- ============ WELCOME SCREEN ============ -->
+<!-- WELCOME -->
 <div id="welcome">
-  <div class="welcome-scan"></div>
-  <div class="welcome-glitch" data-text="LOCKDOWN">LOCKDOWN</div>
-  <div class="welcome-sub">STUDENT HUSTLE OPERATING SYSTEM — NAIROBI, KE</div>
-  <div class="welcome-line"></div>
-  <div class="welcome-greeting">
-    You said you're tired of your situation.<br>
-    This is where that changes.<br>
-    <span style="color:var(--cyan)">Trading · Ethical Hacking · Income · Discipline.</span>
-  </div>
-  <button class="welcome-enter" onclick="enterApp()">INITIALISE SYSTEM →</button>
+  <div class="w-scan"></div>
+  <div class="w-ring"></div><div class="w-ring"></div><div class="w-ring"></div>
+  <div class="w-logo">LOCK<span class="acc">DOWN</span><span class="sub">STUDENT HUSTLE OPERATING SYSTEM</span></div>
+  <div class="w-tag">// NAIROBI, KE &nbsp;·&nbsp; MAY–SEP 2025 &nbsp;·&nbsp; SMC · HACKING · INCOME</div>
+  <div class="w-line"></div>
+  <div class="w-greet">You said you're tired of your situation.<br><strong>This is where it changes.</strong><br>No more basic. No more limited. Just the work.</div>
+  <div class="w-btn"><div class="w-btn-i" onclick="enterApp()">INITIALISE SYSTEM &nbsp;→</div></div>
+  <div class="w-status">SYSTEM READY &nbsp;// ALL MODULES LOADED</div>
 </div>
 
-<!-- ============ MAIN APP ============ -->
+<!-- APP -->
 <div id="app">
-  <div class="container" style="max-width:1280px;margin:0 auto;padding:0 24px 80px;position:relative;z-index:1;">
+  <nav class="nav">
+    <div class="nav-logo"><span class="l1">LOCK</span><span class="l2">DOWN</span><span class="ver">OS v3.0</span></div>
+    <div class="nav-stats">
+      <div class="ns"><div class="ns-v c" id="n-done">0</div><div class="ns-l">TASKS</div></div>
+      <div class="ns"><div class="ns-v gold" id="n-streak">0🔥</div><div class="ns-l">STREAK</div></div>
+      <div class="ns"><div class="ns-v g" id="n-days">—</div><div class="ns-l">DAYS LEFT</div></div>
+    </div>
+    <div style="text-align:right">
+      <div id="clock">00:00:00</div>
+      <div id="navdate">LOADING...</div>
+    </div>
+  </nav>
 
-    <!-- TOPBAR -->
-    <div class="topbar">
-      <div class="topbar-logo">LOCK<span>DOWN</span> <span style="font-size:12px;color:var(--muted);font-weight:400;">OS v2.0</span></div>
-      <div class="topbar-right">
-        <div class="topbar-stat">
-          <div class="topbar-stat-val" id="tb-days">—</div>
-          <div class="topbar-stat-label">DAYS LEFT</div>
-        </div>
-        <div class="topbar-stat">
-          <div class="topbar-stat-val" id="tb-done" style="color:var(--green)">0</div>
-          <div class="topbar-stat-label">TASKS DONE</div>
-        </div>
-        <div class="topbar-stat">
-          <div class="topbar-stat-val" id="tb-streak" style="color:var(--gold)">0🔥</div>
-          <div class="topbar-stat-label">STREAK</div>
-        </div>
-        <div style="font-family:'Share Tech Mono',monospace;font-size:11px;text-align:right;">
-          <div id="clock" style="color:var(--cyan);font-size:18px;letter-spacing:0.1em;">00:00:00</div>
-          <div id="date-top" style="color:var(--muted);font-size:9px;letter-spacing:0.1em;margin-top:2px;"></div>
-        </div>
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <div class="hero-brow">STUDENT HUSTLE SYSTEM &nbsp;·&nbsp; NAIROBI KENYA</div>
+      <h1 class="hero-h1"><span class="l1">YOUR HOLIDAY.</span><span class="l2" data-text="YOUR EMPIRE.">YOUR EMPIRE.</span></h1>
+      <p class="hero-desc">4 months. Smart Money Concepts. Ethical Hacking. Online Income. Every task tracked, every day counted, every skill compounding. This is your operating system for the break that changes everything.</p>
+      <div class="hero-chips">
+        <span class="chip gold">PHOTON TRADING STUDENT</span>
+        <span class="chip">SMC / ICT CONCEPTS</span>
+        <span class="chip">ETHICAL HACKING</span>
+        <span class="chip">FIVERR · UPWORK</span>
+        <span class="chip">118 DAYS</span>
+        <span class="chip">NAIROBI, KE</span>
       </div>
     </div>
-
-    <!-- HERO -->
-    <div class="hero">
-      <div>
-        <div class="hero-title">
-          <span class="t1">YOUR HOLIDAY.</span>
-          <span class="t2">YOUR EMPIRE.</span>
-        </div>
-        <div class="hero-sub">May → September 2025. Smart Money Concepts trader. Ethical hacker in training. Online income generator. This dashboard tracks everything — check in daily, complete tasks, lock in.</div>
-        <div class="hero-tags">
-          <span class="hero-tag">SMC TRADING</span>
-          <span class="hero-tag">ETHICAL HACKING</span>
-          <span class="hero-tag">FREELANCING</span>
-          <span class="hero-tag">NAIROBI, KE</span>
-          <span class="hero-tag">4 MONTHS</span>
-        </div>
-      </div>
-
-      <!-- FLIP CALENDAR -->
-      <div class="flip-cal-wrap">
-        <div class="flip-cal">
-          <div class="flip-card" id="flip-card">
-            <div class="flip-face">
-              <div class="flip-month" id="cal-month">MAY</div>
-              <div class="flip-day" id="cal-day">12</div>
-              <div class="flip-weekday" id="cal-weekday">TUESDAY</div>
-              <div class="flip-year" id="cal-year">2026</div>
-            </div>
-          </div>
-          <div class="flip-hinge">
-            <div class="flip-screw l"></div>
-            <div class="flip-screw r"></div>
+    <div class="calw">
+      <div class="flip-o">
+        <div class="flip-i" id="flip-card">
+          <div class="flip-f">
+            <div class="f-month" id="cal-month">MAY</div>
+            <div class="f-day" id="cal-day">13</div>
+            <div class="f-wd" id="cal-wd">WEDNESDAY</div>
+            <div class="f-yr" id="cal-yr">2026</div>
           </div>
         </div>
-        <div class="cal-progress" id="cal-progress">Day <span id="cal-daynum">—</span> of 118</div>
+        <div class="flip-hinge"><div class="flip-bolt l"></div><div class="flip-bolt r"></div></div>
       </div>
+      <div class="cal-sub">Day <span id="cal-n">1</span> of 118</div>
+      <div class="cal-sub" id="cal-ph" style="color:var(--gold);margin-top:2px;"></div>
     </div>
+  </div>
 
-    <!-- TICKER -->
-    <div class="ticker">
-      <div class="ticker-inner">
-        <span class="ti">ORDER BLOCKS <b>→</b></span><span class="ti">FAIR VALUE GAPS <b>→</b></span><span class="ti">MARKET STRUCTURE <b>→</b></span><span class="ti">LIQUIDITY SWEEPS <b>→</b></span><span class="ti">BREAKER BLOCKS <b>→</b></span><span class="ti">CHANGE OF CHARACTER <b>→</b></span><span class="ti">BOS/CHOCH <b>→</b></span><span class="ti">PREMIUM vs DISCOUNT <b>→</b></span><span class="ti">TRYHACKME DAILY <b>→</b></span><span class="ti">FIVERR PROFILE LIVE <b>→</b></span><span class="ti">SKILLS COMPOUND <b>→</b></span><span class="ti">NAIROBI TECH SCENE GROWING <b>→</b></span><span class="ti">BUG BOUNTIES REAL MONEY <b>→</b></span><span class="ti">NSE SAFARICOM EQUITY <b>→</b></span>
-        <span class="ti">ORDER BLOCKS <b>→</b></span><span class="ti">FAIR VALUE GAPS <b>→</b></span><span class="ti">MARKET STRUCTURE <b>→</b></span><span class="ti">LIQUIDITY SWEEPS <b>→</b></span><span class="ti">BREAKER BLOCKS <b>→</b></span><span class="ti">CHANGE OF CHARACTER <b>→</b></span><span class="ti">BOS/CHOCH <b>→</b></span><span class="ti">PREMIUM vs DISCOUNT <b>→</b></span><span class="ti">TRYHACKME DAILY <b>→</b></span><span class="ti">FIVERR PROFILE LIVE <b>→</b></span><span class="ti">SKILLS COMPOUND <b>→</b></span><span class="ti">NAIROBI TECH SCENE GROWING <b>→</b></span><span class="ti">BUG BOUNTIES REAL MONEY <b>→</b></span><span class="ti">NSE SAFARICOM EQUITY <b>→</b></span>
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="tick-inner">
+      <span class="ti">ORDER BLOCKS <b>→</b></span><span class="ti">FAIR VALUE GAPS <b>→</b></span><span class="ti">LIQUIDITY SWEEPS <b>→</b></span>
+      <span class="ti gold">PHOTON TRADING <b>→</b></span><span class="ti">BOS / CHOCH <b>→</b></span><span class="ti">PREMIUM vs DISCOUNT <b>→</b></span>
+      <span class="ti green">TRYHACKME DAILY <b>→</b></span><span class="ti">LONDON OPEN 10AM EAT <b>→</b></span><span class="ti">NY OPEN 3PM EAT <b>→</b></span>
+      <span class="ti gold">FIVERR · UPWORK · INCOME <b>→</b></span><span class="ti">NAIROBI TECH GROWING <b>→</b></span><span class="ti green">BUG BOUNTIES = REAL USD <b>→</b></span>
+      <span class="ti">DISPLACEMENT <b>→</b></span><span class="ti">MITIGATION BLOCKS <b>→</b></span><span class="ti gold">NSE · SAFARICOM · EQUITY <b>→</b></span>
+      <span class="ti">ORDER BLOCKS <b>→</b></span><span class="ti">FAIR VALUE GAPS <b>→</b></span><span class="ti">LIQUIDITY SWEEPS <b>→</b></span>
+      <span class="ti gold">PHOTON TRADING <b>→</b></span><span class="ti">BOS / CHOCH <b>→</b></span><span class="ti">PREMIUM vs DISCOUNT <b>→</b></span>
+      <span class="ti green">TRYHACKME DAILY <b>→</b></span><span class="ti">LONDON OPEN 10AM EAT <b>→</b></span><span class="ti">NY OPEN 3PM EAT <b>→</b></span>
+      <span class="ti gold">FIVERR · UPWORK · INCOME <b>→</b></span><span class="ti">NAIROBI TECH GROWING <b>→</b></span><span class="ti green">BUG BOUNTIES = REAL USD <b>→</b></span>
+      <span class="ti">DISPLACEMENT <b>→</b></span><span class="ti">MITIGATION BLOCKS <b>→</b></span><span class="ti gold">NSE · SAFARICOM · EQUITY <b>→</b></span>
+    </div>
+  </div>
+
+  <!-- MASTER PROGRESS -->
+  <div class="master reveal">
+    <div class="ml">PROGRESS</div>
+    <div class="mtrack"><div class="mbg"><div class="mfill" id="mfill" style="width:0%"></div></div></div>
+    <div class="mpct" id="mpct">0%</div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats reveal">
+    <div class="sc"><div class="sc-l">TASKS COMPLETE</div><div class="sc-v c" id="s-done">0</div><div class="sc-s">of <span id="s-total">0</span> total</div></div>
+    <div class="sc"><div class="sc-l">DAYS REMAINING</div><div class="sc-v gold" id="s-days">—</div><div class="sc-s">until Sep 1, 2025</div></div>
+    <div class="sc"><div class="sc-l">CURRENT STREAK</div><div class="sc-v gold" id="s-streak">0</div><div class="sc-s">consecutive days 🔥</div></div>
+    <div class="sc"><div class="sc-l">BEST STREAK</div><div class="sc-v g" id="s-best">0</div><div class="sc-s">personal record</div></div>
+    <div class="sc"><div class="sc-l">PHASE</div><div class="sc-v c" style="font-size:28px" id="s-phase">01</div><div class="sc-s" id="s-pname">FOUNDATION</div></div>
+  </div>
+
+  <!-- STREAK BLOCK -->
+  <div class="stk reveal">
+    <div class="stk-fw"><div class="stk-fl">🔥</div><div class="stk-ring"></div></div>
+    <div>
+      <div class="stk-num" id="stk-num">0</div>
+      <div class="stk-lbl">DAY STREAK</div>
+      <div class="stk-best">Best: <span id="stk-best">0</span> days</div>
+    </div>
+    <div class="stk-cal">
+      <div class="sc-head">LAST 28 DAYS <span id="stk-month">—</span></div>
+      <div class="sc-dh"><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div><div>S</div></div>
+      <div id="stk-grid"></div>
+    </div>
+    <div class="stk-acts">
+      <button class="stk-btn p" id="ci-btn" onclick="doCheckIn()">CHECK IN TODAY</button>
+      <button class="stk-btn s" onclick="if(confirm('Reset streak?')){localStorage.removeItem('ld3_ci');buildStreak();showToast('STREAK RESET');}">RESET STREAK</button>
+    </div>
+  </div>
+
+  <!-- PHASES -->
+  <div class="phases reveal">
+    <div class="ph" id="ph1"><div class="ph-n">PHASE 01 <span class="ph-nt" id="ph1t"></span></div><div class="ph-t">FOUNDATION</div><div class="ph-d">May — Jun 15, 2025</div></div>
+    <div class="ph" id="ph2"><div class="ph-n">PHASE 02 <span class="ph-nt" id="ph2t"></span></div><div class="ph-t">BUILD & EARN</div><div class="ph-d">Jun 15 — Jul 31, 2025</div></div>
+    <div class="ph" id="ph3"><div class="ph-n">PHASE 03 <span class="ph-nt" id="ph3t"></span></div><div class="ph-t">SCALE UP</div><div class="ph-d">Aug 1 — Sep 1, 2025</div></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab on" onclick="swTab('income',this)">💸 INCOME NOW</button>
+    <button class="tab" onclick="swTab('smc',this)">📈 SMC TRADING</button>
+    <button class="tab" onclick="swTab('hacking',this)">🔐 HACKING</button>
+    <button class="tab" onclick="swTab('schedule',this)">📅 SCHEDULE</button>
+    <button class="tab" onclick="swTab('finance',this)">💰 FINANCE</button>
+    <button class="tab" onclick="swTab('resources',this)">📺 RESOURCES</button>
+    <button class="tab" onclick="swTab('reminders',this)">🔔 REMINDERS</button>
+    <button class="tab" onclick="swTab('notes',this)">📝 NOTES</button>
+  </div>
+
+  <!-- INCOME -->
+  <div id="tab-income" class="panel on">
+    <div class="sh"><span class="sh-tag gold">WEEK 1 — START TODAY</span><h2>Immediate Income Setup</h2><div class="sh-line"></div></div>
+    <div class="cl">
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Create Fiverr account — 100% profile, real headshot, bio mentioning tech + writing + social media</div><div class="cm">fiverr.com → Research top sellers in your niche before writing anything. Mirror what works, execute better.</div></div><span class="ctag gold">DAY 1</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Create Upwork account + pass readiness test + complete ID verification</div><div class="cm">upwork.com → More competitive than Fiverr but significantly higher rates. Takes ~30 min to set up.</div></div><span class="ctag gold">DAY 1</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Post 3 Fiverr gigs: writing, data entry, social media management</div><div class="cm">Undercut by 20% until you have 5 reviews. First review = algorithm visibility = consistent orders flowing.</div></div><span class="ctag gold">DAY 2–3</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Register on Remotasks — complete all qualification tests to unlock higher-paying tasks</div><div class="cm">remotasks.com → AI data labelling. Pays USD via PayPal/Wave. Immediate income while building other skills.</div></div><span class="ctag gold">DAY 2</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Set up Payoneer account for receiving USD internationally</div><div class="cm">payoneer.com → Lower Kenya withdrawal fees than PayPal. Links to Equity or KCB. Do this on Day 1.</div></div><span class="ctag gold">DAY 1</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Identify 5 local Nairobi businesses with no/weak social media — pitch 3 of them</div><div class="cm">Google Maps search + walk around. Offer IG/Facebook management for Ksh 8–15K/mo. One yes = recurring.</div></div><span class="ctag gold">DAY 3–7</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Build a free portfolio on Carrd.co — link Fiverr, Upwork, and 3 sample works</div><div class="cm">carrd.co → Free, no code, professional result in 30 min. This URL goes in every pitch you send.</div></div><span class="ctag c">WEEK 2</span></div>
+    </div>
+    <div class="sh"><span class="sh-tag c">ONGOING</span><h2>Freelance execution rules</h2><div class="sh-line"></div></div>
+    <div class="cl">
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Study top 10 sellers in your niche — analyse titles, pricing, packages, and review patterns</div><div class="cm">Don't copy. Understand the formula. What 3 things do ALL top sellers share? Do those better.</div></div><span class="ctag c">WEEK 1</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Over-deliver on first 3 gigs even at low price — get 5-star reviews at all costs</div><div class="cm">First review unlocks the algorithm. Worth 10x more than whatever you charged for it.</div></div><span class="ctag c">WEEK 2</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Send 5 fully custom Upwork proposals every day — reference something specific from their post</div><div class="cm">Never templates. One personalised sentence referencing their actual problem doubles response rate.</div></div><span class="ctag c">ONGOING</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Register on Appen.com — higher quality AI projects, pays more per hour than Remotasks</div><div class="cm">Apply to multiple projects immediately. English fluency tests first. Combines well with Remotasks.</div></div><span class="ctag c">WEEK 2</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Join Kenya Freelancers Network on Facebook + relevant Nairobi WhatsApp communities</div><div class="cm">Local gigs pay faster, easier to close, in KES. Great source for social media and tutoring leads.</div></div><span class="ctag c">WEEK 1</span></div>
+    </div>
+  </div>
+
+  <!-- SMC TRADING -->
+  <div id="tab-smc" class="panel">
+    <div class="sh"><span class="sh-tag gold">SMC FRAMEWORK</span><h2>Smart Money Concepts — Core Concepts</h2><div class="sh-line"></div></div>
+    <div class="smc-grid">
+      <div class="smc-card"><h4>ORDER BLOCKS</h4><p>Last opposing candle before a strong impulsive move. Bullish OB = last bearish candle before rally. Mark on H4+. This is institutional entry. Most reliable entry model.</p></div>
+      <div class="smc-card"><h4>FAIR VALUE GAPS</h4><p>3-candle imbalance. Gap between candle 1 high and candle 3 low (bullish). Price returns to fill. Combine with OB for highest-confluence entries.</p></div>
+      <div class="smc-card"><h4>BOS / CHOCH</h4><p>BOS = Break of Structure (trend continuation). ChoCh = Change of Character (first opposite BOS, potential reversal). Track on D1 first, confirm H4.</p></div>
+      <div class="smc-card"><h4>LIQUIDITY SWEEPS</h4><p>Price spikes above equal highs (BSL) or below equal lows (SSL) to hunt stops, then reverses. Enter after the sweep candle closes back inside. Never before.</p></div>
+      <div class="smc-card"><h4>PREMIUM vs DISCOUNT</h4><p>Fib 0–1 range. Above 0.5 = premium (only sell). Below 0.5 = discount (only buy). This single filter eliminates 80% of bad entries. Non-negotiable.</p></div>
+      <div class="smc-card"><h4>DISPLACEMENT</h4><p>A strong impulsive candle that creates an FVG and shifts market structure. Displacement is your confirmation signal. Enter only after displacement in your direction.</p></div>
+      <div class="smc-card"><h4>INDUCEMENT</h4><p>False liquidity before the real target. Minor swing engineered to trap retail before the actual sweep. Wait for inducement to be swept THEN look for your entry.</p></div>
+      <div class="smc-card"><h4>MITIGATION BLOCKS</h4><p>Failed OBs that get retested. When price breaks an OB and returns, smart money defends it again. Can be stronger entries than standard OBs because of double institutional interest.</p></div>
+    </div>
+    <div class="sh"><span class="sh-tag gold">PHASE 1 — MONTH 1</span><h2>SMC Foundation Checklist</h2><div class="sh-line"></div></div>
+    <div class="cl">
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Watch Photon Trading (Matt Donlevey) full SMC series on YouTube — your primary mentor</div><div class="cm">youtube.com/@PhotonTrading → Start with his "SMC Trading Course for Beginners" playlist. Watch every video in order.</div></div><span class="ctag gold">WEEK 1</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Watch ICT 2022 Mentorship playlist — original source material for all SMC/ICT concepts</div><div class="cm">youtube.com/@ICT → 200+ hours free. Cross-reference with Photon Trading explanations to deepen understanding.</div></div><span class="ctag gold">MONTH 1</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Set up TradingView SMC chart layout: D1 + H4 + H1 + M15 multi-pane view</div><div class="cm">Mark: Daily OBs blue, H4 FVGs yellow, structure lines white, liquidity levels red. Keep it clean.</div></div><span class="ctag gold">WEEK 1</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Open demo account on Exness or IC Markets ($10,000 virtual) — Kenya-friendly, M-Pesa deposits</div><div class="cm">Minimum 60 days demo before real money. Not negotiable. The journal does not lie.</div></div><span class="ctag gold">WEEK 2</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Start SMC trading journal in Google Sheets — log every single demo trade</div><div class="cm">Date | Pair | Session | D1 bias | H4 OB | FVG | Liquidity swept | Entry TF | SL | TP | R:R | Result | Screenshot</div></div><span class="ctag gold">WEEK 2</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Learn session times: London Open 10am–12pm EAT, New York Open 3pm–5pm EAT</div><div class="cm">SMC moves happen here. Do NOT trade 12–3pm EAT — dead zone, choppy price, setups get hunted.</div></div><span class="ctag gold">WEEK 2</span></div>
+    </div>
+    <div class="sh"><span class="sh-tag c">PHASE 2</span><h2>Strategy refinement</h2><div class="sh-line"></div></div>
+    <div class="cl">
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Backtest your SMC strategy on 100 historical trades using TradingView Bar Replay</div><div class="cm">One pair only (XAUUSD or EURUSD). Document every trade. Target 1:3 R:R minimum. Data doesn't lie.</div></div><span class="ctag c">MONTH 2</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Always minimum 1:3 R:R — SL below OB, TP at next liquidity pool</div><div class="cm">1:3 R:R = only need 26% win rate to be profitable. Photon Trading emphasises this in every video.</div></div><span class="ctag c">ONGOING</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Watch Bloomberg Markets 2–3x per week — macro narrative drives SMC moves</div><div class="cm">youtube.com/@BloombergMarkets → DXY, interest rates, risk sentiment all affect your setups heavily.</div></div><span class="ctag c">ONGOING</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Bookmark Forex Factory — check economic calendar every morning before marking SMC levels</div><div class="cm">Avoid ALL setups 30 min before/after red folder events. News completely destroys SMC structure.</div></div><span class="ctag c">ONGOING</span></div>
+    </div>
+    <div class="sh"><span class="sh-tag r">IRON RULES</span><h2>Never break these</h2><div class="sh-line"></div></div>
+    <div class="cl">
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Go live only after 60+ days profitable demo trading with consistent SMC execution</div><div class="cm">Not profitable on demo = not profitable live. Period. The journal knows the truth even when you don't.</div></div><span class="ctag r">MONTH 3</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Max Ksh 5,000 real capital to start — risk 1% per trade = Ksh 50 per trade</div><div class="cm">Tuition money not profit money. Every loss is paid education. Keep it cheap while the skill builds.</div></div><span class="ctag r">MONTH 3</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">3 losses in one day = close all charts, walk away for the rest of the day</div><div class="cm">Revenge trading after 3 losses = guaranteed account destruction. This rule has absolutely zero exceptions.</div></div><span class="ctag r">ABSOLUTE</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">NEVER borrow money to fund a trading account. Not from family. Not from HELB. Never.</div><div class="cm">Borrowed capital + leverage + emotions = 100% account blowup + debt. Not a maybe. A certainty.</div></div><span class="ctag r">ABSOLUTE</span></div>
+    </div>
+  </div>
+
+  <!-- HACKING -->
+  <div id="tab-hacking" class="panel">
+    <div class="sh"><span class="sh-tag c">PHASE 1 — MONTH 1</span><h2>Cybersecurity Foundations</h2><div class="sh-line"></div></div>
+    <div class="cl">
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Create TryHackMe account — start "Pre-Security" path immediately (free, ~40 hours)</div><div class="cm">tryhackme.com → Best structured beginner cybersecurity curriculum online. Browser-based, no setup needed.</div></div><span class="ctag c">WEEK 1</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Complete TryHackMe Linux Fundamentals Parts 1, 2, 3</div><div class="cm">Linux is the OS of hackers. File system, permissions, bash, processes, networking commands. Know cold.</div></div><span class="ctag c">WEEK 1–2</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Watch NetworkChuck YouTube — "ethical hacking in 12 hours" + Kali Linux setup series</div><div class="cm">youtube.com/@NetworkChuck → Entertaining and technically solid. His hacking roadmap video tells you exactly what order to learn in.</div></div><span class="ctag c">WEEK 1</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Install Kali Linux via VirtualBox — follow NetworkChuck setup tutorial step by step</div><div class="cm">kali.org → All tools pre-installed. VirtualBox keeps it isolated from main OS. Safe to break things here.</div></div><span class="ctag c">WEEK 2</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Learn basic Python: variables, loops, functions, file I/O, HTTP requests library</div><div class="cm">Harvard CS50P on YouTube (completely free). Python is the automation language of security. Build 3 small tools.</div></div><span class="ctag c">WEEK 3–4</span></div>
+    </div>
+    <div class="sh"><span class="sh-tag gold">PHASE 2 — MONTH 2</span><h2>Core attack techniques</h2><div class="sh-line"></div></div>
+    <div class="cl">
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Complete TryHackMe "Jr Penetration Tester" path (free)</div><div class="cm">Web app attacks, network scanning, privilege escalation, Metasploit, Active Directory basics.</div></div><span class="ctag gold">MONTH 2</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Complete PortSwigger Web Security Academy — all OWASP Top 10 labs (free)</div><div class="cm">portswigger.net/web-security → SQLi, XSS, IDOR, SSRF, XXE. Best web security training in existence.</div></div><span class="ctag gold">MONTH 2</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Master Nmap — port scanning, OS detection, service versioning, NSE scripts</div><div class="cm">-sV -sC -A -p- --script=vuln. Every penetration test starts here. Know this tool completely.</div></div><span class="ctag gold">MONTH 2</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Learn Burp Suite Community — intercept, repeater, intruder, decoder modules</div><div class="cm">Watch Rana Khalil's Burp Suite series on YouTube. Essential for every web app hack and bug bounty.</div></div><span class="ctag gold">MONTH 2</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Set up DVWA — exploit every vulnerability at all 3 security levels manually</div><div class="cm">SQLi, XSS, Command Injection, CSRF, File Upload, SSRF. Legal intentionally broken app. Practice endlessly.</div></div><span class="ctag gold">MONTH 2</span></div>
+    </div>
+    <div class="sh"><span class="sh-tag g">PHASE 3 — MONTH 3</span><h2>Bug bounty & real income</h2><div class="sh-line"></div></div>
+    <div class="cl">
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Create HackerOne account — read 50+ disclosed bug reports before hunting anything</div><div class="cm">hackerone.com → Disclosed reports are free blueprints showing exactly what vulnerabilities paid real USD.</div></div><span class="ctag g">MONTH 3</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Solve 10 HackTheBox machines (Easy tier) — document every step as a writeup</div><div class="cm">hackthebox.com → Start after TryHackMe Jr Pentest path. Each machine = interview topic + portfolio proof.</div></div><span class="ctag g">MONTH 3</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Publish all writeups publicly on Medium or GitHub Pages — make them Google-indexed</div><div class="cm">Public writeups = portfolio + search ranking + community credibility. Employers search for these specifically.</div></div><span class="ctag g">MONTH 3</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Begin CompTIA Security+ prep — Professor Messer free course on YouTube</div><div class="cm">professormesser.com → Globally recognised. Budget ~Ksh 30K for exam. Study now, sit next semester.</div></div><span class="ctag g">MONTH 3</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Join OWASP Kenya + iHub Nairobi events + Nairobi tech meetups</div><div class="cm">ihub.co.ke → Every free event attended = connections made. People you meet > certificates you earn.</div></div><span class="ctag g">MONTH 3</span></div>
+    </div>
+  </div>
+
+  <!-- SCHEDULE -->
+  <div id="tab-schedule" class="panel">
+    <div class="sh"><span class="sh-tag c">MON–FRI</span><h2>Daily time architecture</h2><div class="sh-line"></div></div>
+    <div class="sched" id="sched">
+      <div class="sb" data-s="360" data-e="420"><div class="sb-time">06:00–07:00</div><div class="sb-body"><div class="sb-title">Wake + Market Prep + News</div><div class="sb-desc">Check Forex Factory calendar. Mark SMC levels on D1/H4. Read TechCabal for Kenya tech news.</div></div><span class="sb-badge trade">TRADING</span></div>
+      <div class="sb" data-s="420" data-e="480"><div class="sb-time">07:00–08:00</div><div class="sb-body"><div class="sb-title">Exercise + Breakfast (zero screens)</div><div class="sb-desc">Physical health = cognitive performance. Walk, run, gym. Non-negotiable every single day.</div></div><span class="sb-badge rest">HEALTH</span></div>
+      <div class="sb" data-s="480" data-e="660"><div class="sb-time">08:00–11:00</div><div class="sb-body"><div class="sb-title">DEEP WORK — Income Block (Fiverr / Upwork / Client Work)</div><div class="sb-desc">Phone on silent. Zero social media. Your money-making window. Treat it as sacred time.</div></div><span class="sb-badge income">💰 INCOME</span></div>
+      <div class="sb" data-s="600" data-e="720"><div class="sb-time">10:00–12:00 EAT</div><div class="sb-body"><div class="sb-title">LONDON OPEN — Live SMC Session</div><div class="sb-desc">Highest volume. Look for liquidity sweeps + OB retests + FVG fills. Max 2 setups. Stop at 3 losses.</div></div><span class="sb-badge trade">📈 TRADE</span></div>
+      <div class="sb" data-s="660" data-e="780"><div class="sb-time">11:00–13:00</div><div class="sb-body"><div class="sb-title">SMC Study — Photon Trading / ICT / Bloomberg / TradingView Replay</div><div class="sb-desc">One concept per session. Watch → find 5 historical examples → journal them. Build the eye for setups.</div></div><span class="sb-badge trade">📈 STUDY</span></div>
+      <div class="sb" data-s="780" data-e="840"><div class="sb-time">13:00–14:00</div><div class="sb-body"><div class="sb-title">Lunch + Rest (zero screens)</div><div class="sb-desc">Brain consolidates learning during rest. Eat properly. Short walk. No phone.</div></div><span class="sb-badge rest">BREAK</span></div>
+      <div class="sb" data-s="840" data-e="1020"><div class="sb-time">14:00–17:00</div><div class="sb-body"><div class="sb-title">DEEP WORK — Ethical Hacking (TryHackMe / HTB / PortSwigger)</div><div class="sb-desc">One full TryHackMe room minimum. Structured notes. Building personal reference document.</div></div><span class="sb-badge hack">🔐 HACK</span></div>
+      <div class="sb" data-s="900" data-e="1020"><div class="sb-time">15:00–17:00 EAT</div><div class="sb-body"><div class="sb-title">NEW YORK OPEN — Live SMC Session</div><div class="sb-desc">Second high-volume session. XAUUSD + EURUSD. Only trade clear setups. Paper if not profitable yet.</div></div><span class="sb-badge trade">📈 TRADE</span></div>
+      <div class="sb" data-s="1020" data-e="1140"><div class="sb-time">17:00–19:00</div><div class="sb-body"><div class="sb-title">Portfolio + Projects + Community</div><div class="sb-desc">Write HTB writeups. GitHub portfolio. LinkedIn. Upwork proposals. Network on Twitter/X.</div></div><span class="sb-badge hack">🔐 BUILD</span></div>
+      <div class="sb" data-s="1140" data-e="1260"><div class="sb-time">19:00–21:00</div><div class="sb-body"><div class="sb-title">Review + Journal + Plan Tomorrow</div><div class="sb-desc">Update trading journal. Check this dashboard. Write tomorrow's 3 non-negotiables. Then rest.</div></div><span class="sb-badge rest">REVIEW</span></div>
+    </div>
+    <div class="sh"><span class="sh-tag gold">WEEKEND RULES</span><h2>Sat & Sun</h2><div class="sh-line"></div></div>
+    <div class="cl">
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Saturday AM: Full weekly review — tasks done, missed, why, adjusted plan</div><div class="cm">Be honest. No judgment. Data-driven. Your journal tells the truth your memory hides.</div></div></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Saturday PM: One stretch session — harder HTB machine, advanced SMC concept, new income lead</div><div class="cm">One deliberate push past comfort zone weekly. Actual skill growth lives here.</div></div></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Sunday: Full rest, social, recharge. Zero deep work. Rule not suggestion.</div><div class="cm">4-month sustainable pace crushes 2-week burnout sprint every time. Guard your energy.</div></div></div>
+    </div>
+  </div>
+
+  <!-- FINANCE -->
+  <div id="tab-finance" class="panel">
+    <div class="sh"><span class="sh-tag g">ALLOCATION</span><h2>Every shilling earns a job</h2><div class="sh-line"></div></div>
+    <div class="fsplit">
+      <div class="fc"><div class="fc-lbl">DAILY NEEDS</div><div class="fc-pct" style="color:var(--c)">50%</div><div class="fc-desc">Food, transport, internet, phone. Operational cost.</div></div>
+      <div class="fc"><div class="fc-lbl">LOCKED SAVINGS</div><div class="fc-pct" style="color:var(--green)">30%</div><div class="fc-desc">M-Shwari / KCB M-Pesa. Emergency fund first.</div></div>
+      <div class="fc"><div class="fc-lbl">TRADING CAPITAL</div><div class="fc-pct" style="color:var(--gold)">10%</div><div class="fc-desc">Separate account only. Risk capital never living money.</div></div>
+      <div class="fc"><div class="fc-lbl">SELF-INVESTMENT</div><div class="fc-pct" style="color:var(--red)">10%</div><div class="fc-desc">Courses, certs, tools. A skill doubling your earnings = 10x ROI.</div></div>
+    </div>
+    <div class="sh"><span class="sh-tag c">SETUP</span><h2>Financial infrastructure</h2><div class="sh-line"></div></div>
+    <div class="cl">
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Open M-Shwari — set a lock savings target (even Ksh 500/week)</div><div class="cm">M-Pesa → Financial Services → M-Shwari. Psychological lock stops impulse spending instantly.</div></div><span class="ctag c">WEEK 1</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">KCB M-Pesa Goal Savings — label one pot "TRADING CAPITAL" — never touch for anything else</div><div class="cm">Separate mental account = separate physical account = actual savings. This trick is extremely effective.</div></div><span class="ctag c">WEEK 1</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Create a Google Sheets income/expense tracker — update every single day</div><div class="cm">Track every shilling for 30 days. The data will change your behaviour automatically without willpower.</div></div><span class="ctag c">WEEK 1</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Set up Payoneer — lower Kenya fees than PayPal, links to local banks directly</div><div class="cm">payoneer.com → Takes 3–5 days to verify. Set up now so it's ready when income arrives.</div></div><span class="ctag c">WEEK 1</span></div>
+      <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Research Sacco membership — Ksh 200/mo now = significant borrowing power by Year 3</div><div class="cm">Stima Sacco, Mwalimu National, or university Sacco. Compound interest starts working for you immediately.</div></div><span class="ctag c">MONTH 2</span></div>
+    </div>
+  </div>
+
+  <!-- RESOURCES -->
+  <div id="tab-resources" class="panel">
+    <!-- MENTOR -->
+    <div class="sh"><span class="sh-tag g">⭐ YOUR PRIMARY MENTOR</span><h2>Photon Trading — Matt Donlevey</h2><div class="sh-line"></div></div>
+    <a href="https://www.youtube.com/@PhotonTrading" target="_blank" class="mentor-card">
+      <div class="mentor-thumb">
+        <img class="yt-th" src="https://img.youtube.com/vi/q9DYXQ-VNAQ/maxresdefault.jpg" alt="Photon Trading" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="yt-fall" style="display:none">📈<span>PHOTON TRADING</span></div>
+        <div class="yt-pb"></div>
       </div>
-    </div>
-
-    <!-- MASTER PROGRESS -->
-    <div class="master-bar">
-      <div class="mb-label">OVERALL</div>
-      <div class="mb-bar">
-        <div class="mb-bg">
-          <div class="mb-fill" id="mb-fill" style="width:0%">
-            <div class="mb-scan"></div>
-          </div>
+      <div class="mentor-body">
+        <div class="mentor-tag">PRIMARY SMC MENTOR</div>
+        <div class="mentor-name">PHOTON TRADING</div>
+        <div class="mentor-sub">MATT DONLEVEY</div>
+        <div class="mentor-desc">Your primary mentor for SMC. Matt's explanations are clear, structured and deeply practical. His free course series covers Order Blocks, FVGs, Liquidity, and full top-down analysis — better than most paid courses anywhere.</div>
+        <div class="mentor-chips">
+          <span class="mentor-chip">ORDER BLOCKS</span>
+          <span class="mentor-chip">FVG</span>
+          <span class="mentor-chip">TOP-DOWN</span>
+          <span class="mentor-chip">LIQUIDITY</span>
+          <span class="mentor-chip">LIVE ANALYSIS</span>
         </div>
+        <span class="mentor-link" onclick="event.stopPropagation()">OPEN CHANNEL ↗</span>
       </div>
-      <div class="mb-pct" id="mb-pct">0%</div>
+    </a>
+
+    <!-- SMC YT -->
+    <div class="sh"><span class="sh-tag gold">YOUTUBE — SMC TRADING</span><h2>Essential channels</h2><div class="sh-line"></div></div>
+    <div class="yt-grid">
+      <a href="https://www.youtube.com/@ICT" target="_blank" class="yt-card">
+        <div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/UEe59fvSg5c/maxresdefault.jpg" alt="ICT" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="yt-fall" style="display:none">📈<span>ICT</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge smc">SMC ORIGINAL</span></div>
+        <div class="yt-body"><div class="yt-ch">YOUTUBE · SMC</div><div class="yt-title">ICT — Inner Circle Trader</div><div class="yt-desc">Michael Huddleston, creator of all SMC concepts. 2022 Mentorship playlist is the source material. 200+ hours free. Cross-reference with Photon Trading for clarity.</div><div class="yt-foot"><span class="yt-subs">4.5M+ SUBS</span><span class="yt-cta">WATCH NOW</span></div></div>
+      </a>
+      <a href="https://www.youtube.com/@BloombergMarkets" target="_blank" class="yt-card">
+        <div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/dp8PhLsUcFE/maxresdefault.jpg" alt="Bloomberg" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="yt-fall" style="display:none">💹<span>BLOOMBERG</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge macro">MACRO</span></div>
+        <div class="yt-body"><div class="yt-ch">YOUTUBE · MACRO</div><div class="yt-title">Bloomberg Markets & Finance</div><div class="yt-desc">Daily macro market coverage. DXY, central banks, interest rates. Watch 2–3x per week. Understanding macro narrative makes every SMC setup significantly stronger.</div><div class="yt-foot"><span class="yt-subs">3.2M+ SUBS</span><span class="yt-cta">WATCH NOW</span></div></div>
+      </a>
+      <a href="https://www.youtube.com/@AntonKreilOfficial" target="_blank" class="yt-card">
+        <div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/5XYZQ8qXAHE/maxresdefault.jpg" alt="Anton Kreil" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="yt-fall" style="display:none">🏦<span>ANTON KREIL</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge macro">PROFESSIONAL</span></div>
+        <div class="yt-body"><div class="yt-ch">YOUTUBE · MINDSET</div><div class="yt-title">Anton Kreil — ITPM</div><div class="yt-desc">Ex-Goldman Sachs trader. Brutally honest about retail trading psychology and risk. "Retail Traders are Stupid" series eliminates bad habits before they become expensive.</div><div class="yt-foot"><span class="yt-subs">500K+ SUBS</span><span class="yt-cta">WATCH NOW</span></div></div>
+      </a>
+      <a href="https://www.youtube.com/@RaynerTeo" target="_blank" class="yt-card">
+        <div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/NJoLFalCKkI/maxresdefault.jpg" alt="Rayner Teo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="yt-fall" style="display:none">📉<span>RAYNER TEO</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge smc">RISK MGT</span></div>
+        <div class="yt-body"><div class="yt-ch">YOUTUBE · TRADING</div><div class="yt-title">Rayner Teo</div><div class="yt-desc">Best content on risk management, position sizing and trading psychology. His series on "how not to blow your account" is essential viewing for every SMC trader starting out.</div><div class="yt-foot"><span class="yt-subs">1M+ SUBS</span><span class="yt-cta">WATCH NOW</span></div></div>
+      </a>
+      <a href="https://www.youtube.com/@TheTradingChannel" target="_blank" class="yt-card">
+        <div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/8s7uJXL8QnI/maxresdefault.jpg" alt="Trading Channel" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="yt-fall" style="display:none">📊<span>TRADING CHANNEL</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge smc">SMC</span></div>
+        <div class="yt-body"><div class="yt-ch">YOUTUBE · SMC</div><div class="yt-title">The Trading Channel</div><div class="yt-desc">Clean visual SMC breakdowns. Excellent for understanding OBs and FVGs with clear chart markups. Good supplemental resource alongside Photon Trading's structured series.</div><div class="yt-foot"><span class="yt-subs">900K+ SUBS</span><span class="yt-cta">WATCH NOW</span></div></div>
+      </a>
+      <a href="https://www.youtube.com/@IliyaMakSimov" target="_blank" class="yt-card">
+        <div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/OdoBW-UvJMI/maxresdefault.jpg" alt="Iliya" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="yt-fall" style="display:none">🔭<span>ILIYA</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge smc">TOP-DOWN</span></div>
+        <div class="yt-body"><div class="yt-ch">YOUTUBE · SMC</div><div class="yt-title">Iliya MakSimov</div><div class="yt-desc">Daily top-down SMC analysis walkthroughs on live markets. Helps you see how to read D1→H4→H1→M15 in real time every session. Trains pattern recognition fast.</div><div class="yt-foot"><span class="yt-subs">400K+ SUBS</span><span class="yt-cta">WATCH NOW</span></div></div>
+      </a>
     </div>
 
-    <!-- STATS -->
-    <div class="stats">
-      <div class="stat">
-        <div class="stat-label">TASKS COMPLETE</div>
-        <div class="stat-num c" id="s-done">0</div>
-        <div class="stat-sub">of <span id="s-total">0</span> total</div>
-        <div class="stat-bar"><div class="stat-bar-fill" id="s-bar" style="width:0%"></div></div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">DAYS REMAINING</div>
-        <div class="stat-num gold" id="s-days">—</div>
-        <div class="stat-sub">until Sep 1, 2025</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">CHECK-IN STREAK</div>
-        <div class="stat-num" id="s-streak" style="color:var(--gold)">0</div>
-        <div class="stat-sub">consecutive days 🔥</div>
-      </div>
-      <div class="stat">
-        <div class="stat-label">PHASE</div>
-        <div class="stat-num c" style="font-size:22px;" id="s-phase">01</div>
-        <div class="stat-sub" id="s-phase-name">FOUNDATION</div>
-      </div>
+    <!-- HACKING YT -->
+    <div class="sh"><span class="sh-tag c">YOUTUBE — ETHICAL HACKING</span><h2>Essential channels</h2><div class="sh-line"></div></div>
+    <div class="yt-grid">
+      <a href="https://www.youtube.com/@NetworkChuck" target="_blank" class="yt-card">
+        <div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/2_lswM1S264/maxresdefault.jpg" alt="NetworkChuck" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="yt-fall" style="display:none">🔐<span>NETWORKCHUCK</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">BEGINNER</span></div>
+        <div class="yt-body"><div class="yt-ch">YOUTUBE · HACKING</div><div class="yt-title">NetworkChuck</div><div class="yt-desc">Best beginner hacking channel. Fun, energetic and technically accurate. Start with "ethical hacking in 12 hours" then his complete Kali Linux setup and networking series.</div><div class="yt-foot"><span class="yt-subs">3M+ SUBS</span><span class="yt-cta">WATCH NOW</span></div></div>
+      </a>
+      <a href="https://www.youtube.com/@_JohnHammond" target="_blank" class="yt-card">
+        <div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/AXwly3VOBKA/maxresdefault.jpg" alt="John Hammond" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="yt-fall" style="display:none">💻<span>JOHN HAMMOND</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">CTF</span></div>
+        <div class="yt-body"><div class="yt-ch">YOUTUBE · CTF</div><div class="yt-title">John Hammond</div><div class="yt-desc">CTF walkthroughs and practical hacking concepts. Start with his beginner playlist then follow his HackTheBox series. Watch his content alongside solving machines to accelerate learning.</div><div class="yt-foot"><span class="yt-subs">800K+ SUBS</span><span class="yt-cta">WATCH NOW</span></div></div>
+      </a>
+      <a href="https://www.youtube.com/@TCMSecurityAcademy" target="_blank" class="yt-card">
+        <div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/fNzpcB7ODxQ/maxresdefault.jpg" alt="TCM Security" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="yt-fall" style="display:none">🛡️<span>TCM SECURITY</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">PENTEST</span></div>
+        <div class="yt-body"><div class="yt-ch">YOUTUBE · PENTEST</div><div class="yt-title">TCM Security</div><div class="yt-desc">Practical ethical hacking and penetration testing. Their free "Practical Ethical Hacking" course is the most recommended beginner pentesting resource anywhere on the internet.</div><div class="yt-foot"><span class="yt-subs">500K+ SUBS</span><span class="yt-cta">WATCH NOW</span></div></div>
+      </a>
+      <a href="https://www.youtube.com/@davidbombal" target="_blank" class="yt-card">
+        <div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/3Kq1MIfTWCE/maxresdefault.jpg" alt="David Bombal" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="yt-fall" style="display:none">🌐<span>DAVID BOMBAL</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">NETWORKING</span></div>
+        <div class="yt-body"><div class="yt-ch">YOUTUBE · NETWORKING</div><div class="yt-title">David Bombal</div><div class="yt-desc">Networking + ethical hacking. Understanding TCP/IP, DNS, subnets is required before you can hack networks effectively. Best channel for building that foundation properly.</div><div class="yt-foot"><span class="yt-subs">2.7M+ SUBS</span><span class="yt-cta">WATCH NOW</span></div></div>
+      </a>
+      <a href="https://www.youtube.com/@ippsec" target="_blank" class="yt-card">
+        <div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/ziQGJBMlpew/maxresdefault.jpg" alt="IppSec" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="yt-fall" style="display:none">🖥️<span>IPPSEC</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">HTB</span></div>
+        <div class="yt-body"><div class="yt-ch">YOUTUBE · HACKTHEBOX</div><div class="yt-title">IppSec</div><div class="yt-desc">The definitive HackTheBox walkthrough channel. Watch AFTER attempting a machine yourself — never before. Every retired HTB box has a detailed walkthrough here.</div><div class="yt-foot"><span class="yt-subs">350K+ SUBS</span><span class="yt-cta">WATCH NOW</span></div></div>
+      </a>
+      <a href="https://www.youtube.com/@LiveOverflow" target="_blank" class="yt-card">
+        <div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/iyAyN3GFM7A/maxresdefault.jpg" alt="LiveOverflow" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="yt-fall" style="display:none">⚡<span>LIVEOVERFLOW</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">ADVANCED</span></div>
+        <div class="yt-body"><div class="yt-ch">YOUTUBE · ADVANCED</div><div class="yt-title">LiveOverflow</div><div class="yt-desc">Deep binary exploitation, real CVE research, CTF walkthroughs. Save for Month 2+ when foundations are solid. Most technically honest and rigorous security content on YouTube.</div><div class="yt-foot"><span class="yt-subs">600K+ SUBS</span><span class="yt-cta">WATCH NOW</span></div></div>
+      </a>
     </div>
 
-    <!-- STREAK -->
-    <div class="streak-wrap">
-      <div class="streak-flame">🔥</div>
-      <div>
-        <div class="streak-num" id="streak-big">0</div>
-        <div class="streak-label">DAY STREAK</div>
-        <div class="streak-dots" id="streak-dots"></div>
-      </div>
-      <div style="flex:1;">
-        <div style="font-size:12px;color:var(--muted);margin-bottom:8px;font-family:'Share Tech Mono',monospace;letter-spacing:0.1em;">LAST 30 DAYS</div>
-        <div id="month-grid" style="display:grid;grid-template-columns:repeat(10,1fr);gap:4px;"></div>
-      </div>
-      <button class="streak-checkin" id="checkin-btn" onclick="checkIn()">CHECK IN TODAY</button>
+    <!-- PLATFORMS -->
+    <div class="sh"><span class="sh-tag c">PLATFORMS & TOOLS</span><h2>Everything you need</h2><div class="sh-line"></div></div>
+    <div class="rc-grid">
+      <a href="https://tryhackme.com" target="_blank" class="rc"><div class="rc-icon">🎯</div><div class="rc-name">TryHackMe</div><div class="rc-chips"><span class="rc-chip g">START HERE</span><span class="rc-chip c">FREE</span></div><div class="rc-desc">Pre-Security path (free, 40hrs) then Jr Penetration Tester. Best structured beginner path anywhere.</div><span class="rc-link">tryhackme.com →</span></a>
+      <a href="https://www.hackthebox.com" target="_blank" class="rc"><div class="rc-icon">📦</div><div class="rc-name">HackTheBox</div><div class="rc-chips"><span class="rc-chip c">INTERMEDIATE</span><span class="rc-chip gold">PORTFOLIO</span></div><div class="rc-desc">Real machines to hack. Graduate here from TryHackMe. Your HTB rank is visible proof of skill.</div><span class="rc-link">hackthebox.com →</span></a>
+      <a href="https://portswigger.net/web-security" target="_blank" class="rc"><div class="rc-icon">🔬</div><div class="rc-name">PortSwigger Academy</div><div class="rc-chips"><span class="rc-chip c">WEB HACKING</span><span class="rc-chip g">FREE</span></div><div class="rc-desc">Free labs for all OWASP Top 10. Made by Burp Suite creators. Best web security training in existence.</div><span class="rc-link">portswigger.net →</span></a>
+      <a href="https://www.hackerone.com" target="_blank" class="rc"><div class="rc-icon">💰</div><div class="rc-name">HackerOne</div><div class="rc-chips"><span class="rc-chip gold">BUG BOUNTY</span><span class="rc-chip gold">PAID</span></div><div class="rc-desc">Bug bounty platform. Read 50 disclosed reports first. Real USD payouts when you find real bugs.</div><span class="rc-link">hackerone.com →</span></a>
+      <a href="https://www.tradingview.com" target="_blank" class="rc"><div class="rc-icon">📊</div><div class="rc-name">TradingView</div><div class="rc-chips"><span class="rc-chip gold">SMC CHARTS</span><span class="rc-chip g">FREE</span></div><div class="rc-desc">Free charting, paper trading, Bar Replay for backtesting. Search "SMC" in community scripts.</div><span class="rc-link">tradingview.com →</span></a>
+      <a href="https://www.forexfactory.com/calendar" target="_blank" class="rc"><div class="rc-icon">📅</div><div class="rc-name">Forex Factory</div><div class="rc-chips"><span class="rc-chip gold">CALENDAR</span><span class="rc-chip c">DAILY</span></div><div class="rc-desc">Economic calendar. Check every morning. Avoid all SMC setups during red folder events.</div><span class="rc-link">forexfactory.com →</span></a>
+      <a href="https://www.fiverr.com" target="_blank" class="rc"><div class="rc-icon">💸</div><div class="rc-name">Fiverr</div><div class="rc-chips"><span class="rc-chip g">INCOME</span><span class="rc-chip c">START HERE</span></div><div class="rc-desc">Easiest first income. Post 3 gigs. First review unlocks algorithm. Income possible within 2 weeks.</div><span class="rc-link">fiverr.com →</span></a>
+      <a href="https://www.upwork.com" target="_blank" class="rc"><div class="rc-icon">💼</div><div class="rc-name">Upwork</div><div class="rc-chips"><span class="rc-chip gold">HIGHER PAY</span><span class="rc-chip c">INCOME</span></div><div class="rc-desc">Higher rates, better clients. Custom proposals only. Long-term relationships possible from Day 1.</div><span class="rc-link">upwork.com →</span></a>
+      <a href="https://ihub.co.ke" target="_blank" class="rc"><div class="rc-icon">🌍</div><div class="rc-name">iHub Nairobi</div><div class="rc-chips"><span class="rc-chip g">NETWORK</span><span class="rc-chip c">EVENTS</span></div><div class="rc-desc">Nairobi's premier tech hub. Every free event = connections made. People here > certificates.</div><span class="rc-link">ihub.co.ke →</span></a>
+      <a href="https://techcabal.com" target="_blank" class="rc"><div class="rc-icon">📰</div><div class="rc-name">TechCabal</div><div class="rc-chips"><span class="rc-chip g">AFRICA TECH</span><span class="rc-chip c">DAILY</span></div><div class="rc-desc">Africa's leading tech publication. Read daily for opportunities, jobs, and Kenya tech landscape insight.</div><span class="rc-link">techcabal.com →</span></a>
     </div>
+  </div>
 
-    <!-- PHASES -->
-    <div class="phases">
-      <div class="phase" id="ph1"><div class="phase-n">PHASE 01</div><div class="phase-t">FOUNDATION</div><div class="phase-d">May — Jun 15</div></div>
-      <div class="phase" id="ph2"><div class="phase-n">PHASE 02</div><div class="phase-t">BUILD & EARN</div><div class="phase-d">Jun 15 — Jul 31</div></div>
-      <div class="phase" id="ph3"><div class="phase-n">PHASE 03</div><div class="phase-t">SCALE UP</div><div class="phase-d">Aug 1 — Sep 1</div></div>
+  <!-- REMINDERS -->
+  <div id="tab-reminders" class="panel">
+    <div class="sh"><span class="sh-tag gold">GMAIL REMINDERS</span><h2>Send yourself milestone check-ins</h2><div class="sh-line"></div></div>
+    <div class="rem-box">
+      <h3>HOW TO USE</h3>
+      <p>Enter your Gmail below → click any reminder button → Gmail opens with a pre-written email. In Gmail, click the ▾ next to Send and choose "Schedule send" to pick a future delivery date. Works perfectly as milestone accountability.</p>
+      <div class="ir">
+        <input type="email" class="inf" id="email-in" placeholder="your@gmail.com">
+        <button class="btn btn-c" onclick="saveEmail()">SAVE EMAIL</button>
+      </div>
+      <div id="email-saved" style="font-family:var(--fm);font-size:11px;color:var(--green);display:none;letter-spacing:.1em;margin-top:6px;">✓ EMAIL SAVED — ALL LINKS UPDATED</div>
     </div>
-
-    <!-- TABS -->
-    <div class="tabs">
-      <button class="tab on" onclick="switchTab('income',this)">💸 INCOME NOW</button>
-      <button class="tab" onclick="switchTab('smc',this)">📈 SMC TRADING</button>
-      <button class="tab" onclick="switchTab('hacking',this)">🔐 ETHICAL HACKING</button>
-      <button class="tab" onclick="switchTab('schedule',this)">📅 SCHEDULE</button>
-      <button class="tab" onclick="switchTab('finance',this)">💰 FINANCES</button>
-      <button class="tab" onclick="switchTab('resources',this)">📚 RESOURCES</button>
-      <button class="tab" onclick="switchTab('reminders',this)">🔔 REMINDERS</button>
-      <button class="tab" onclick="switchTab('notes',this)">📝 NOTES</button>
+    <div class="rl">
+      <div class="rli"><div><div class="rli-lbl">📅 Week 1 — Fiverr, Upwork & Payoneer setup check</div><div class="rli-sub">Schedule for 7 days from today</div></div><button class="btn btn-o" onclick="openR(1)">OPEN IN GMAIL ↗</button></div>
+      <div class="rli"><div><div class="rli-lbl">📅 Month 1 — Photon Trading done? TryHackMe Pre-Security? First income?</div><div class="rli-sub">Schedule for 30 days from today</div></div><button class="btn btn-o" onclick="openR(2)">OPEN IN GMAIL ↗</button></div>
+      <div class="rli"><div><div class="rli-lbl">📅 Month 2 — Paper trading profitably? Jr Pentest path done? Upwork income?</div><div class="rli-sub">Schedule for 60 days from today</div></div><button class="btn btn-o" onclick="openR(3)">OPEN IN GMAIL ↗</button></div>
+      <div class="rli"><div><div class="rli-lbl">📅 Pre-campus review — What did you actually build this holiday?</div><div class="rli-sub">Schedule for 85 days from today</div></div><button class="btn btn-o" onclick="openR(4)">OPEN IN GMAIL ↗</button></div>
+      <div class="rli"><div><div class="rli-lbl">🔔 Daily — "Open TryHackMe. Open TradingView. Do the work."</div><div class="rli-sub">Set as recurring Google Calendar alarm</div></div><button class="btn btn-o" onclick="openR(5)">OPEN IN GMAIL ↗</button></div>
     </div>
-
-    <!-- ===== INCOME ===== -->
-    <div id="tab-income" class="panel on">
-      <div class="sh"><span class="sh-tag gold">WEEK 1 — START TODAY</span><h2>Immediate setup</h2><div class="sh-line"></div></div>
-      <div class="cl">
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Create Fiverr account + 100% profile (real photo, strong bio, skills listed)</div><div class="cm">fiverr.com — first impression. Use a clear headshot. Write bio mentioning tech + writing + social media skills.</div></div><span class="ctag gold">DAY 1</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Create Upwork account + pass the readiness test + complete ID verification</div><div class="cm">upwork.com — takes ~30 min. More competitive than Fiverr but pays significantly higher rates.</div></div><span class="ctag gold">DAY 1</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Post 3 Fiverr gigs: one writing, one data entry, one social media management</div><div class="cm">Research top sellers first. Mirror their keyword strategy. Undercut price by 20% to get first reviews.</div></div><span class="ctag gold">DAY 2-3</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Register on Remotasks (remotasks.com) — complete all qualification tests</div><div class="cm">AI data labelling. Pays USD via PayPal/Wave. Instant micro-income while building other streams.</div></div><span class="ctag gold">DAY 2</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Set up Payoneer account for receiving USD internationally</div><div class="cm">payoneer.com — lower Kenya withdrawal fees than PayPal. Links to Equity Bank or KCB directly.</div></div><span class="ctag gold">DAY 1</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Identify 5 local Nairobi businesses with no or weak social media presence</div><div class="cm">Google Maps search + walk around. SMEs are your easiest first clients for social media management.</div></div><span class="ctag gold">DAY 3-5</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Write a cold pitch and send to 3 local businesses offering social media for Ksh 8,000–15,000/mo</div><div class="cm">One yes = Ksh 8–15K monthly recurring. Three clients = your living expenses covered.</div></div><span class="ctag gold">DAY 5-7</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Build a free portfolio page on Carrd.co (free) or GitHub Pages</div><div class="cm">3–5 sample works. Add Fiverr + Upwork links. This is your digital CV. Put the URL everywhere.</div></div><span class="ctag c">WEEK 2</span></div>
-      </div>
-
-      <div class="sh"><span class="sh-tag c">FREELANCE GRIND</span><h2>Fiverr + Upwork strategy</h2><div class="sh-line"></div></div>
-      <div class="cl">
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Study top 10 sellers in your niche — analyse gig titles, packages, pricing, reviews</div><div class="cm">Look for patterns. What 3 things do all top sellers have in common? Do those things.</div></div><span class="ctag c">WEEK 1</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Complete your first gig even at Ksh 500 — you need that first 5-star review</div><div class="cm">Over-deliver massively. Ask politely for a review. First review unlocks Fiverr algorithm visibility.</div></div><span class="ctag c">WEEK 2</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Apply to 5 Upwork jobs per day — write fully custom proposals every single time</div><div class="cm">Reference something specific in their job post. Show you actually read it. Never use templates.</div></div><span class="ctag c">ONGOING</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Join Kenya Freelancers Network Facebook group + relevant WhatsApp communities</div><div class="cm">Search "Kenya Freelancers" on Facebook. Local gigs pay faster, easier to close, in KES.</div></div><span class="ctag c">WEEK 1</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Register on Appen (appen.com) as a backup — higher pay than Remotasks, more selective</div><div class="cm">AI training data projects. Apply to multiple projects. Often needs English fluency tests first.</div></div><span class="ctag c">WEEK 2</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Set up Preply or iTalki profile if English is strong — tutor foreigners in English</div><div class="cm">Pays in USD. Record a 60-second intro video. Kenya timezone is convenient for European students.</div></div><span class="ctag c">WEEK 3</span></div>
-      </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;">
+      <a href="https://calendar.google.com/calendar/r/eventedit?text=LOCKDOWN+Daily+Study+Block&details=Open+TryHackMe.+Open+TradingView.+Mark+SMC+levels.+Do+the+work.&recur=RRULE:FREQ%3DDAILY" target="_blank" class="btn btn-c" style="text-decoration:none;display:inline-block;">CREATE DAILY CALENDAR BLOCK ↗</a>
+      <a href="https://calendar.google.com/calendar/r/eventedit?text=LOCKDOWN+Weekly+Review&details=Review+checklist.+Update+trading+journal.+Plan+next+week.&recur=RRULE:FREQ%3DWEEKLY;BYDAY%3DSA" target="_blank" class="btn btn-o" style="text-decoration:none;display:inline-block;">CREATE WEEKLY REVIEW ↗</a>
     </div>
+  </div>
 
-    <!-- ===== SMC TRADING ===== -->
-    <div id="tab-smc" class="panel">
-      <div class="sh"><span class="sh-tag gold">SMC CONCEPTS</span><h2>Smart Money Concepts — your edge</h2><div class="sh-line"></div></div>
-      <div class="smc-grid">
-        <div class="smc-card"><h4>ORDER BLOCKS (OB)</h4><p>Last opposing candle before a strong impulsive move. Institutional accumulation/distribution zones. Mark bullish OB (last bearish candle before rally) and bearish OB (last bullish candle before drop).</p></div>
-        <div class="smc-card"><h4>FAIR VALUE GAPS (FVG)</h4><p>3-candle imbalance where price moves too fast leaving unfilled orders. Price returns to fill these gaps. Mark the gap between candle 1 high and candle 3 low (bullish) or inverse (bearish).</p></div>
-        <div class="smc-card"><h4>BREAK OF STRUCTURE (BOS)</h4><p>Price breaks a previous swing high (bullish BOS) or swing low (bearish BOS). Continuation signal. Higher highs + higher lows = bullish structure. Opposite = bearish.</p></div>
-        <div class="smc-card"><h4>CHANGE OF CHARACTER (ChoCh)</h4><p>First BOS in the opposite direction after a trend — signals potential reversal. Wait for ChoCh, then look for entry on the retest of the OB that caused it.</p></div>
-        <div class="smc-card"><h4>LIQUIDITY SWEEPS</h4><p>Price spikes to hunt stop losses above equal highs (buy-side liquidity) or below equal lows (sell-side liquidity) before reversing. Enter after the sweep, not before.</p></div>
-        <div class="smc-card"><h4>PREMIUM vs DISCOUNT</h4><p>Use Fibonacci 0–1 range. Above 0.5 = premium (sell zone), below 0.5 = discount (buy zone). Only buy in discount, only sell in premium. This filters 80% of bad entries.</p></div>
-        <div class="smc-card"><h4>INDUCEMENT</h4><p>False liquidity engineered by institutions to trap retail traders. Minor swing highs/lows before the actual target. Don't chase — wait for sweep of inducement then enter.</p></div>
-        <div class="smc-card"><h4>MITIGATION BLOCKS</h4><p>Failed order blocks that get retested. When price breaks an OB and comes back, that's a mitigation. Can be stronger than standard OB because smart money is defending it again.</p></div>
-      </div>
-
-      <div class="sh"><span class="sh-tag gold">PHASE 1 — MONTH 1</span><h2>SMC foundation checklist</h2><div class="sh-line"></div></div>
-      <div class="cl">
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Watch ICT (Inner Circle Trader) 2022 Mentorship on YouTube — full series</div><div class="cm">youtube.com/@ICT — This is the original SMC. 200+ hours but the most comprehensive free education on the internet.</div></div><span class="ctag gold">MONTH 1</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Watch The Trading Channel — SMC explained for beginners (YouTube)</div><div class="cm">youtube.com/@TheTradingChannel — cleaner SMC breakdowns. Great visual explanations of OBs and FVGs.</div></div><span class="ctag gold">WEEK 1</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Watch Iliya MakSimov (SMC) YouTube channel — top-down analysis walkthroughs</div><div class="cm">Daily market analysis using pure SMC. Helps you understand how to read charts top-down (HTF to LTF).</div></div><span class="ctag gold">WEEK 1</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Create a free TradingView account and set up your chart layout for SMC</div><div class="cm">Mark: daily OBs in blue, H4 FVGs in yellow, structure lines in white. Keep it clean — max 3 tools.</div></div><span class="ctag gold">WEEK 1</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Practice top-down analysis daily: D1 → H4 → H1 → M15 entry for 30 days straight</div><div class="cm">Start on Daily to find premium/discount. Drop to H4 for OBs. Enter on M15 with confirmation.</div></div><span class="ctag gold">MONTH 1</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Open a free demo account on Exness or IC Markets — paper trade with $10,000 virtual</div><div class="cm">Kenya-friendly brokers. M-Pesa deposits available. Use demo for minimum 60 days before real money.</div></div><span class="ctag gold">WEEK 2</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Start your trading journal in Google Sheets — log every trade with SMC confluence factors</div><div class="cm">Columns: Date | Pair | Session | HTF OB? | FVG? | Liquidity swept? | Entry TF | SL | TP | Result | Notes</div></div><span class="ctag gold">WEEK 2</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Learn trading sessions: London Open (10am–12pm EAT), New York Open (3pm–5pm EAT)</div><div class="cm">These are the highest liquidity periods. SMC setups work best during session opens. DO NOT trade between 12–3pm EAT.</div></div><span class="ctag gold">WEEK 2</span></div>
-      </div>
-
-      <div class="sh"><span class="sh-tag c">PHASE 2 — MONTH 2</span><h2>Strategy refinement</h2><div class="sh-line"></div></div>
-      <div class="cl">
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Backtest your SMC strategy on 100 historical trades on TradingView Replay</div><div class="cm">Use Bar Replay feature. Test one pair (XAUUSD or EURUSD recommended). Document every trade.</div></div><span class="ctag c">MONTH 2</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Aim for minimum 1:3 Risk:Reward on every SMC trade — no exceptions</div><div class="cm">With 1:3 R:R you only need 34% win rate to be profitable. Your SL goes below the OB, TP at liquidity.</div></div><span class="ctag c">MONTH 2</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Learn Forex Factory economic calendar — avoid trading during red folder news events</div><div class="cm">forexfactory.com — add to bookmarks. NFP, CPI, Fed/FOMC events destroy SMC setups. Stay out.</div></div><span class="ctag c">MONTH 2</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Watch Bloomberg Markets on YouTube 3x per week for macro context</div><div class="cm">youtube.com/@BloombergMarkets — macro context makes your SMC analysis 10x stronger. Know the narrative.</div></div><span class="ctag c">MONTH 2</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Follow and watch Anton Kreil (ITPM) YouTube — professional trader mindset and risk management</div><div class="cm">youtube.com/@AntonKreilOfficial — brutal honesty about retail trading. Destroys bad habits before they form.</div></div><span class="ctag c">MONTH 2</span></div>
-      </div>
-
-      <div class="sh"><span class="sh-tag r">PHASE 3 — MONTH 3</span><h2>Going live — strict rules</h2><div class="sh-line"></div></div>
-      <div class="cl">
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Only go live when you have 60+ days of profitable paper trading with consistent SMC execution</div><div class="cm">Not profitable on demo = not profitable live. Cold hard truth. The journal doesn't lie.</div></div><span class="ctag r">MONTH 3</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Start with maximum Ksh 5,000 real capital — risk 1% per trade maximum</div><div class="cm">1% of Ksh 5,000 = Ksh 50 per trade. This is tuition. Every losing trade teaches you something.</div></div><span class="ctag r">MONTH 3</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Hard rule: maximum 3 losses in a day = close all charts, do something else</div><div class="cm">Revenge trading after 3 losses is how accounts get blown. This rule has saved thousands of accounts.</div></div><span class="ctag r">NEVER BREAK</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">NEVER borrow money to fund a trading account. Ever.</div><div class="cm">Borrowed capital + leverage + emotions = guaranteed account blowup + debt. Zero exceptions to this rule.</div></div><span class="ctag r">NEVER BREAK</span></div>
-      </div>
-    </div>
-
-    <!-- ===== ETHICAL HACKING ===== -->
-    <div id="tab-hacking" class="panel">
-      <div class="sh"><span class="sh-tag c">PHASE 1 — MONTH 1</span><h2>Cybersecurity foundations</h2><div class="sh-line"></div></div>
-      <div class="cl">
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Create TryHackMe account and start "Pre-Security" path (free, ~40 hours)</div><div class="cm">tryhackme.com — best structured beginner path on the internet. Covers Linux, networking, web fundamentals.</div></div><span class="ctag c">WEEK 1</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Complete Linux Fundamentals Parts 1, 2, 3 on TryHackMe</div><div class="cm">Linux is the OS of hackers. Master: file system, permissions, bash scripting, processes, networking commands.</div></div><span class="ctag c">WEEK 1-2</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Watch NetworkChuck on YouTube — "I became an ethical hacker in 6 months" series</div><div class="cm">youtube.com/@NetworkChuck — entertaining, technically accurate. Start with his hacking roadmap video.</div></div><span class="ctag c">WEEK 1</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Install Kali Linux via VirtualBox (free) — follow NetworkChuck's setup tutorial</div><div class="cm">kali.org — all tools pre-installed. VirtualBox keeps it isolated from your main OS. Safe to break things.</div></div><span class="ctag c">WEEK 2</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Learn basic Python: variables, loops, functions, HTTP requests (requests library)</div><div class="cm">Python is the scripting language of security. CS50P on YouTube (Harvard, free) is the best intro course.</div></div><span class="ctag c">WEEK 3-4</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Watch John Hammond on YouTube — CTF walkthroughs and hacking concepts</div><div class="cm">youtube.com/@_JohnHammond — best CTF content creator. Watch his beginner playlist first.</div></div><span class="ctag c">WEEK 2</span></div>
-      </div>
-
-      <div class="sh"><span class="sh-tag gold">PHASE 2 — MONTH 2</span><h2>Core attack techniques</h2><div class="sh-line"></div></div>
-      <div class="cl">
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Complete TryHackMe "Jr Penetration Tester" path (free)</div><div class="cm">Covers: web app attacks, network scanning, privilege escalation, Metasploit. Most complete free path.</div></div><span class="ctag gold">MONTH 2</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Learn OWASP Top 10 — do the PortSwigger Web Security Academy labs for each (all free)</div><div class="cm">portswigger.net/web-security — SQLi, XSS, IDOR, SSRF, XXE. Best web security training in existence. All free.</div></div><span class="ctag gold">MONTH 2</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Master Nmap — port scanning, OS detection, service versioning, scripting engine</div><div class="cm">Every pentest starts here. Learn: -sV, -sC, -A, -p-, --script flags. Practice on TryHackMe rooms.</div></div><span class="ctag gold">MONTH 2</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Learn Burp Suite Community Edition — intercept, modify, repeat HTTP requests</div><div class="cm">Watch Rana Khalil's Burp Suite series on YouTube. Essential for web app hacking and bug bounty.</div></div><span class="ctag gold">MONTH 2</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Watch LiveOverflow on YouTube — binary exploitation, CTF, real vulnerability research</div><div class="cm">youtube.com/@LiveOverflow — deeper, more technical content for when basics are solid.</div></div><span class="ctag gold">MONTH 2</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Set up DVWA locally and manually exploit every vulnerability at all 3 security levels</div><div class="cm">SQLi, XSS, Command Injection, CSRF, File Upload. This is a legal intentionally broken app for practice.</div></div><span class="ctag gold">MONTH 2</span></div>
-      </div>
-
-      <div class="sh"><span class="sh-tag g">PHASE 3 — MONTH 3</span><h2>Bug bounty & real income</h2><div class="sh-line"></div></div>
-      <div class="cl">
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Create HackerOne account — read 50 disclosed bug reports in your target program</div><div class="cm">hackerone.com — disclosed reports teach you exactly what works. Read before you hunt. This is studying.</div></div><span class="ctag g">MONTH 3</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Solve 10 HackTheBox machines (Easy tier) — document every step in a writeup</div><div class="cm">hackthebox.com — only start after TryHackMe paths. Each machine = real interview topic + portfolio proof.</div></div><span class="ctag g">MONTH 3</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Publish all writeups on a free Medium or GitHub Pages blog</div><div class="cm">Public writeups = portfolio + Google ranking + community credibility. Employers search for these.</div></div><span class="ctag g">MONTH 3</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Start studying CompTIA Security+ — Professor Messer free course on YouTube</div><div class="cm">professormesser.com — globally recognised entry cert. Worth Ksh ~30K exam fee. Budget for it.</div></div><span class="ctag g">MONTH 3</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Join OWASP Kenya chapter + iHub Nairobi events + Nairobi tech meetups</div><div class="cm">ihub.co.ke — Kenya's main tech hub. Attend every free event. The people you meet are worth more than certificates.</div></div><span class="ctag g">MONTH 3</span></div>
-      </div>
-    </div>
-
-    <!-- ===== SCHEDULE ===== -->
-    <div id="tab-schedule" class="panel">
-      <div class="sh"><span class="sh-tag c">MON–FRI</span><h2>Daily time blocks</h2><div class="sh-line"></div></div>
-      <div class="sched" id="sched-blocks">
-        <div class="sb"><div class="sb-time">06:00–07:00</div><div class="sb-body"><div class="sb-title">Wake + Market Prep + News</div><div class="sb-desc">Check Forex Factory calendar. Read TechCabal.com + Business Daily headlines. Mark SMC levels on charts.</div></div><span class="sb-badge trade">TRADING</span></div>
-        <div class="sb"><div class="sb-time">07:00–08:00</div><div class="sb-body"><div class="sb-title">Exercise + Breakfast (no screens)</div><div class="sb-desc">Physical health = cognitive performance. Walk, run, gym, bodyweight. Non-negotiable daily.</div></div><span class="sb-badge rest">HEALTH</span></div>
-        <div class="sb"><div class="sb-time">08:00–11:00</div><div class="sb-body"><div class="sb-title">INCOME BLOCK — Fiverr / Upwork / Client Work</div><div class="sb-desc">Your primary money-making window. Phone on silent. No social media. This pays your bills NOW.</div></div><span class="sb-badge income">💰 INCOME</span></div>
-        <div class="sb"><div class="sb-time">10:00–12:00</div><div class="sb-body"><div class="sb-title">LONDON OPEN — Live SMC Trading Session (EAT)</div><div class="sb-desc">Highest volume session. Look for liquidity sweeps + OB retests. Maximum 2 setups. Stop at 3 losses.</div></div><span class="sb-badge trade">📈 TRADE</span></div>
-        <div class="sb"><div class="sb-time">11:00–13:00</div><div class="sb-body"><div class="sb-title">SMC Study + TradingView Replay Backtesting</div><div class="sb-desc">One concept per session. Watch ICT/Bloomberg clip → find 5 historical examples → journal them.</div></div><span class="sb-badge trade">📈 TRADE</span></div>
-        <div class="sb"><div class="sb-time">13:00–14:00</div><div class="sb-body"><div class="sb-title">Lunch + Rest (step away from all screens)</div><div class="sb-desc">Your brain consolidates learning during rest. Eat a proper meal. Take a short walk.</div></div><span class="sb-badge rest">BREAK</span></div>
-        <div class="sb"><div class="sb-time">14:00–17:00</div><div class="sb-body"><div class="sb-title">ETHICAL HACKING STUDY — TryHackMe / HTB / Labs</div><div class="sb-desc">Complete one full TryHackMe room per session. Take structured notes. Build your personal reference doc.</div></div><span class="sb-badge hack">🔐 HACK</span></div>
-        <div class="sb"><div class="sb-time">15:00–17:00</div><div class="sb-body"><div class="sb-title">NEW YORK OPEN — SMC Trading Session (EAT)</div><div class="sb-desc">Second high-volume session. Only trade if you have a clear setup. Paper trade if not profitable yet.</div></div><span class="sb-badge trade">📈 TRADE</span></div>
-        <div class="sb"><div class="sb-time">17:00–19:00</div><div class="sb-body"><div class="sb-title">Portfolio Building + Projects + Community</div><div class="sb-desc">Write HTB writeups. Build GitHub portfolio. Post on LinkedIn. Reply to freelance opportunities.</div></div><span class="sb-badge hack">🔐 BUILD</span></div>
-        <div class="sb"><div class="sb-time">19:00–21:00</div><div class="sb-body"><div class="sb-title">Review + Journal + Plan Tomorrow</div><div class="sb-desc">Update trading journal. Check checklist. Write tomorrow's 3 non-negotiable tasks. Then relax fully.</div></div><span class="sb-badge rest">REVIEW</span></div>
-      </div>
-
-      <div class="sh"><span class="sh-tag gold">WEEKENDS</span><h2>Saturday & Sunday rules</h2><div class="sh-line"></div></div>
-      <div class="cl">
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Saturday morning: Full weekly review — what completed, what missed, why, adjusted plan</div><div class="cm">Honest. No judgment. Data-driven. The journal reveals the truth your memory hides.</div></div></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Saturday: One "stretch" session — harder HTB machine, advanced SMC concept, or new income lead</div><div class="cm">One push past comfort zone per week. This is where real skill growth happens.</div></div></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Sunday: Rest, social, recharge — NO deep work. This is a rule, not a suggestion.</div><div class="cm">Sustainable pace over 4 months > burnout sprint over 2 weeks. Protect your energy.</div></div></div>
-      </div>
-    </div>
-
-    <!-- ===== FINANCE ===== -->
-    <div id="tab-finance" class="panel">
-      <div class="sh"><span class="sh-tag g">MONEY SPLIT</span><h2>How to allocate every shilling earned</h2><div class="sh-line"></div></div>
-      <div class="fsplit">
-        <div class="fc"><div class="stat-label" style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:0.2em;">DAILY NEEDS</div><div class="fc-pct" style="color:var(--cyan);">50%</div><div class="fc-label">LIVING EXPENSES</div><div class="fc-sub">Food, transport, internet, phone</div></div>
-        <div class="fc"><div class="stat-label" style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:0.2em;">LOCKED SAVINGS</div><div class="fc-pct" style="color:var(--green);">30%</div><div class="fc-label">M-SHWARI / KCB</div><div class="fc-sub">Emergency fund first, then goals</div></div>
-        <div class="fc"><div class="stat-label" style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:0.2em;">TRADING CAPITAL</div><div class="fc-pct" style="color:var(--gold);">10%</div><div class="fc-label">SEPARATE ACCOUNT</div><div class="fc-sub">Only what you can lose entirely</div></div>
-        <div class="fc"><div class="stat-label" style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:0.2em;">SELF INVESTMENT</div><div class="fc-pct" style="color:var(--red);">10%</div><div class="fc-label">COURSES & TOOLS</div><div class="fc-sub">Udemy, certs, software, books</div></div>
-      </div>
-
-      <div class="sh"><span class="sh-tag c">SETUP</span><h2>Financial infrastructure checklist</h2><div class="sh-line"></div></div>
-      <div class="cl">
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Open M-Shwari (M-Pesa → Financial Services → M-Shwari) — set a lock savings target</div><div class="cm">Even Ksh 500/week locked. Interest accrues. Psychological barrier stops impulse spending.</div></div><span class="ctag c">WEEK 1</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Set up KCB M-Pesa Goal Savings — label it "TRADING CAPITAL" — never touch for anything else</div><div class="cm">Separate mental account = separate physical account. This is how you actually save.</div></div><span class="ctag c">WEEK 1</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Create a Google Sheets budget — income in, expenses out, savings rate, running balance</div><div class="cm">Track every shilling for 30 days. The data will change your behaviour automatically.</div></div><span class="ctag c">WEEK 1</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Set up Payoneer (payoneer.com) — lower Kenya withdrawal fees than PayPal</div><div class="cm">Links to Equity or KCB. Upwork pays directly. Takes 3–5 days to verify.</div></div><span class="ctag c">WEEK 1</span></div>
-        <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Research Sacco membership — even Ksh 200/month now builds borrowing power by campus year 3</div><div class="cm">Stima Sacco, Mwalimu National, or your university's Sacco. Compound interest works in your favour here.</div></div><span class="ctag c">MONTH 2</span></div>
-      </div>
-    </div>
-
-    <!-- ===== RESOURCES ===== -->
-    <div id="tab-resources" class="panel">
-      <div class="sh"><span class="sh-tag gold">YOUTUBE — SMC TRADING</span><h2>Watch these channels</h2><div class="sh-line"></div></div>
-      <div class="rg">
-        <div class="rc"><div class="rc-icon">📺</div><div class="rc-name">ICT (Inner Circle Trader)</div><div class="rc-tags"><span class="rc-tag gold">SMC ORIGINAL</span><span class="rc-tag">FREE</span></div><div class="rc-desc">Michael Huddleston — the original creator of SMC/ICT concepts. 2022 Mentorship playlist is the bible. Over 200 hours of free content.</div><a href="https://www.youtube.com/@ICT" target="_blank" class="rc-link">youtube.com/@ICT →</a></div>
-        <div class="rc"><div class="rc-icon">📺</div><div class="rc-name">The Trading Channel</div><div class="rc-tags"><span class="rc-tag gold">SMC</span><span class="rc-tag">BEGINNER FRIENDLY</span></div><div class="rc-desc">Clean, visual SMC breakdowns. Best channel for understanding Order Blocks and FVGs with clear chart examples. Start here before ICT.</div><a href="https://www.youtube.com/@TheTradingChannel" target="_blank" class="rc-link">youtube.com/@TheTradingChannel →</a></div>
-        <div class="rc"><div class="rc-icon">📺</div><div class="rc-name">Bloomberg Markets</div><div class="rc-tags"><span class="rc-tag">MACRO</span><span class="rc-tag">DAILY</span></div><div class="rc-desc">Daily market coverage, central bank decisions, forex macro context. Watch 2x per week to understand the narrative behind SMC moves.</div><a href="https://www.youtube.com/@BloombergMarkets" target="_blank" class="rc-link yt">youtube.com/@BloombergMarkets →</a></div>
-        <div class="rc"><div class="rc-icon">📺</div><div class="rc-name">Anton Kreil — ITPM</div><div class="rc-tags"><span class="rc-tag">PROFESSIONAL</span><span class="rc-tag">MINDSET</span></div><div class="rc-desc">Former Goldman Sachs trader. Brutally honest about retail trading. Essential for developing professional risk management mindset.</div><a href="https://www.youtube.com/@AntonKreilOfficial" target="_blank" class="rc-link yt">youtube.com/@AntonKreilOfficial →</a></div>
-        <div class="rc"><div class="rc-icon">📺</div><div class="rc-name">Rayner Teo</div><div class="rc-tags"><span class="rc-tag">PRICE ACTION</span><span class="rc-tag">RISK</span></div><div class="rc-desc">Complements SMC well. Strong content on risk management, position sizing, and trading psychology. "How to not blow your account" series.</div><a href="https://www.youtube.com/@RaynerTeo" target="_blank" class="rc-link yt">youtube.com/@RaynerTeo →</a></div>
-        <div class="rc"><div class="rc-icon">🌐</div><div class="rc-name">TradingView</div><div class="rc-tags"><span class="rc-tag">CHARTS</span><span class="rc-tag">FREE</span></div><div class="rc-desc">Free charting. Paper trading built in. Bar Replay for backtesting. SMC indicators available in community scripts.</div><a href="https://www.tradingview.com" target="_blank" class="rc-link">tradingview.com →</a></div>
-        <div class="rc"><div class="rc-icon">🌐</div><div class="rc-name">Forex Factory</div><div class="rc-tags"><span class="rc-tag">CALENDAR</span><span class="rc-tag">DAILY</span></div><div class="rc-desc">Economic calendar — bookmark this. Check every morning. Avoid trading during red news events. Fundamental + SMC = edge.</div><a href="https://www.forexfactory.com/calendar" target="_blank" class="rc-link">forexfactory.com →</a></div>
-        <div class="rc"><div class="rc-icon">🌐</div><div class="rc-name">Exness Kenya</div><div class="rc-tags"><span class="rc-tag">BROKER</span><span class="rc-tag">M-PESA</span></div><div class="rc-desc">CMA-regulated broker accepting Kenyan clients. M-Pesa deposits. Good for small accounts starting Ksh 1,000+.</div><a href="https://www.exness.com" target="_blank" class="rc-link">exness.com →</a></div>
-      </div>
-
-      <div class="sh"><span class="sh-tag c">YOUTUBE — ETHICAL HACKING</span><h2>Watch these channels</h2><div class="sh-line"></div></div>
-      <div class="rg">
-        <div class="rc"><div class="rc-icon">📺</div><div class="rc-name">NetworkChuck</div><div class="rc-tags"><span class="rc-tag">BEGINNER</span><span class="rc-tag">FUN</span></div><div class="rc-desc">Best hacking channel for beginners. Entertaining but technically accurate. Start: "I became an ethical hacker in 6 months" and his Kali Linux setup video.</div><a href="https://www.youtube.com/@NetworkChuck" target="_blank" class="rc-link yt">youtube.com/@NetworkChuck →</a></div>
-        <div class="rc"><div class="rc-icon">📺</div><div class="rc-name">John Hammond</div><div class="rc-tags"><span class="rc-tag">CTF</span><span class="rc-tag">PRACTICAL</span></div><div class="rc-desc">CTF walkthroughs and security concepts explained clearly. Watch his beginner playlist. Real practical hacking content daily.</div><a href="https://www.youtube.com/@_JohnHammond" target="_blank" class="rc-link yt">youtube.com/@_JohnHammond →</a></div>
-        <div class="rc"><div class="rc-icon">📺</div><div class="rc-name">LiveOverflow</div><div class="rc-tags"><span class="rc-tag">ADVANCED</span><span class="rc-tag">DEEP</span></div><div class="rc-desc">Binary exploitation, real vulnerability research, deep technical content. Watch after TryHackMe basics are solid.</div><a href="https://www.youtube.com/@LiveOverflow" target="_blank" class="rc-link yt">youtube.com/@LiveOverflow →</a></div>
-        <div class="rc"><div class="rc-icon">📺</div><div class="rc-name">David Bombal</div><div class="rc-tags"><span class="rc-tag">NETWORKING</span><span class="rc-tag">CERTS</span></div><div class="rc-desc">Networking + ethical hacking. Best for understanding how networks work (which you need for hacking). CCNA + hacking content.</div><a href="https://www.youtube.com/@davidbombal" target="_blank" class="rc-link yt">youtube.com/@davidbombal →</a></div>
-        <div class="rc"><div class="rc-icon">🌐</div><div class="rc-name">TryHackMe</div><div class="rc-tags"><span class="rc-tag">BEGINNER</span><span class="rc-tag">FREE</span></div><div class="rc-desc">Start with "Pre-Security" path (free). Then "Jr Pentration Tester". Gamified, structured, best beginner path anywhere.</div><a href="https://tryhackme.com" target="_blank" class="rc-link">tryhackme.com →</a></div>
-        <div class="rc"><div class="rc-icon">🌐</div><div class="rc-name">PortSwigger Web Academy</div><div class="rc-tags"><span class="rc-tag">WEB HACKING</span><span class="rc-tag">FREE</span></div><div class="rc-desc">Free labs for every OWASP Top 10 vulnerability. From makers of Burp Suite. Best web security training in existence.</div><a href="https://portswigger.net/web-security" target="_blank" class="rc-link">portswigger.net →</a></div>
-        <div class="rc"><div class="rc-icon">🌐</div><div class="rc-name">HackTheBox</div><div class="rc-tags"><span class="rc-tag">INTERMEDIATE</span><span class="rc-tag">PORTFOLIO</span></div><div class="rc-desc">Real machines to hack. Graduate here from TryHackMe. Your HTB rank is proof of skill to employers.</div><a href="https://www.hackthebox.com" target="_blank" class="rc-link">hackthebox.com →</a></div>
-        <div class="rc"><div class="rc-icon">🌐</div><div class="rc-name">HackerOne</div><div class="rc-tags"><span class="rc-tag">BUG BOUNTY</span><span class="rc-tag">PAID</span></div><div class="rc-desc">Bug bounty platform. Read disclosed reports first. When ready, hunt real programs for real USD payouts.</div><a href="https://www.hackerone.com" target="_blank" class="rc-link">hackerone.com →</a></div>
-      </div>
-
-      <div class="sh"><span class="sh-tag g">INCOME & FREELANCING</span><h2>Platforms and tools</h2><div class="sh-line"></div></div>
-      <div class="rg">
-        <div class="rc"><div class="rc-icon">💸</div><div class="rc-name">Fiverr</div><div class="rc-tags"><span class="rc-tag g">START HERE</span><span class="rc-tag">EASY</span></div><div class="rc-desc">Easiest platform to get first clients. Post 3 gigs. Undercut slightly on price. Get 5-star reviews. Income within 2 weeks possible.</div><a href="https://www.fiverr.com" target="_blank" class="rc-link">fiverr.com →</a></div>
-        <div class="rc"><div class="rc-icon">💼</div><div class="rc-name">Upwork</div><div class="rc-tags"><span class="rc-tag">HIGHER PAY</span><span class="rc-tag">COMPETITIVE</span></div><div class="rc-desc">Higher rates than Fiverr but more competitive. Write 100% custom proposals. Client quality is better. Long-term relationships possible.</div><a href="https://www.upwork.com" target="_blank" class="rc-link">upwork.com →</a></div>
-        <div class="rc"><div class="rc-icon">🤖</div><div class="rc-name">Remotasks</div><div class="rc-tags"><span class="rc-tag">USD</span><span class="rc-tag">INSTANT</span></div><div class="rc-desc">AI data labelling. Pays in USD. Complete qualification tests to unlock higher-paying tasks. Immediate income while building skills.</div><a href="https://www.remotasks.com" target="_blank" class="rc-link">remotasks.com →</a></div>
-        <div class="rc"><div class="rc-icon">💳</div><div class="rc-name">Payoneer</div><div class="rc-tags"><span class="rc-tag">PAYMENTS</span><span class="rc-tag">KENYA</span></div><div class="rc-desc">Best international payment receiver for Kenya. Lower withdrawal fees than PayPal. Links to Equity/KCB directly.</div><a href="https://www.payoneer.com" target="_blank" class="rc-link">payoneer.com →</a></div>
-        <div class="rc"><div class="rc-icon">🌐</div><div class="rc-name">iHub Nairobi</div><div class="rc-tags"><span class="rc-tag">NETWORKING</span><span class="rc-tag">EVENTS</span></div><div class="rc-desc">Nairobi's premier tech hub. Attend every free meetup and hackathon. The people you meet here are worth more than certificates.</div><a href="https://ihub.co.ke" target="_blank" class="rc-link">ihub.co.ke →</a></div>
-        <div class="rc"><div class="rc-icon">📰</div><div class="rc-name">TechCabal</div><div class="rc-tags"><span class="rc-tag">AFRICA TECH</span><span class="rc-tag">DAILY</span></div><div class="rc-desc">Africa's leading tech publication. Read daily to understand the Kenyan and African tech opportunity landscape. Jobs listed too.</div><a href="https://techcabal.com" target="_blank" class="rc-link">techcabal.com →</a></div>
-      </div>
-    </div>
-
-    <!-- ===== REMINDERS ===== -->
-    <div id="tab-reminders" class="panel">
-      <div class="sh"><span class="sh-tag gold">GMAIL REMINDERS</span><h2>Send yourself milestone check-ins</h2><div class="sh-line"></div></div>
-      <div class="rem-box">
-        <h3>HOW IT WORKS</h3>
-        <p>Enter your Gmail below. Click any reminder button to open a pre-written email in Gmail. Once in Gmail, click the dropdown arrow next to Send and choose "Schedule send" to have it arrive at a future date. Use Boomerang (free Chrome extension) for even more control.</p>
-        <div class="ir">
-          <input type="email" class="inf" id="email-in" placeholder="your@gmail.com" />
-          <button class="btn btn-c" onclick="saveEmail()">SAVE</button>
-        </div>
-        <div id="email-saved" style="font-size:11px;color:var(--green);display:none;font-family:'Share Tech Mono',monospace;letter-spacing:0.1em;">✓ EMAIL SAVED — ALL REMINDER LINKS UPDATED</div>
-      </div>
-      <div class="rl">
-        <div class="rli"><div><div class="rli-label">📅 Week 1 — Fiverr, Upwork, Payoneer setup check</div><div class="rli-sub">Schedule to arrive: 7 days from now</div></div><button class="btn btn-o" onclick="openR(1)">OPEN IN GMAIL ↗</button></div>
-        <div class="rli"><div><div class="rli-label">📅 Month 1 — BabyPips done? TryHackMe Pre-Security done? First income?</div><div class="rli-sub">Schedule to arrive: 30 days from now</div></div><button class="btn btn-o" onclick="openR(2)">OPEN IN GMAIL ↗</button></div>
-        <div class="rli"><div><div class="rli-label">📅 Month 2 — Paper trading profitably? HTB machines solved? Upwork income?</div><div class="rli-sub">Schedule to arrive: 60 days from now</div></div><button class="btn btn-o" onclick="openR(3)">OPEN IN GMAIL ↗</button></div>
-        <div class="rli"><div><div class="rli-label">📅 Pre-campus review — What did you actually build this holiday?</div><div class="rli-sub">Schedule to arrive: 85 days from now</div></div><button class="btn btn-o" onclick="openR(4)">OPEN IN GMAIL ↗</button></div>
-        <div class="rli"><div><div class="rli-label">🔔 Daily — "Open TryHackMe. Open TradingView. Do the work."</div><div class="rli-sub">Set as recurring Google Calendar reminder</div></div><button class="btn btn-o" onclick="openR(5)">OPEN IN GMAIL ↗</button></div>
-      </div>
-      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
-        <a href="https://calendar.google.com/calendar/r/eventedit?text=LOCKDOWN+Daily+Study+Block&details=Open+TryHackMe+and+TradingView.+Mark+your+SMC+levels.+No+excuses.&recur=RRULE:FREQ%3DDAILY" target="_blank" class="btn btn-c" style="text-decoration:none;display:inline-block;">CREATE DAILY CALENDAR BLOCK ↗</a>
-        <a href="https://calendar.google.com/calendar/r/eventedit?text=LOCKDOWN+Weekly+Review&details=Review+checklist+progress.+Update+trading+journal.+Plan+next+week.&recur=RRULE:FREQ%3DWEEKLY;BYDAY%3DSA" target="_blank" class="btn btn-o" style="text-decoration:none;display:inline-block;">CREATE WEEKLY REVIEW ↗</a>
-      </div>
-    </div>
-
-    <!-- ===== NOTES ===== -->
-    <div id="tab-notes" class="panel">
-      <div class="sh"><span class="sh-tag c">PRIVATE NOTES</span><h2>Your journal — saves automatically</h2><div class="sh-line"></div></div>
-      <textarea class="notes-ta" id="notes-ta" placeholder="// TRADING JOURNAL
-// Date:
-// Pair:
+  <!-- NOTES -->
+  <div id="tab-notes" class="panel">
+    <div class="sh"><span class="sh-tag c">PRIVATE JOURNAL</span><h2>Notes — saves automatically</h2><div class="sh-line"></div></div>
+    <textarea class="notes-area" id="notes-ta" oninput="saveNotes()" placeholder="// SMC TRADING JOURNAL
+// Date:           Pair:           Session: London / NY
+// D1 Bias:        H4 Structure:
 // Setup: OB / FVG / Liquidity Sweep / BOS / ChoCh
-// Entry TF:
-// SL:   TP:   Result:
-// Notes:
+// Premium or Discount zone?
+// Entry:          SL:             TP:           R:R:
+// Result:         Screenshot: Y/N
+// What I learned:
 
 // HACKING LOG
+// Platform: THM / HTB / PortSwigger
 // Room/Machine:
 // Vulnerabilities found:
 // New technique learned:
+// Writeup published: Y/N
 
 // INCOME LOG
-// Fiverr orders:
-// Upwork proposals sent:
-// Income this week: Ksh ___
+// Fiverr orders:          Upwork proposals sent:
+// Local clients contacted:
+// Income this week: Ksh___    Savings total: Ksh___
 
-// DAILY REFLECTION
-// Win today:
-// Tomorrow non-negotiables:
-// ________________________________" oninput="saveNotes()"></textarea>
-      <div style="display:flex;gap:10px;margin-top:10px;align-items:center;flex-wrap:wrap;">
-        <button class="btn btn-o" onclick="clearNotes()">CLEAR</button>
-        <span id="notes-status" style="font-size:11px;color:var(--muted);font-family:'Share Tech Mono',monospace;letter-spacing:0.1em;"></span>
-      </div>
+// TOMORROW'S 3 NON-NEGOTIABLES:
+// 1.
+// 2.
+// 3."></textarea>
+    <div style="display:flex;gap:12px;align-items:center;margin-top:12px;flex-wrap:wrap;">
+      <button class="btn btn-o" onclick="clearNotes()">CLEAR NOTES</button>
+      <span id="notes-status" style="font-family:var(--fm);font-size:10px;color:var(--t3);letter-spacing:.1em;"></span>
     </div>
+  </div>
 
-  </div><!-- /container -->
 </div><!-- /app -->
-
 <div id="toast"></div>
 
 <script>
-// ============ CURSOR ============
-const cur = document.getElementById('cursor');
-const ring = document.getElementById('cursor-ring');
-document.addEventListener('mousemove', e => {
-  cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
-  ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px';
-});
-document.querySelectorAll('button,a,.ci,.rc').forEach(el => {
-  el.addEventListener('mouseenter', () => { ring.style.width = '48px'; ring.style.height = '48px'; ring.style.borderColor = 'rgba(0,245,255,0.7)'; });
-  el.addEventListener('mouseleave', () => { ring.style.width = '32px'; ring.style.height = '32px'; ring.style.borderColor = 'rgba(0,245,255,0.4)'; });
+'use strict';
+// CURSOR
+const CUR=document.getElementById('CUR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+document.addEventListener('mousedown',()=>document.body.classList.add('clk'));
+document.addEventListener('mouseup',()=>document.body.classList.remove('clk'));
+(function loop(){
+  rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+  CUR.style.left=mx+'px';CUR.style.top=my+'px';
+  CUR.querySelector('.ring').style.left=rx+'px';
+  CUR.querySelector('.ring').style.top=ry+'px';
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a,button,.ci,.yt-card,.smc-card,.sc,.rc,.mentor-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
 });
 
-// ============ STARS ============
-(function() {
-  const c = document.getElementById('stars');
-  const ctx = c.getContext('2d');
-  c.width = window.innerWidth; c.height = window.innerHeight;
-  const stars = Array.from({length:180}, () => ({
-    x: Math.random()*c.width, y: Math.random()*c.height,
-    r: Math.random()*1.5, o: Math.random()*0.6+0.1, speed: Math.random()*0.15+0.02
-  }));
-  function draw() {
-    ctx.clearRect(0,0,c.width,c.height);
-    stars.forEach(s => {
-      ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-      ctx.fillStyle = `rgba(200,240,255,${s.o})`; ctx.fill();
-      s.y += s.speed; if(s.y > c.height){s.y=0;s.x=Math.random()*c.width;}
+// PARTICLES
+(function(){
+  const c=document.getElementById('bgC'),ctx=c.getContext('2d');
+  let W,H,P=[];
+  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;init();}
+  function init(){
+    P=[];
+    const n=Math.min(100,Math.floor(W*H/14000));
+    for(let i=0;i<n;i++)P.push(mk());
+  }
+  function mk(){return{x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.2+.2,o:Math.random()*.5+.1,c:Math.random()<.6?'0,229,255':Math.random()<.5?'245,197,24':'57,255,20'};}
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(let i=0;i<P.length;i++){
+      for(let j=i+1;j<P.length;j++){
+        const dx=P[i].x-P[j].x,dy=P[i].y-P[j].y,d=Math.sqrt(dx*dx+dy*dy);
+        if(d<150){ctx.beginPath();ctx.strokeStyle=`rgba(0,229,255,${.07*(1-d/150)})`;ctx.lineWidth=.5;ctx.moveTo(P[i].x,P[i].y);ctx.lineTo(P[j].x,P[j].y);ctx.stroke();}
+      }
+    }
+    P.forEach(p=>{
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(${p.c},${p.o})`;ctx.fill();
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+      const dx=p.x-mx,dy=p.y-my,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<90){p.x+=dx/d*1.5;p.y+=dy/d*1.5;}
     });
     requestAnimationFrame(draw);
   }
-  draw();
-  window.addEventListener('resize', () => { c.width=window.innerWidth; c.height=window.innerHeight; });
+  window.addEventListener('resize',resize);resize();draw();
 })();
 
-// ============ WELCOME ============
-function enterApp() {
-  const w = document.getElementById('welcome');
-  w.style.transition = 'opacity 0.8s ease';
-  w.style.opacity = '0';
-  setTimeout(() => { w.style.display='none'; document.getElementById('app').classList.add('visible'); }, 800);
-  updateAll();
+// WELCOME
+function enterApp(){
+  document.getElementById('welcome').classList.add('exit');
+  setTimeout(()=>{document.getElementById('welcome').style.display='none';document.getElementById('app').classList.add('show');boot();},1000);
 }
 
-// ============ CLOCK ============
-function updateClock() {
-  const now = new Date();
-  const eat = new Date(now.toLocaleString('en-US',{timeZone:'Africa/Nairobi'}));
-  document.getElementById('clock').textContent = eat.toTimeString().slice(0,8);
-  document.getElementById('date-top').textContent = eat.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
-  updateCalendar(eat);
-  highlightSchedule(eat);
+// CLOCK
+let lastDay=-1;
+const MONTHS=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+const WDAYS=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+function tick(){
+  const now=new Date();
+  const eat=new Date(now.toLocaleString('en-US',{timeZone:'Africa/Nairobi'}));
+  document.getElementById('clock').textContent=eat.toTimeString().slice(0,8);
+  document.getElementById('navdate').textContent=eat.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+  updateCal(eat);highlightSched(eat);
 }
-setInterval(updateClock,1000); updateClock();
+setInterval(tick,1000);tick();
 
-// ============ FLIP CALENDAR ============
-let lastDay = -1;
-function updateCalendar(d) {
-  const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-  const weekdays = ['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
-  document.getElementById('cal-month').textContent = months[d.getMonth()];
-  document.getElementById('cal-weekday').textContent = weekdays[d.getDay()];
-  document.getElementById('cal-year').textContent = d.getFullYear();
-  const day = d.getDate();
-  if(day !== lastDay) {
-    if(lastDay !== -1) {
-      // flip animation
-      const card = document.getElementById('flip-card');
-      card.style.transition = 'transform 0.4s cubic-bezier(0.4,0,0.2,1)';
-      card.style.transform = 'rotateX(-90deg)';
-      setTimeout(() => {
-        document.getElementById('cal-day').textContent = day;
-        card.style.transition = 'transform 0.3s cubic-bezier(0,0.8,0.4,1)';
-        card.style.transform = 'rotateX(0deg)';
-      }, 400);
-    } else {
-      document.getElementById('cal-day').textContent = day;
-    }
-    lastDay = day;
+// FLIP CAL
+function updateCal(d){
+  const day=d.getDate();
+  document.getElementById('cal-month').textContent=MONTHS[d.getMonth()];
+  document.getElementById('cal-wd').textContent=WDAYS[d.getDay()];
+  document.getElementById('cal-yr').textContent=d.getFullYear();
+  if(day!==lastDay){
+    if(lastDay!==-1){
+      const card=document.getElementById('flip-card');
+      card.style.transition='transform .45s cubic-bezier(.55,0,.45,1)';
+      card.style.transform='rotateX(-90deg)';
+      setTimeout(()=>{document.getElementById('cal-day').textContent=day;card.style.transition='transform .35s cubic-bezier(0,1.2,.4,1)';card.style.transform='rotateX(0deg)';},450);
+    } else document.getElementById('cal-day').textContent=day;
+    lastDay=day;
   }
-  const start = new Date('2025-05-12');
-  const end = new Date('2025-09-01');
-  const total = Math.ceil((end-start)/(1000*60*60*24));
-  const elapsed = Math.max(0,Math.ceil((d-start)/(1000*60*60*24)));
-  document.getElementById('cal-daynum').textContent = Math.min(elapsed,total);
+  const start=new Date('2025-05-12'),end=new Date('2025-09-01');
+  const elapsed=Math.max(0,Math.ceil((d-start)/864e5));
+  document.getElementById('cal-n').textContent=Math.min(elapsed,Math.ceil((end-start)/864e5));
+  const phases=[{e:new Date('2025-06-15'),n:'PHASE 01: FOUNDATION'},{e:new Date('2025-07-31'),n:'PHASE 02: BUILD & EARN'},{e:new Date('2025-09-01'),n:'PHASE 03: SCALE UP'}];
+  let ph='PHASE 03: SCALE UP';for(const p of phases){if(d<p.e){ph=p.n;break;}}
+  document.getElementById('cal-ph').textContent=ph;
 }
 
-// ============ DAYS LEFT ============
-function daysLeft() {
-  const diff = Math.ceil((new Date('2025-09-01')-new Date())/(1000*60*60*24));
-  const v = Math.max(0,diff);
-  ['s-days','tb-days'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=v; });
+// DAYS LEFT
+function updateDays(){
+  const v=Math.max(0,Math.ceil((new Date('2025-09-01')-new Date())/864e5));
+  ['s-days','n-days'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=v;});
 }
-daysLeft();
+updateDays();
 
-// ============ PHASE ============
-function updatePhase() {
-  const now = new Date();
-  let ph='01', name='FOUNDATION';
-  document.querySelectorAll('.phase').forEach(p=>p.classList.remove('now'));
-  if(now < new Date('2025-06-15')){document.getElementById('ph1').classList.add('now');}
-  else if(now < new Date('2025-07-31')){document.getElementById('ph2').classList.add('now');ph='02';name='BUILD & EARN';}
-  else{document.getElementById('ph3').classList.add('now');ph='03';name='SCALE UP';}
-  const sp=document.getElementById('s-phase'),sn=document.getElementById('s-phase-name');
-  if(sp)sp.textContent=ph; if(sn)sn.textContent=name;
+// PHASE
+function updatePhase(){
+  const now=new Date();let ph='01',pn='FOUNDATION';
+  ['ph1','ph2','ph3'].forEach(id=>document.getElementById(id).classList.remove('now'));
+  ['ph1t','ph2t','ph3t'].forEach(id=>document.getElementById(id).textContent='');
+  if(now<new Date('2025-06-15')){document.getElementById('ph1').classList.add('now');document.getElementById('ph1t').textContent='▶ NOW';}
+  else if(now<new Date('2025-07-31')){document.getElementById('ph2').classList.add('now');document.getElementById('ph2t').textContent='▶ NOW';ph='02';pn='BUILD & EARN';}
+  else{document.getElementById('ph3').classList.add('now');document.getElementById('ph3t').textContent='▶ NOW';ph='03';pn='SCALE UP';}
+  const sp=document.getElementById('s-phase'),sn=document.getElementById('s-pname');if(sp)sp.textContent=ph;if(sn)sn.textContent=pn;
 }
-updatePhase();
 
-// ============ SCHEDULE HIGHLIGHT ============
-function highlightSchedule(d) {
-  const h = d.getHours(), m = d.getMinutes(), tot = h*60+m;
-  const blocks = [
-    [6*60,7*60],[7*60,8*60],[8*60,11*60],[10*60,12*60],
-    [11*60,13*60],[13*60,14*60],[14*60,17*60],[15*60,17*60],
-    [17*60,19*60],[19*60,21*60]
-  ];
-  document.querySelectorAll('.sb').forEach((sb,i) => {
-    sb.classList.remove('now');
-    if(blocks[i] && tot>=blocks[i][0] && tot<blocks[i][1]) sb.classList.add('now');
+// SCHEDULE HIGHLIGHT
+function highlightSched(d){
+  const tot=d.getHours()*60+d.getMinutes();
+  document.querySelectorAll('.sb[data-s]').forEach(sb=>{
+    const s=+sb.dataset.s,e=+sb.dataset.e;sb.classList.toggle('nb',tot>=s&&tot<e);
   });
 }
 
-// ============ CHECKLIST ============
-function tc(el) {
+// CHECKLIST
+function tc(el){
   el.classList.toggle('done');
-  const key = 'ci_'+btoa(el.querySelector('.ct').textContent.slice(0,24).replace(/\s/g,'')).slice(0,16);
-  el.classList.contains('done') ? localStorage.setItem(key,'1') : localStorage.removeItem(key);
-  updateStats(); showToast(el.classList.contains('done') ? '✓ TASK COMPLETE' : 'TASK UNMARKED');
+  const key='ci3_'+btoa(encodeURIComponent(el.querySelector('.ct').textContent.slice(0,28))).slice(0,22);
+  el.classList.contains('done')?localStorage.setItem(key,'1'):localStorage.removeItem(key);
+  updateStats();showToast(el.classList.contains('done')?'✓ TASK COMPLETE — KEEP GOING':'TASK UNMARKED');
 }
-function restoreChecks() {
-  document.querySelectorAll('.ci[onclick]').forEach(el => {
-    const key = 'ci_'+btoa(el.querySelector('.ct').textContent.slice(0,24).replace(/\s/g,'')).slice(0,16);
-    if(localStorage.getItem(key)==='1') el.classList.add('done');
+function restoreChecks(){
+  document.querySelectorAll('.ci[onclick]').forEach(el=>{
+    const key='ci3_'+btoa(encodeURIComponent(el.querySelector('.ct').textContent.slice(0,28))).slice(0,22);
+    if(localStorage.getItem(key)==='1')el.classList.add('done');
   });
 }
 
-// ============ STATS ============
-function updateStats() {
-  const all = document.querySelectorAll('.ci[onclick]').length;
-  const done = document.querySelectorAll('.ci.done').length;
-  const pct = all>0?Math.round((done/all)*100):0;
-  ['s-done','tb-done'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=done;});
-  document.getElementById('s-total').textContent=all;
-  document.getElementById('mb-fill').style.width=pct+'%';
-  document.getElementById('mb-pct').textContent=pct+'%';
-  document.getElementById('s-bar').style.width=pct+'%';
+// STATS
+function updateStats(){
+  const all=document.querySelectorAll('.ci[onclick]').length;
+  const done=document.querySelectorAll('.ci.done').length;
+  const pct=all>0?Math.round(done/all*100):0;
+  ['s-done','n-done'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=done;});
+  const st=document.getElementById('s-total');if(st)st.textContent=all;
+  const mf=document.getElementById('mfill');if(mf)mf.style.width=pct+'%';
+  const mp=document.getElementById('mpct');if(mp)mp.textContent=pct+'%';
 }
 
-// ============ STREAK ============
-function getCheckins(){return JSON.parse(localStorage.getItem('checkins')||'[]');}
-function saveCheckins(c){localStorage.setItem('checkins',JSON.stringify(c));}
-function calcStreak(checkins) {
-  if(!checkins.length) return 0;
-  const sorted = [...new Set(checkins)].sort().reverse();
-  let streak=0,d=new Date();
-  for(let i=0;i<100;i++){
+// STREAK — fully persistent via localStorage
+const CK_KEY='ld3_checkins',BS_KEY='ld3_best';
+function getCI(){try{return JSON.parse(localStorage.getItem(CK_KEY)||'[]');}catch{return[];}}
+function saveCI(a){localStorage.setItem(CK_KEY,JSON.stringify([...new Set(a)]))}
+
+function calcStreak(ci){
+  if(!ci.length)return 0;
+  const set=new Set(ci);let streak=0;
+  const d=new Date();
+  for(let i=0;i<180;i++){
     const ds=d.toISOString().slice(0,10);
-    if(sorted.includes(ds)){streak++;d.setDate(d.getDate()-1);}
-    else if(i===0){d.setDate(d.getDate()-1);}
+    if(set.has(ds)){streak++;d.setDate(d.getDate()-1);}
+    else if(i===0)d.setDate(d.getDate()-1);
     else break;
   }
   return streak;
 }
-function buildStreakUI() {
-  const checkins = getCheckins();
-  const streak = calcStreak(checkins);
-  document.getElementById('streak-big').textContent=streak;
-  document.getElementById('s-streak').textContent=streak;
-  document.getElementById('tb-streak').textContent=streak+'🔥';
-  // week dots (last 7 days)
-  const dots = document.getElementById('streak-dots');
-  dots.innerHTML='';
-  for(let i=6;i>=0;i--){
-    const d=new Date(); d.setDate(d.getDate()-i);
-    const ds=d.toISOString().slice(0,10);
-    const dot=document.createElement('div');
-    dot.className='streak-dot'+(i===0?' today':'')+(checkins.includes(ds)?' hit':'');
-    dots.appendChild(dot);
+function calcBest(ci){
+  if(!ci.length)return 0;
+  const s=[...new Set(ci)].sort();let best=1,cur=1;
+  for(let i=1;i<s.length;i++){
+    const diff=(new Date(s[i])-new Date(s[i-1]))/864e5;
+    if(diff===1){cur++;best=Math.max(best,cur);}else cur=1;
   }
-  // 30 day grid
-  const grid=document.getElementById('month-grid');
+  return Math.max(best,s.length?1:0);
+}
+
+function buildStreak(){
+  const ci=getCI();
+  const streak=calcStreak(ci);
+  const best=Math.max(calcBest(ci),+(localStorage.getItem(BS_KEY)||0));
+  localStorage.setItem(BS_KEY,best);
+  // update displays
+  ['stk-num','s-streak'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=streak;});
+  document.getElementById('n-streak').textContent=streak+'🔥';
+  document.getElementById('s-best').textContent=best;
+  document.getElementById('stk-best').textContent=best;
+  const ml=document.getElementById('stk-month');if(ml)ml.textContent=new Date().toLocaleDateString('en-GB',{month:'short',year:'numeric'}).toUpperCase();
+  // 28-day grid
+  const grid=document.getElementById('stk-grid');if(!grid)return;
   grid.innerHTML='';
-  for(let i=29;i>=0;i--){
-    const d=new Date(); d.setDate(d.getDate()-i);
+  const today=new Date(),todayStr=today.toISOString().slice(0,10);
+  const dow=today.getDay(),mondayOff=dow===0?6:dow-1;
+  const start=new Date(today);start.setDate(start.getDate()-(mondayOff+21));
+  for(let i=0;i<28;i++){
+    const d=new Date(start);d.setDate(start.getDate()+i);
     const ds=d.toISOString().slice(0,10);
-    const cell=document.createElement('div');
-    cell.style.cssText=`width:100%;padding-bottom:100%;border-radius:2px;background:${checkins.includes(ds)?'var(--gold)':'rgba(255,255,255,0.06)'};${checkins.includes(ds)?'box-shadow:0 0 6px rgba(255,215,0,0.4);':''}transition:all 0.2s;`;
-    grid.appendChild(cell);
+    const cell=document.createElement('div');cell.className='sc-cell';
+    if(ci.includes(ds))cell.classList.add('hit');
+    if(ds===todayStr)cell.classList.add('today');
+    cell.title=ds;grid.appendChild(cell);
   }
-  // checkin button
-  const today=new Date().toISOString().slice(0,10);
-  const btn=document.getElementById('checkin-btn');
-  if(checkins.includes(today)){btn.textContent='✓ CHECKED IN TODAY';btn.classList.add('done');}
+  // button state
+  const btn=document.getElementById('ci-btn');if(!btn)return;
+  if(ci.includes(todayStr)){btn.textContent='✓ CHECKED IN';btn.classList.add('done');}
   else{btn.textContent='CHECK IN TODAY';btn.classList.remove('done');}
 }
-function checkIn() {
+
+function doCheckIn(){
   const today=new Date().toISOString().slice(0,10);
-  const checkins=getCheckins();
-  if(!checkins.includes(today)){checkins.push(today);saveCheckins(checkins);showToast('🔥 CHECKED IN! STREAK ALIVE.');}
-  else{showToast('ALREADY CHECKED IN TODAY. BEAST.');}
-  buildStreakUI();
+  const ci=getCI();
+  if(!ci.includes(today)){ci.push(today);saveCI(ci);showToast('🔥 CHECKED IN! STREAK BURNING.');}
+  else showToast('ALREADY CHECKED IN TODAY. BEAST.');
+  buildStreak();
 }
 
-// ============ TABS ============
-function switchTab(id,btn) {
+// TABS
+function swTab(id,btn){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
-  document.getElementById('tab-'+id).classList.add('on');
-  btn.classList.add('on');
-  updateStats();
+  document.getElementById('tab-'+id).classList.add('on');btn.classList.add('on');updateStats();
 }
 
-// ============ NOTES ============
-function saveNotes(){localStorage.setItem('ld_notes',document.getElementById('notes-ta').value);document.getElementById('notes-status').textContent='SAVED '+new Date().toTimeString().slice(0,5);}
-function clearNotes(){if(confirm('Clear all notes?')){document.getElementById('notes-ta').value='';localStorage.removeItem('ld_notes');document.getElementById('notes-status').textContent='CLEARED';}}
-function restoreNotes(){const n=localStorage.getItem('ld_notes');if(n)document.getElementById('notes-ta').value=n;}
+// NOTES
+function saveNotes(){localStorage.setItem('ld3_notes',document.getElementById('notes-ta').value);const s=document.getElementById('notes-status');if(s)s.textContent='SAVED '+new Date().toTimeString().slice(0,5);}
+function clearNotes(){if(confirm('Clear all notes?')){document.getElementById('notes-ta').value='';localStorage.removeItem('ld3_notes');const s=document.getElementById('notes-status');if(s)s.textContent='CLEARED';}}
+function restoreNotes(){const n=localStorage.getItem('ld3_notes');if(n){const ta=document.getElementById('notes-ta');if(ta)ta.value=n;}}
 
-// ============ REMINDERS ============
-const remData=[
-  {s:'LOCKDOWN Week 1 Check-in',b:`It's been 7 days. Be honest:\n\n☐ Fiverr account created and 3 gigs live?\n☐ Upwork profile complete?\n☐ Payoneer set up?\n☐ TryHackMe Pre-Security started?\n☐ BabyPips Preschool done?\n☐ First local business pitched for social media?\n\nIf not — the dashboard is waiting. Open it now.\nYou said you were tired of your situation. Prove it.\n\n— Your LOCKDOWN System`},
-  {s:'LOCKDOWN Month 1 Check-in',b:`30 days in. Let's see the data:\n\nTRADING:\n☐ BabyPips School of Pipsology completed?\n☐ TradingView SMC chart setup done?\n☐ Demo account active with 30+ trades logged?\n☐ Trading journal updated?\n\nETHICAL HACKING:\n☐ TryHackMe Pre-Security path complete?\n☐ Kali Linux installed?\n☐ 3+ rooms per week hit?\n\nINCOME:\n☐ First Fiverr or Upwork income received?\n☐ At least 1 freelance client?\n\nAdjust the plan. Keep moving. No spiral.\n\n— Your LOCKDOWN System`},
-  {s:'LOCKDOWN Month 2 Check-in',b:`60 days. Halfway.\n\nTRADING: Are you paper trading profitably?\nIf not — stay on demo. No exceptions.\n\nHACKING: Jr Pentration Tester path done?\nHave you solved any HackTheBox machines?\n\nINCOME: What's your total earnings so far?\nWhat's your savings balance?\n\nThe compounding has already started. You just can't see it yet.\nKeep going.\n\n— Your LOCKDOWN System`},
-  {s:'LOCKDOWN Final Review — Campus Soon',b:`The holiday is nearly over.\n\nDocument EVERYTHING you did:\n- Total income earned: Ksh ___\n- Demo trades logged: ___\n- Win rate: ___%\n- TryHackMe rooms completed: ___\n- HTB machines solved: ___\n- Skills added: ___\n\nWhatever the number — you built something real.\nNow set targets for next holiday.\nThe compound interest on your skills is just starting.\n\n— Your LOCKDOWN System`},
-  {s:'LOCKDOWN Daily — DO THE WORK',b:`Open TryHackMe. Open TradingView. Check your Upwork/Fiverr.\n\nToday. Not tomorrow. Not after you eat. NOW.\n\nOne room. One trade analysis. One proposal.\n\nThat's all it takes.\n\n— Your LOCKDOWN System`}
+// REMINDERS
+const RD=[
+  {s:'LOCKDOWN Week 1 Check-in',b:`7 days in. Be honest:\n\n☐ Fiverr account + 3 gigs live?\n☐ Upwork profile complete?\n☐ Payoneer set up?\n☐ Photon Trading channel subscribed and started?\n☐ TryHackMe Pre-Security started?\n☐ First local business pitched?\n\nIf not — your LOCKDOWN dashboard is waiting.\nYou said you were tired of your situation. Prove it.\n\n— LOCKDOWN OS`},
+  {s:'LOCKDOWN Month 1 Check-in',b:`30 days. Let the data speak:\n\nSMC TRADING:\n☐ Photon Trading beginner series completed?\n☐ TradingView SMC layout set up?\n☐ Demo account active, 30+ trades logged?\n☐ Trading journal updated daily?\n\nETHICAL HACKING:\n☐ TryHackMe Pre-Security path done?\n☐ Kali Linux installed?\n☐ 3+ rooms per week completed?\n\nINCOME:\n☐ First Fiverr or Upwork payment received?\n☐ Local client secured?\n\nAdjust. Keep moving. No spiral.\n— LOCKDOWN OS`},
+  {s:'LOCKDOWN Month 2 Check-in',b:`60 days. Halfway through your holiday.\n\nTRADING: Profitable on demo?\nIf no — stay on demo. Absolutely no exceptions.\n\nHACKING: Jr Pentest path done? HTB machines?\n\nINCOME: Total earned this holiday: Ksh___\nSavings balance: Ksh___\n\nThe compounding has started. Keep going.\n— LOCKDOWN OS`},
+  {s:'LOCKDOWN Final Review — Campus Soon',b:`Holiday nearly over. Document everything:\n\nTotal income: Ksh___  Demo trades: ___  Win rate: ___%\nTryHackMe rooms: ___  HTB machines: ___\nSkills built: ___\n\nWhatever the number — you built something real.\nNext holiday will be even more powerful.\n— LOCKDOWN OS`},
+  {s:'LOCKDOWN Daily — DO THE WORK',b:`Open Photon Trading. Open TryHackMe. Check Upwork.\n\nToday. Now. Not after this episode.\nNOW.\n\nOne video. One room. One proposal.\nThat's all it takes.\n— LOCKDOWN OS`}
 ];
-function saveEmail(){const e=document.getElementById('email-in').value;if(e&&e.includes('@')){localStorage.setItem('ld_email',e);document.getElementById('email-saved').style.display='block';showToast('EMAIL SAVED ✓');}}
-function openR(n){const e=localStorage.getItem('ld_email')||document.getElementById('email-in').value||'';const r=remData[n-1];window.location.href=`mailto:${encodeURIComponent(e)}?subject=${encodeURIComponent(r.s)}&body=${encodeURIComponent(r.b)}`;}
-function loadEmail(){const s=localStorage.getItem('ld_email');if(s){document.getElementById('email-in').value=s;document.getElementById('email-saved').style.display='block';}}
+function saveEmail(){const e=document.getElementById('email-in').value;if(e&&e.includes('@')){localStorage.setItem('ld3_email',e);document.getElementById('email-saved').style.display='block';showToast('EMAIL SAVED ✓');}}
+function openR(n){const e=localStorage.getItem('ld3_email')||document.getElementById('email-in').value||'';const r=RD[n-1];window.location.href=`mailto:${encodeURIComponent(e)}?subject=${encodeURIComponent(r.s)}&body=${encodeURIComponent(r.b)}`;}
+function loadEmail(){const s=localStorage.getItem('ld3_email');if(s){const el=document.getElementById('email-in');if(el)el.value=s;document.getElementById('email-saved').style.display='block';}}
 
-// ============ TOAST ============
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+// TOAST
+let toastT;
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2800);}
 
-// ============ INIT ============
-function updateAll(){restoreChecks();restoreNotes();buildStreakUI();loadEmail();updateStats();daysLeft();updatePhase();}
-updateAll();
+// SCROLL REVEAL
+function initReveal(){
+  const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+}
+
+// MAGNETIC on checklist
+function initMagnetic(){
+  document.querySelectorAll('.ci[onclick]').forEach(el=>{
+    el.addEventListener('mousemove',e=>{
+      const r=el.getBoundingClientRect();
+      el.style.transform=`translateX(${4+(e.clientX-r.left-r.width/2)/r.width*8}px) translateY(${(e.clientY-r.top-r.height/2)/r.height*4}px)`;
+    });
+    el.addEventListener('mouseleave',()=>el.style.transform='');
+  });
+}
+
+// RC GLOW
+function initRcGlow(){
+  document.querySelectorAll('.rc').forEach(el=>{
+    el.addEventListener('mousemove',e=>{
+      const r=el.getBoundingClientRect();
+      el.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
+      el.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
+    });
+  });
+}
+
+// BOOT
+function boot(){
+  restoreChecks();restoreNotes();buildStreak();updateStats();updateDays();updatePhase();loadEmail();initReveal();initMagnetic();initRcGlow();
+}
 </script>
 </body>
 </html>
