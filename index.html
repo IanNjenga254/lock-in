@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LOCKDOWN OS v3.1 — Student Hustle System</title>
+<title>LOCKDOWN OS v3.2 — Student Hustle System</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;900&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -296,7 +296,7 @@ body.clk #CUR .dot{transform:translate(-50%,-50%) scale(3);}
 @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 /* RESOURCES */
 .res-db-hdr{background:linear-gradient(135deg,rgba(0,229,255,.04),rgba(57,255,20,.02));border:1px solid var(--b);padding:22px 26px;margin-bottom:16px;position:relative;}
-.res-db-hdr::after{content:'LOCKDOWN OS v3.1 // 82 VETTED ENTRIES';position:absolute;top:12px;right:20px;font-family:var(--fm);font-size:8px;color:var(--t3);letter-spacing:.18em;}
+.res-db-hdr::after{content:'LOCKDOWN OS v3.2 // 82 VETTED ENTRIES';position:absolute;top:12px;right:20px;font-family:var(--fm);font-size:8px;color:var(--t3);letter-spacing:.18em;}
 .res-db-row{display:flex;gap:24px;flex-wrap:wrap;}
 .rdb-stat{text-align:center;min-width:56px;}
 .rdb-n{font-family:var(--fd);font-size:32px;line-height:1;}
@@ -393,6 +393,82 @@ body.clk #CUR .dot{transform:translate(-50%,-50%) scale(3);}
 .reveal{opacity:0;transform:translateY(22px);transition:opacity .6s var(--expo),transform .6s var(--expo);}
 .reveal.visible{opacity:1;transform:none;}
 @media(max-width:760px){.yt-grid{grid-template-columns:1fr;}.smc-grid{grid-template-columns:1fr;}.stats{grid-template-columns:repeat(2,1fr);}.books-grid{grid-template-columns:1fr;}.course-grid{grid-template-columns:1fr;}.pod-grid{grid-template-columns:1fr;}.fraud-grid{grid-template-columns:1fr;}}
+
+/* ═══ v3.2 NEW CSS ═══ */
+/* POMODORO BAR */
+#pomo-bar{position:fixed;bottom:0;left:0;right:0;height:52px;z-index:500;background:rgba(3,8,15,0.96);border-top:1px solid var(--b);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;gap:24px;opacity:0;transition:opacity .6s ease;}
+#pomo-bar.show{opacity:1;}
+#pomo-progress{position:absolute;top:0;left:0;height:2px;background:var(--c);transition:width .5s linear;box-shadow:0 0 6px var(--c);}
+#pomo-mode{font-family:var(--fm);font-size:9px;letter-spacing:.18em;color:var(--t3);min-width:70px;text-align:center;}
+#pomo-time{font-family:var(--fd);font-size:28px;letter-spacing:.08em;color:var(--c);min-width:80px;text-align:center;}
+#pomo-dots{display:flex;gap:5px;align-items:center;}
+.pomo-dot{width:8px;height:8px;border-radius:50%;border:1px solid var(--b2);background:transparent;transition:all .3s;}
+.pomo-dot.done{background:var(--c);border-color:var(--c);box-shadow:0 0 6px var(--c);}
+#app{padding-bottom:60px;}
+/* DATES SETTINGS PANEL */
+#dates-drawer{max-height:0;overflow:hidden;transition:max-height .4s var(--expo);background:rgba(6,17,30,.9);border-bottom:1px solid var(--b);}
+#dates-drawer.open{max-height:160px;}
+.dates-inner{padding:16px 28px;display:grid;grid-template-columns:repeat(2,1fr);gap:12px 24px;}
+.date-field{display:flex;flex-direction:column;gap:4px;}
+.date-field label{font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:.14em;}
+.date-field input[type=date]{background:rgba(6,17,30,.9);border:1px solid var(--b2);color:var(--text);font-family:var(--fm);font-size:11px;padding:7px 10px;outline:none;transition:border-color .3s;width:100%;}
+.date-field input[type=date]:focus{border-color:var(--c);}
+.dates-save-row{grid-column:1/-1;display:flex;align-items:center;gap:12px;}
+/* INCOME LOG TAB */
+.il-target-row{background:var(--glass);border:1px solid var(--b);padding:20px 24px;margin-bottom:20px;backdrop-filter:blur(8px);}
+.il-target-top{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:12px;}
+.il-target-lbl{font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:.18em;}
+.il-target-nums{font-family:var(--fd);font-size:22px;color:var(--c);white-space:nowrap;}
+.il-target-input{flex:1;min-width:160px;display:flex;align-items:center;gap:8px;}
+.il-bar-lbl{font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:.15em;margin-bottom:6px;}
+.il-entry-row{background:var(--glass);border:1px solid var(--b);padding:18px 22px;margin-bottom:20px;backdrop-filter:blur(8px);}
+.il-entry-row h3{font-family:var(--fd);font-size:18px;margin-bottom:14px;letter-spacing:.06em;}
+.il-table-wrap{background:var(--glass);border:1px solid var(--b);padding:0;overflow-x:auto;}
+.il-table{width:100%;border-collapse:collapse;}
+.il-table th{font-family:var(--fm);font-size:9px;letter-spacing:.18em;color:var(--t3);padding:10px 14px;text-align:left;border-bottom:1px solid var(--b);}
+.il-table td{font-family:var(--fm);font-size:11px;color:var(--text);padding:10px 14px;border-bottom:1px solid rgba(0,229,255,.05);}
+.il-table td.amount{font-family:var(--fd);font-size:16px;color:var(--gold);}
+.il-table td.total-row{font-family:var(--fd);font-size:16px;color:var(--gold);border-bottom:none;}
+.il-table tr.total-row td{border-top:1px solid var(--b);border-bottom:none;font-family:var(--fm);font-size:10px;letter-spacing:.1em;}
+.il-del{background:transparent;border:none;color:var(--red);font-size:16px;cursor:none;padding:0 4px;transition:opacity .2s;}
+.il-del:hover{opacity:.7;}
+.il-empty{font-family:var(--fm);font-size:12px;color:var(--t3);letter-spacing:.14em;text-align:center;padding:32px;border:1px solid var(--b);}
+/* TRADE LOG TAB */
+.tl-form{background:var(--glass);border:1px solid var(--b);padding:22px;margin-bottom:22px;backdrop-filter:blur(8px);}
+.tl-form h3{font-family:var(--fd);font-size:18px;margin-bottom:16px;letter-spacing:.06em;}
+.tl-rr{font-family:var(--fd);font-size:20px;color:var(--gold);padding:8px 16px;border:1px solid rgba(245,197,24,.3);background:rgba(245,197,24,.06);min-width:80px;text-align:center;}
+.tl-table-wrap{background:var(--glass);border:1px solid var(--b);overflow-x:auto;}
+.tl-table{width:100%;border-collapse:collapse;}
+.tl-table th{font-family:var(--fm);font-size:9px;letter-spacing:.18em;color:var(--t3);padding:10px 14px;text-align:left;border-bottom:1px solid var(--b);}
+.tl-table td{font-family:var(--fm);font-size:11px;color:var(--text);padding:9px 12px;border-bottom:1px solid rgba(0,229,255,.05);}
+.tl-res{font-family:var(--fm);font-size:9px;padding:3px 9px;letter-spacing:.1em;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%);}
+.tl-res.win{background:rgba(57,255,20,.1);color:var(--green);border:1px solid rgba(57,255,20,.3);}
+.tl-res.loss{background:rgba(255,45,85,.08);color:var(--red);border:1px solid rgba(255,45,85,.22);}
+.tl-res.be{color:var(--t2);border:1px solid var(--b);}
+.tl-res.miss{color:var(--t3);border:1px solid rgba(255,255,255,.08);}
+/* RESOURCE DONE STATES */
+.res-done-btn{font-family:var(--fm);font-size:9px;padding:3px 8px;border:1px solid var(--b);color:var(--t3);cursor:none;background:transparent;transition:all .25s;white-space:nowrap;flex-shrink:0;}
+.res-done-btn.marked{color:var(--green);border-color:rgba(57,255,20,.3);}
+.yt-card.res-done{opacity:.55;border-top:2px solid var(--green);}
+.book-card.res-done{opacity:.55;border-top:2px solid var(--green);}
+.course-card.res-done{opacity:.55;}
+.course-card.res-done::before{background:var(--green);}
+/* WEEKEND SCHEDULE */
+.sched-toggle{display:flex;gap:8px;margin-bottom:20px;}
+.wkend-sched{display:none;}
+.wkend-sched.show{display:flex;flex-direction:column;gap:3px;}
+/* SKELETON LOADING */
+@keyframes skelShim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.yt-tw.skel{background:linear-gradient(90deg,rgba(6,17,30,.8) 25%,rgba(0,229,255,.04) 50%,rgba(6,17,30,.8) 75%);background-size:200% 100%;animation:skelShim 1.5s infinite;}
+/* SKIP BOOT HINT */
+#boot-skip-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);font-family:var(--fm);font-size:10px;color:var(--t3);letter-spacing:.15em;opacity:0;transition:opacity .5s .5s ease;white-space:nowrap;}
+#welcome.skip-hint-show #boot-skip-hint{opacity:1;}
+/* BACKUP BUTTONS */
+.nav-backup-btns{display:flex;gap:6px;align-items:center;}
+/* SELECT / INPUT STYLING */
+select.inf{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(221,238,255,0.3)'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
+input[type=number].inf::-webkit-inner-spin-button{opacity:.4;}
+
 </style>
 </head>
 <body>
@@ -402,6 +478,7 @@ body.clk #CUR .dot{transform:translate(-50%,-50%) scale(3);}
 <div class="noise"></div><div class="vign"></div><div class="grid-bg"></div>
 <div id="welcome">
   <div class="w-scan"></div>
+  <div id="boot-skip-hint">// PRESS ANY KEY TO SKIP</div>
   <div class="w-ring"></div><div class="w-ring"></div><div class="w-ring"></div>
   <div id="boot-term"></div>
   <div id="w-main">
@@ -416,14 +493,29 @@ body.clk #CUR .dot{transform:translate(-50%,-50%) scale(3);}
 
 <div id="app">
   <nav class="nav">
-    <div class="nav-logo"><span class="l1">LOCK</span><span class="l2">DOWN</span><span class="ver">OS v3.1</span></div>
+    <div class="nav-logo"><span class="l1">LOCK</span><span class="l2">DOWN</span><span class="ver">OS v3.2</span></div>
     <div class="nav-stats">
       <div class="ns"><div class="ns-v c" id="n-done">0</div><div class="ns-l">TASKS</div></div>
       <div class="ns"><div class="ns-v gold" id="n-streak">0🔥</div><div class="ns-l">STREAK</div></div>
       <div class="ns"><div class="ns-v g" id="n-days">—</div><div class="ns-l">DAYS LEFT</div></div>
     </div>
     <div style="text-align:right"><div id="clock">00:00:00</div><div id="navdate"></div></div>
+    <div class="nav-backup-btns">
+      <button class="stk-btn s" onclick="doBackup()">⬇ BACKUP</button>
+      <button class="stk-btn s" onclick="document.getElementById('file-restore').click()">⬆ RESTORE</button>
+      <input type="file" id="file-restore" accept=".json" style="display:none" onchange="doRestore(event)">
+      <span style="font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:.1em;cursor:none;" onclick="toggleDates()">⚙ DATES</span>
+    </div>
   </nav>
+  <div id="dates-drawer">
+    <div class="dates-inner">
+      <div class="date-field"><label>SYSTEM START DATE</label><input type="date" id="d-start" value="2025-05-12"></div>
+      <div class="date-field"><label>PHASE 1 END / PHASE 2 START</label><input type="date" id="d-p2" value="2025-06-15"></div>
+      <div class="date-field"><label>PHASE 2 END / PHASE 3 START</label><input type="date" id="d-p3" value="2025-07-31"></div>
+      <div class="date-field"><label>SYSTEM END DATE</label><input type="date" id="d-end" value="2025-09-01"></div>
+      <div class="dates-save-row"><button class="btn btn-c" onclick="saveDates()">SAVE DATES</button></div>
+    </div>
+  </div>
 
   <div class="hero">
     <div>
@@ -470,17 +562,19 @@ body.clk #CUR .dot{transform:translate(-50%,-50%) scale(3);}
   </div>
 
   <div class="phases reveal">
-    <div class="ph" id="ph1"><div class="ph-n">PHASE 01 <span class="ph-nt" id="ph1t"></span></div><div class="ph-t">FOUNDATION</div><div class="ph-d">May — Jun 15, 2025</div></div>
-    <div class="ph" id="ph2"><div class="ph-n">PHASE 02 <span class="ph-nt" id="ph2t"></span></div><div class="ph-t">BUILD & EARN</div><div class="ph-d">Jun 15 — Jul 31, 2025</div></div>
-    <div class="ph" id="ph3"><div class="ph-n">PHASE 03 <span class="ph-nt" id="ph3t"></span></div><div class="ph-t">SCALE UP</div><div class="ph-d">Aug 1 — Sep 1, 2025</div></div>
+    <div class="ph" id="ph1"><div class="ph-n">PHASE 01 <span class="ph-nt" id="ph1t"></span></div><div class="ph-t">FOUNDATION</div><div class="ph-d" id="ph1-d">May — Jun 15</div></div>
+    <div class="ph" id="ph2"><div class="ph-n">PHASE 02 <span class="ph-nt" id="ph2t"></span></div><div class="ph-t">BUILD & EARN</div><div class="ph-d" id="ph2-d">Jun 15 — Jul 31</div></div>
+    <div class="ph" id="ph3"><div class="ph-n">PHASE 03 <span class="ph-nt" id="ph3t"></span></div><div class="ph-t">SCALE UP</div><div class="ph-d" id="ph3-d">Aug 1 — Sep 1</div></div>
   </div>
 
   <div class="tabs">
     <button class="tab on" onclick="swTab('income',this)">💸 INCOME NOW</button>
     <button class="tab" onclick="swTab('smc',this)">📈 SMC TRADING</button>
+    <button class="tab" onclick="swTab('tradelog',this)">📊 TRADE LOG</button>
     <button class="tab" onclick="swTab('hacking',this)">🔐 HACKING</button>
     <button class="tab" onclick="swTab('schedule',this)">📅 SCHEDULE</button>
     <button class="tab" onclick="swTab('finance',this)">💰 FINANCE</button>
+    <button class="tab" onclick="swTab('incomelog',this)">💰 INCOME LOG</button>
     <button class="tab" onclick="swTab('resources',this)">📚 RESOURCES <span class="tab-cnt">82</span></button>
     <button class="tab" onclick="swTab('reminders',this)">🔔 REMINDERS</button>
     <button class="tab" onclick="swTab('notes',this)">📝 NOTES</button>
@@ -566,6 +660,11 @@ body.clk #CUR .dot{transform:translate(-50%,-50%) scale(3);}
 
   <!-- SCHEDULE TAB -->
   <div id="tab-schedule" class="panel">
+    <div class="sched-toggle">
+      <button class="rcat on" id="sched-btn-wk" onclick="setSchedMode('weekday',this)">MON–FRI</button>
+      <button class="rcat" id="sched-btn-we" onclick="setSchedMode('weekend',this)">SAT–SUN</button>
+    </div>
+    <div id="sched-weekday">
     <div class="sh"><span class="sh-tag c">MON–FRI</span><h2>Daily time architecture</h2><div class="sh-line"></div></div>
     <div class="sched" id="sched">
       <div class="sb" data-s="360" data-e="420"><div class="sb-time">06:00–07:00</div><div class="sb-body"><div class="sb-title">Wake + Market Prep + News</div><div class="sb-desc">Check Forex Factory calendar. Mark SMC levels on D1/H4. Read TechCabal for Kenya tech news.</div></div><span class="sb-badge trade">TRADING</span></div>
@@ -579,8 +678,23 @@ body.clk #CUR .dot{transform:translate(-50%,-50%) scale(3);}
       <div class="sb" data-s="1020" data-e="1140"><div class="sb-time">17:00–19:00</div><div class="sb-body"><div class="sb-title">Portfolio + Projects + Community Building</div><div class="sb-desc">Write HTB writeups. GitHub portfolio. LinkedIn. Upwork proposals. Network on Twitter/X tech circles.</div></div><span class="sb-badge hack">🔐 BUILD</span></div>
       <div class="sb" data-s="1140" data-e="1260"><div class="sb-time">19:00–21:00</div><div class="sb-body"><div class="sb-title">Review + Journal + Plan Tomorrow</div><div class="sb-desc">Update trading journal. Check dashboard. Write tomorrow's 3 non-negotiables. Then fully rest.</div></div><span class="sb-badge rest">REVIEW</span></div>
     </div>
-  </div>
-
+    </div><!-- /sched weekday -->
+    <div id="sched-weekend" class="wkend-sched">
+      <div class="sh"><span class="sh-tag gold">SATURDAY</span><h2>Review + Deep Work</h2><div class="sh-line"></div></div>
+      <div class="sched">
+        <div class="sb"><div class="sb-time">08:00–09:00</div><div class="sb-body"><div class="sb-title">WEEKLY REVIEW</div><div class="sb-desc">Review all 5 tabs. Tasks done. Tasks missed. Why. No judgment — data only.</div></div><span class="sb-badge hack">REVIEW</span></div>
+        <div class="sb"><div class="sb-time">09:00–12:00</div><div class="sb-body"><div class="sb-title">SMC BACKTESTING</div><div class="sb-desc">TradingView Bar Replay. 20 historical setups. No live trading on weekends.</div></div><span class="sb-badge trade">📈 STUDY</span></div>
+        <div class="sb"><div class="sb-time">12:00–13:00</div><div class="sb-body"><div class="sb-title">LUNCH + REST — ZERO SCREENS</div><div class="sb-desc">Mandatory. Brain consolidates. No phone.</div></div><span class="sb-badge rest">BREAK</span></div>
+        <div class="sb"><div class="sb-time">13:00–16:00</div><div class="sb-body"><div class="sb-title">STRETCH SESSION</div><div class="sb-desc">Harder HTB machine or advanced SMC concept or new income lead. One deliberate push past comfort zone.</div></div><span class="sb-badge hack">🔐 STUDY</span></div>
+        <div class="sb"><div class="sb-time">16:00–18:00</div><div class="sb-body"><div class="sb-title">PORTFOLIO + COMMUNITY</div><div class="sb-desc">Write a HTB writeup. Update GitHub. Send LinkedIn connections.</div></div><span class="sb-badge income">💰 BUILD</span></div>
+        <div class="sb"><div class="sb-time">18:00–20:00</div><div class="sb-body"><div class="sb-title">PLAN NEXT WEEK</div><div class="sb-desc">Fill in Google Calendar blocks. Set 3 non-negotiables per day.</div></div><span class="sb-badge rest">REVIEW</span></div>
+      </div>
+      <div class="sh"><span class="sh-tag g">SUNDAY</span><h2>Full Rest — Non-Negotiable</h2><div class="sh-line"></div></div>
+      <div class="sched">
+        <div class="sb"><div class="sb-time">ALL DAY</div><div class="sb-body"><div class="sb-title">FULL REST — NO DEEP WORK</div><div class="sb-desc">Social. Family. Recharge. Zero tasks. Sustainable 4-month pace beats 2-week burnout every time. This is mandatory recovery.</div></div><span class="sb-badge rest">REST</span></div>
+      </div>
+    </div>
+  </div><!-- end schedule tab -->
   <!-- FINANCE TAB -->
   <div id="tab-finance" class="panel">
     <div class="sh"><span class="sh-tag g">ALLOCATION</span><h2>Every shilling earns a job</h2><div class="sh-line"></div></div>
@@ -597,6 +711,107 @@ body.clk #CUR .dot{transform:translate(-50%,-50%) scale(3);}
       <div class="ci" onclick="tc(this)"><div class="cb"><span class="ck">✓</span></div><div class="cc"><div class="ct">Create Google Sheets income/expense tracker — update every single day for 30 days</div><div class="cm">Track every shilling. The data changes your behaviour automatically without needing willpower.</div></div><span class="ctag c">WEEK 1</span></div>
     </div>
   </div>
+
+  <!-- INCOME LOG TAB -->
+  <div id="tab-incomelog" class="panel">
+    <div class="sh"><span class="sh-tag gold">INCOME LOG</span><h2>Track every shilling earned</h2><div class="sh-line"></div></div>
+    <div class="il-target-row reveal">
+      <div class="il-bar-lbl">THIS MONTH vs TARGET</div>
+      <div class="il-target-top">
+        <div class="il-target-nums"><span id="il-month-total">Ksh 0</span> / <span id="il-target-disp">Ksh 5,000</span></div>
+        <div class="il-target-input">
+          <span style="font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:.12em;">TARGET Ksh</span>
+          <input type="number" class="inf" id="il-target-in" placeholder="5000" min="0" oninput="saveILTarget()" style="max-width:120px;">
+        </div>
+      </div>
+      <div class="mbg"><div class="mfill" id="il-progress-fill" style="width:0%"></div></div>
+    </div>
+    <div class="il-entry-row reveal">
+      <h3>LOG NEW INCOME</h3>
+      <div class="ir">
+        <input type="text" class="inf" id="il-week" placeholder="e.g. Week 1 · May 12–18">
+        <select class="inf" id="il-source">
+          <option>Fiverr</option><option>Upwork</option><option>Local Client</option>
+          <option>Remotasks</option><option>Appen</option><option>Other</option>
+        </select>
+        <input type="number" class="inf" id="il-amount" placeholder="Amount in Ksh" min="0">
+        <input type="text" class="inf" id="il-notes" placeholder="what was it for?">
+      </div>
+      <div class="ir" style="margin-top:8px;">
+        <button class="btn btn-c" onclick="addIncomeEntry()">ADD ENTRY</button>
+      </div>
+    </div>
+    <div id="il-table-container" class="reveal"></div>
+    <div class="stats reveal" style="margin-top:20px;" id="il-stats-grid">
+      <div class="sc"><div class="sc-l">TOTAL EARNED</div><div class="sc-v gold" id="il-stat-total">Ksh 0</div><div class="sc-s">all time</div></div>
+      <div class="sc"><div class="sc-l">THIS MONTH</div><div class="sc-v c" id="il-stat-month">Ksh 0</div><div class="sc-s">current calendar month</div></div>
+      <div class="sc"><div class="sc-l">ENTRIES LOGGED</div><div class="sc-v g" id="il-stat-count">0</div><div class="sc-s">total entries</div></div>
+      <div class="sc"><div class="sc-l">BEST WEEK</div><div class="sc-v gold" id="il-stat-best">Ksh 0</div><div class="sc-s">highest single week</div></div>
+    </div>
+  </div>
+
+
+  <!-- TRADE LOG TAB -->
+  <div id="tab-tradelog" class="panel">
+    <div class="sh"><span class="sh-tag g">TRADE LOG</span><h2>Structured trade journal</h2><div class="sh-line"></div></div>
+    <div class="tl-form reveal">
+      <h3>LOG A TRADE</h3>
+      <div class="ir">
+        <div style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:140px;">
+          <span style="font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:.12em;">DATE</span>
+          <input type="date" class="inf" id="tl-date">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:120px;">
+          <span style="font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:.12em;">PAIR</span>
+          <select class="inf" id="tl-pair"><option>XAUUSD</option><option>EURUSD</option><option>GBPUSD</option><option>USDJPY</option><option>GBPJPY</option><option>Other</option></select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:120px;">
+          <span style="font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:.12em;">SESSION</span>
+          <select class="inf" id="tl-session"><option>London</option><option>New York</option><option>Asian</option><option>Other</option></select>
+        </div>
+      </div>
+      <div class="ir" style="margin-top:10px;">
+        <div style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:120px;">
+          <span style="font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:.12em;">D1 BIAS</span>
+          <select class="inf" id="tl-d1bias"><option>Bullish</option><option>Bearish</option><option>Neutral</option></select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:160px;">
+          <span style="font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:.12em;">SETUP</span>
+          <select class="inf" id="tl-setup"><option>OB + FVG</option><option>Liquidity Sweep</option><option>BOS Retest</option><option>ChoCh + Entry</option><option>Mitigation Block</option><option>Other</option></select>
+        </div>
+      </div>
+      <div class="ir" style="margin-top:10px;">
+        <input type="number" class="inf" id="tl-entry" placeholder="Entry price" oninput="calcTLRR()">
+        <input type="number" class="inf" id="tl-sl" placeholder="Stop Loss" oninput="calcTLRR()">
+        <input type="number" class="inf" id="tl-tp" placeholder="Take Profit" oninput="calcTLRR()">
+        <div class="tl-rr" id="tl-rr-disp">—</div>
+      </div>
+      <div class="ir" style="margin-top:10px;">
+        <div style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:120px;">
+          <span style="font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:.12em;">RESULT</span>
+          <select class="inf" id="tl-result"><option>Win</option><option>Loss</option><option>Breakeven</option><option>Missed — Didn't Take</option></select>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:80px;">
+          <span style="font-family:var(--fm);font-size:9px;color:var(--t3);letter-spacing:.12em;">SCREENSHOT</span>
+          <select class="inf" id="tl-screenshot"><option>Yes</option><option>No</option></select>
+        </div>
+      </div>
+      <div class="ir" style="margin-top:10px;">
+        <input type="text" class="inf" id="tl-notes" placeholder="What did you learn from this trade?">
+      </div>
+      <div style="margin-top:12px;">
+        <button class="btn btn-c" onclick="addTradeEntry()">LOG TRADE</button>
+      </div>
+    </div>
+    <div class="stats reveal" id="tl-stats-grid" style="margin-bottom:20px;">
+      <div class="sc"><div class="sc-l">TOTAL TRADES</div><div class="sc-v c" id="tl-stat-total">0</div><div class="sc-s">logged</div></div>
+      <div class="sc"><div class="sc-l">WIN RATE</div><div class="sc-v" style="color:var(--green)" id="tl-stat-wr">—</div><div class="sc-s">wins / (wins+losses)</div></div>
+      <div class="sc"><div class="sc-l">AVG R:R</div><div class="sc-v gold" id="tl-stat-rr">—</div><div class="sc-s">average risk/reward</div></div>
+      <div class="sc"><div class="sc-l">PROFIT FACTOR</div><div class="sc-v g" id="tl-stat-pf">—</div><div class="sc-s">win RR / loss RR</div></div>
+    </div>
+    <div id="tl-table-container" class="tl-table-wrap reveal"></div>
+  </div>
+
   <!-- RESOURCES TAB -->
   <div id="tab-resources" class="panel">
     <div class="res-db-hdr reveal">
@@ -615,7 +830,7 @@ body.clk #CUR .dot{transform:translate(-50%,-50%) scale(3);}
     </div>
     <div class="res-fbar reveal">
       <input type="text" id="res-search" class="res-srch" placeholder="// SEARCH 82 RESOURCES..." oninput="filterResources()">
-      <div class="rcats">
+      <button class="rcat" id="hide-done-btn" onclick="toggleHideDone()" style="margin-right:8px">SHOW UNWATCHED ONLY</button><div class="rcats">
         <button class="rcat on" data-cat="all" onclick="setCat('all',this)">ALL</button>
         <button class="rcat" data-cat="smc" onclick="setCat('smc',this)">📈 TRADING</button>
         <button class="rcat" data-cat="hack" onclick="setCat('hack',this)">🔐 HACKING</button>
@@ -632,7 +847,7 @@ body.clk #CUR .dot{transform:translate(-50%,-50%) scale(3);}
     <div class="res-section" data-cat="smc">
       <div class="sh"><span class="sh-tag g">⭐ PRIMARY MENTOR</span><h2>Photon Trading — Matt Donlevey</h2><div class="sh-line"></div></div>
       <a href="https://www.youtube.com/@PhotonTrading" target="_blank" class="mentor-card">
-        <div class="mentor-thumb"><img class="yt-th" src="https://img.youtube.com/vi/q9DYXQ-VNAQ/maxresdefault.jpg" alt="Photon Trading" onerror="this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">📈<span>PHOTON TRADING</span></div><div class="yt-pb"></div></div>
+        <div class="mentor-thumb skel"><img class="yt-th" src="https://img.youtube.com/vi/q9DYXQ-VNAQ/maxresdefault.jpg" alt="Photon Trading" style="opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('skel')" onerror="this.parentElement.classList.remove('skel');this.parentElement.style.background='linear-gradient(135deg,#0a1a2e,#03080f)';this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">📈<span>PHOTON TRADING</span></div><div class="yt-pb"></div></div>
         <div class="mentor-body">
           <div class="mentor-tag">PRIMARY SMC MENTOR</div>
           <div class="mentor-name">PHOTON TRADING</div>
@@ -648,12 +863,12 @@ body.clk #CUR .dot{transform:translate(-50%,-50%) scale(3);}
     <div class="res-section" data-cat="smc">
       <div class="sh"><span class="sh-tag gold">YOUTUBE — SMC & MACRO</span><h2>6 essential channels</h2><div class="sh-line"></div></div>
       <div class="yt-grid">
-        <a href="https://www.youtube.com/@BloombergMarkets" target="_blank" class="yt-card"><div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/dp8PhLsUcFE/maxresdefault.jpg" onerror="this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">💹<span>BLOOMBERG</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge macro">MACRO</span></div><div class="yt-body"><div class="yt-ch">MACRO · 3.2M SUBS</div><div class="yt-title">Bloomberg Markets & Finance</div><div class="yt-desc">Daily macro coverage. DXY, central banks, interest rates. Watch 2–3x per week. Understanding macro makes every SMC setup significantly stronger and filters out most bad entries.</div><div class="yt-foot"><span class="yt-subs">3.2M+ SUBS</span><span class="yt-cta">▶ WATCH</span></div></div></a>
-        <a href="https://www.youtube.com/@RaynerTeo" target="_blank" class="yt-card"><div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/NJoLFalCKkI/maxresdefault.jpg" onerror="this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">📊<span>RAYNER TEO</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge smc">RISK MGT</span></div><div class="yt-body"><div class="yt-ch">TRADING · 1M+ SUBS</div><div class="yt-title">Rayner Teo</div><div class="yt-desc">The definitive channel on risk management and trading psychology. His "how not to blow your account" series is essential viewing before any real capital goes on the line.</div><div class="yt-foot"><span class="yt-subs">1M+ SUBS</span><span class="yt-cta">▶ WATCH</span></div></div></a>
-        <a href="https://www.youtube.com/@TheTradingChannel" target="_blank" class="yt-card"><div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/8s7uJXL8QnI/maxresdefault.jpg" onerror="this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">📉<span>TRADING CH</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge smc">SMC</span></div><div class="yt-body"><div class="yt-ch">SMC · 900K SUBS</div><div class="yt-title">The Trading Channel</div><div class="yt-desc">Clean visual SMC breakdowns. Clear chart markups for OBs and FVGs. Good as a second perspective alongside Photon Trading's structured series.</div><div class="yt-foot"><span class="yt-subs">900K+ SUBS</span><span class="yt-cta">▶ WATCH</span></div></div></a>
-        <a href="https://www.youtube.com/@IliyaMakSimov" target="_blank" class="yt-card"><div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/OdoBW-UvJMI/maxresdefault.jpg" onerror="this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">🔭<span>ILIYA</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge smc">TOP-DOWN</span></div><div class="yt-body"><div class="yt-ch">SMC · 400K SUBS</div><div class="yt-title">Iliya MakSimov</div><div class="yt-desc">Daily top-down SMC analysis on live markets. D1→H4→H1→M15 in real time every session. Fastest way to train pattern recognition without spending a single shilling on courses.</div><div class="yt-foot"><span class="yt-subs">400K+ SUBS</span><span class="yt-cta">▶ WATCH</span></div></div></a>
-        <a href="https://www.youtube.com/@TradeIQ" target="_blank" class="yt-card"><div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/kxUzpkb3MXI/maxresdefault.jpg" onerror="this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">⚡<span>TRADEIQ</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge smc">SIMPLIFIED</span></div><div class="yt-body"><div class="yt-ch">SMC · 600K SUBS</div><div class="yt-title">TradeIQ</div><div class="yt-desc">SMC concepts simplified and visualised clearly. No course-selling agenda. Good for clarifying specific concepts — especially structure breaks and inducement as a second perspective.</div><div class="yt-foot"><span class="yt-subs">600K+ SUBS</span><span class="yt-cta">▶ WATCH</span></div></div></a>
-        <a href="https://www.youtube.com/@realvisionfinance" target="_blank" class="yt-card"><div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/nrGiUFnXpxM/maxresdefault.jpg" onerror="this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">🌐<span>REAL VISION</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge macro">INSTITUTIONAL</span></div><div class="yt-body"><div class="yt-ch">MACRO · 1.1M SUBS</div><div class="yt-title">Real Vision Finance</div><div class="yt-desc">Institutional-grade macro analysis. Hedge fund managers and economists interviewed in depth. When you understand why DXY moves, every FVG fill starts making sense. Month 2+ material.</div><div class="yt-foot"><span class="yt-subs">1.1M+ SUBS</span><span class="yt-cta">▶ WATCH</span></div></div></a>
+        <a href="https://www.youtube.com/@BloombergMarkets" target="_blank" class="yt-card"><div class="yt-tw skel"><img class="yt-th" src="https://img.youtube.com/vi/dp8PhLsUcFE/maxresdefault.jpg" style="opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('skel')" onerror="this.parentElement.classList.remove('skel');this.parentElement.style.background='linear-gradient(135deg,#0a1a2e,#03080f)';this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">💹<span>BLOOMBERG</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge macro">MACRO</span></div><div class="yt-body"><div class="yt-ch">MACRO · 3.2M SUBS</div><div class="yt-title">Bloomberg Markets & Finance</div><div class="yt-desc">Daily macro coverage. DXY, central banks, interest rates. Watch 2–3x per week. Understanding macro makes every SMC setup significantly stronger and filters out most bad entries.</div><div class="yt-foot"><span class="yt-subs">3.2M+ SUBS</span><span class="yt-cta">▶ WATCH</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK WATCHED</button></div></div></a>
+        <a href="https://www.youtube.com/@RaynerTeo" target="_blank" class="yt-card"><div class="yt-tw skel"><img class="yt-th" src="https://img.youtube.com/vi/NJoLFalCKkI/maxresdefault.jpg" style="opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('skel')" onerror="this.parentElement.classList.remove('skel');this.parentElement.style.background='linear-gradient(135deg,#0a1a2e,#03080f)';this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">📊<span>RAYNER TEO</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge smc">RISK MGT</span></div><div class="yt-body"><div class="yt-ch">TRADING · 1M+ SUBS</div><div class="yt-title">Rayner Teo</div><div class="yt-desc">The definitive channel on risk management and trading psychology. His "how not to blow your account" series is essential viewing before any real capital goes on the line.</div><div class="yt-foot"><span class="yt-subs">1M+ SUBS</span><span class="yt-cta">▶ WATCH</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK WATCHED</button></div></div></a>
+        <a href="https://www.youtube.com/@TheTradingChannel" target="_blank" class="yt-card"><div class="yt-tw skel"><img class="yt-th" src="https://img.youtube.com/vi/8s7uJXL8QnI/maxresdefault.jpg" style="opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('skel')" onerror="this.parentElement.classList.remove('skel');this.parentElement.style.background='linear-gradient(135deg,#0a1a2e,#03080f)';this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">📉<span>TRADING CH</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge smc">SMC</span></div><div class="yt-body"><div class="yt-ch">SMC · 900K SUBS</div><div class="yt-title">The Trading Channel</div><div class="yt-desc">Clean visual SMC breakdowns. Clear chart markups for OBs and FVGs. Good as a second perspective alongside Photon Trading's structured series.</div><div class="yt-foot"><span class="yt-subs">900K+ SUBS</span><span class="yt-cta">▶ WATCH</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK WATCHED</button></div></div></a>
+        <a href="https://www.youtube.com/@IliyaMakSimov" target="_blank" class="yt-card"><div class="yt-tw skel"><img class="yt-th" src="https://img.youtube.com/vi/OdoBW-UvJMI/maxresdefault.jpg" style="opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('skel')" onerror="this.parentElement.classList.remove('skel');this.parentElement.style.background='linear-gradient(135deg,#0a1a2e,#03080f)';this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">🔭<span>ILIYA</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge smc">TOP-DOWN</span></div><div class="yt-body"><div class="yt-ch">SMC · 400K SUBS</div><div class="yt-title">Iliya MakSimov</div><div class="yt-desc">Daily top-down SMC analysis on live markets. D1→H4→H1→M15 in real time every session. Fastest way to train pattern recognition without spending a single shilling on courses.</div><div class="yt-foot"><span class="yt-subs">400K+ SUBS</span><span class="yt-cta">▶ WATCH</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK WATCHED</button></div></div></a>
+        <a href="https://www.youtube.com/@TradeIQ" target="_blank" class="yt-card"><div class="yt-tw skel"><img class="yt-th" src="https://img.youtube.com/vi/kxUzpkb3MXI/maxresdefault.jpg" style="opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('skel')" onerror="this.parentElement.classList.remove('skel');this.parentElement.style.background='linear-gradient(135deg,#0a1a2e,#03080f)';this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">⚡<span>TRADEIQ</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge smc">SIMPLIFIED</span></div><div class="yt-body"><div class="yt-ch">SMC · 600K SUBS</div><div class="yt-title">TradeIQ</div><div class="yt-desc">SMC concepts simplified and visualised clearly. No course-selling agenda. Good for clarifying specific concepts — especially structure breaks and inducement as a second perspective.</div><div class="yt-foot"><span class="yt-subs">600K+ SUBS</span><span class="yt-cta">▶ WATCH</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK WATCHED</button></div></div></a>
+        <a href="https://www.youtube.com/@realvisionfinance" target="_blank" class="yt-card"><div class="yt-tw skel"><img class="yt-th" src="https://img.youtube.com/vi/nrGiUFnXpxM/maxresdefault.jpg" style="opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('skel')" onerror="this.parentElement.classList.remove('skel');this.parentElement.style.background='linear-gradient(135deg,#0a1a2e,#03080f)';this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">🌐<span>REAL VISION</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge macro">INSTITUTIONAL</span></div><div class="yt-body"><div class="yt-ch">MACRO · 1.1M SUBS</div><div class="yt-title">Real Vision Finance</div><div class="yt-desc">Institutional-grade macro analysis. Hedge fund managers and economists interviewed in depth. When you understand why DXY moves, every FVG fill starts making sense. Month 2+ material.</div><div class="yt-foot"><span class="yt-subs">1.1M+ SUBS</span><span class="yt-cta">▶ WATCH</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK WATCHED</button></div></div></a>
       </div>
     </div>
 
@@ -661,15 +876,15 @@ body.clk #CUR .dot{transform:translate(-50%,-50%) scale(3);}
     <div class="res-section" data-cat="hack">
       <div class="sh"><span class="sh-tag c">YOUTUBE — ETHICAL HACKING</span><h2>9 essential channels</h2><div class="sh-line"></div></div>
       <div class="yt-grid">
-        <a href="https://www.youtube.com/@NetworkChuck" target="_blank" class="yt-card"><div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/2_lswM1S264/maxresdefault.jpg" onerror="this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">🔐<span>NETWORKCHUCK</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">START HERE</span></div><div class="yt-body"><div class="yt-ch">HACKING · 3M+ SUBS</div><div class="yt-title">NetworkChuck</div><div class="yt-desc">Best beginner hacking channel. Energetic, accurate, structured. Start with "ethical hacking in 12 hours" then complete Kali Linux setup series. His roadmap video is required viewing — watch it first.</div><div class="yt-foot"><span class="yt-subs">3M+ SUBS</span><span class="yt-cta">▶ WATCH</span></div></div></a>
-        <a href="https://www.youtube.com/@_JohnHammond" target="_blank" class="yt-card"><div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/AXwly3VOBKA/maxresdefault.jpg" onerror="this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">💻<span>JOHN HAMMOND</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">CTF</span></div><div class="yt-body"><div class="yt-ch">CTF · 800K SUBS</div><div class="yt-title">John Hammond</div><div class="yt-desc">CTF walkthroughs and practical hacking from a working professional. Watch beginner playlist then follow HTB series alongside solving machines. Dramatically accelerates learning by showing real methodology.</div><div class="yt-foot"><span class="yt-subs">800K+ SUBS</span><span class="yt-cta">▶ WATCH</span></div></div></a>
-        <a href="https://www.youtube.com/@TCMSecurityAcademy" target="_blank" class="yt-card"><div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/fNzpcB7ODxQ/maxresdefault.jpg" onerror="this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">🛡️<span>TCM SECURITY</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">PENTEST</span></div><div class="yt-body"><div class="yt-ch">PENTEST · 500K SUBS</div><div class="yt-title">TCM Security — Heath Adams</div><div class="yt-desc">Practical ethical hacking from an actual working pentester. Their free "Practical Ethical Hacking" course is the single most recommended beginner pentesting resource online. Credibility: 100%.</div><div class="yt-foot"><span class="yt-subs">500K+ SUBS</span><span class="yt-cta">▶ WATCH</span></div></div></a>
-        <a href="https://www.youtube.com/@davidbombal" target="_blank" class="yt-card"><div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/3Kq1MIfTWCE/maxresdefault.jpg" onerror="this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">🌐<span>DAVID BOMBAL</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">NETWORKING</span></div><div class="yt-body"><div class="yt-ch">NETWORKING · 2.7M SUBS</div><div class="yt-title">David Bombal</div><div class="yt-desc">Networking + ethical hacking. Understanding TCP/IP, DNS, and subnets is required before hacking networks. Best channel for building the networking foundation that makes everything else make sense.</div><div class="yt-foot"><span class="yt-subs">2.7M+ SUBS</span><span class="yt-cta">▶ WATCH</span></div></div></a>
-        <a href="https://www.youtube.com/@ippsec" target="_blank" class="yt-card"><div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/ziQGJBMlpew/maxresdefault.jpg" onerror="this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">🖥️<span>IPPSEC</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">HTB</span></div><div class="yt-body"><div class="yt-ch">HACKTHEBOX · 350K SUBS</div><div class="yt-title">IppSec</div><div class="yt-desc">The definitive HackTheBox walkthrough channel. Watch ONLY after attempting a machine yourself. Every retired HTB box has a detailed walkthrough here. Makes your HTB learning 10x more effective.</div><div class="yt-foot"><span class="yt-subs">350K+ SUBS</span><span class="yt-cta">▶ WATCH</span></div></div></a>
-        <a href="https://www.youtube.com/@LiveOverflow" target="_blank" class="yt-card"><div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/iyAyN3GFM7A/maxresdefault.jpg" onerror="this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">⚡<span>LIVEOVERFLOW</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">ADVANCED</span></div><div class="yt-body"><div class="yt-ch">ADVANCED · 600K SUBS</div><div class="yt-title">LiveOverflow</div><div class="yt-desc">Deep binary exploitation, real CVE research, CTF walkthroughs. Save for Month 2+ when foundations are solid. The most technically honest security content on YouTube. No hype — just actual hacking.</div><div class="yt-foot"><span class="yt-subs">600K+ SUBS</span><span class="yt-cta">▶ WATCH</span></div></div></a>
-        <a href="https://www.youtube.com/@HackerSploit" target="_blank" class="yt-card"><div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/xl2Xx5YmfUI/maxresdefault.jpg" onerror="this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">🎯<span>HACKERSPLOIT</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">LINUX</span></div><div class="yt-body"><div class="yt-ch">PENTESTING · 900K SUBS</div><div class="yt-title">HackerSploit</div><div class="yt-desc">Structured ethical hacking covering Linux, Metasploit, web app hacking, and network pentesting. Excellent for learning the methodology behind professional pentests. Great companion to TCM Security.</div><div class="yt-foot"><span class="yt-subs">900K+ SUBS</span><span class="yt-cta">▶ WATCH</span></div></div></a>
-        <a href="https://www.youtube.com/@NahamSec" target="_blank" class="yt-card"><div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/g_mE3hgZmBw/maxresdefault.jpg" onerror="this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">💰<span>NAHAMSEC</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">BUG BOUNTY</span></div><div class="yt-body"><div class="yt-ch">BUG BOUNTY · 200K SUBS</div><div class="yt-title">NahamSec</div><div class="yt-desc">Bug bounty community's most trusted educator. Ben Sadeghipour earned hundreds of thousands from bounties and shares his methodology openly. Live hacking sessions on real programs are invaluable.</div><div class="yt-foot"><span class="yt-subs">200K+ SUBS</span><span class="yt-cta">▶ WATCH</span></div></div></a>
-        <a href="https://www.youtube.com/@STOKfredrik" target="_blank" class="yt-card"><div class="yt-tw"><img class="yt-th" src="https://img.youtube.com/vi/2XPHi4mvQm4/maxresdefault.jpg" onerror="this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">🏆<span>STÖK</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">BOUNTY LIFE</span></div><div class="yt-body"><div class="yt-ch">BUG BOUNTY · 180K SUBS</div><div class="yt-title">STÖK — Fredrik Alexandersson</div><div class="yt-desc">Real bug bounty methodology, recon techniques, and hunter mindset. Recon framework videos are essential. Pairs perfectly with NahamSec for a complete, practical bug bounty education at zero cost.</div><div class="yt-foot"><span class="yt-subs">180K+ SUBS</span><span class="yt-cta">▶ WATCH</span></div></div></a>
+        <a href="https://www.youtube.com/@NetworkChuck" target="_blank" class="yt-card"><div class="yt-tw skel"><img class="yt-th" src="https://img.youtube.com/vi/2_lswM1S264/maxresdefault.jpg" style="opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('skel')" onerror="this.parentElement.classList.remove('skel');this.parentElement.style.background='linear-gradient(135deg,#0a1a2e,#03080f)';this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">🔐<span>NETWORKCHUCK</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">START HERE</span></div><div class="yt-body"><div class="yt-ch">HACKING · 3M+ SUBS</div><div class="yt-title">NetworkChuck</div><div class="yt-desc">Best beginner hacking channel. Energetic, accurate, structured. Start with "ethical hacking in 12 hours" then complete Kali Linux setup series. His roadmap video is required viewing — watch it first.</div><div class="yt-foot"><span class="yt-subs">3M+ SUBS</span><span class="yt-cta">▶ WATCH</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK WATCHED</button></div></div></a>
+        <a href="https://www.youtube.com/@_JohnHammond" target="_blank" class="yt-card"><div class="yt-tw skel"><img class="yt-th" src="https://img.youtube.com/vi/AXwly3VOBKA/maxresdefault.jpg" style="opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('skel')" onerror="this.parentElement.classList.remove('skel');this.parentElement.style.background='linear-gradient(135deg,#0a1a2e,#03080f)';this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">💻<span>JOHN HAMMOND</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">CTF</span></div><div class="yt-body"><div class="yt-ch">CTF · 800K SUBS</div><div class="yt-title">John Hammond</div><div class="yt-desc">CTF walkthroughs and practical hacking from a working professional. Watch beginner playlist then follow HTB series alongside solving machines. Dramatically accelerates learning by showing real methodology.</div><div class="yt-foot"><span class="yt-subs">800K+ SUBS</span><span class="yt-cta">▶ WATCH</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK WATCHED</button></div></div></a>
+        <a href="https://www.youtube.com/@TCMSecurityAcademy" target="_blank" class="yt-card"><div class="yt-tw skel"><img class="yt-th" src="https://img.youtube.com/vi/fNzpcB7ODxQ/maxresdefault.jpg" style="opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('skel')" onerror="this.parentElement.classList.remove('skel');this.parentElement.style.background='linear-gradient(135deg,#0a1a2e,#03080f)';this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">🛡️<span>TCM SECURITY</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">PENTEST</span></div><div class="yt-body"><div class="yt-ch">PENTEST · 500K SUBS</div><div class="yt-title">TCM Security — Heath Adams</div><div class="yt-desc">Practical ethical hacking from an actual working pentester. Their free "Practical Ethical Hacking" course is the single most recommended beginner pentesting resource online. Credibility: 100%.</div><div class="yt-foot"><span class="yt-subs">500K+ SUBS</span><span class="yt-cta">▶ WATCH</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK WATCHED</button></div></div></a>
+        <a href="https://www.youtube.com/@davidbombal" target="_blank" class="yt-card"><div class="yt-tw skel"><img class="yt-th" src="https://img.youtube.com/vi/3Kq1MIfTWCE/maxresdefault.jpg" style="opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('skel')" onerror="this.parentElement.classList.remove('skel');this.parentElement.style.background='linear-gradient(135deg,#0a1a2e,#03080f)';this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">🌐<span>DAVID BOMBAL</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">NETWORKING</span></div><div class="yt-body"><div class="yt-ch">NETWORKING · 2.7M SUBS</div><div class="yt-title">David Bombal</div><div class="yt-desc">Networking + ethical hacking. Understanding TCP/IP, DNS, and subnets is required before hacking networks. Best channel for building the networking foundation that makes everything else make sense.</div><div class="yt-foot"><span class="yt-subs">2.7M+ SUBS</span><span class="yt-cta">▶ WATCH</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK WATCHED</button></div></div></a>
+        <a href="https://www.youtube.com/@ippsec" target="_blank" class="yt-card"><div class="yt-tw skel"><img class="yt-th" src="https://img.youtube.com/vi/ziQGJBMlpew/maxresdefault.jpg" style="opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('skel')" onerror="this.parentElement.classList.remove('skel');this.parentElement.style.background='linear-gradient(135deg,#0a1a2e,#03080f)';this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">🖥️<span>IPPSEC</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">HTB</span></div><div class="yt-body"><div class="yt-ch">HACKTHEBOX · 350K SUBS</div><div class="yt-title">IppSec</div><div class="yt-desc">The definitive HackTheBox walkthrough channel. Watch ONLY after attempting a machine yourself. Every retired HTB box has a detailed walkthrough here. Makes your HTB learning 10x more effective.</div><div class="yt-foot"><span class="yt-subs">350K+ SUBS</span><span class="yt-cta">▶ WATCH</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK WATCHED</button></div></div></a>
+        <a href="https://www.youtube.com/@LiveOverflow" target="_blank" class="yt-card"><div class="yt-tw skel"><img class="yt-th" src="https://img.youtube.com/vi/iyAyN3GFM7A/maxresdefault.jpg" style="opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('skel')" onerror="this.parentElement.classList.remove('skel');this.parentElement.style.background='linear-gradient(135deg,#0a1a2e,#03080f)';this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">⚡<span>LIVEOVERFLOW</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">ADVANCED</span></div><div class="yt-body"><div class="yt-ch">ADVANCED · 600K SUBS</div><div class="yt-title">LiveOverflow</div><div class="yt-desc">Deep binary exploitation, real CVE research, CTF walkthroughs. Save for Month 2+ when foundations are solid. The most technically honest security content on YouTube. No hype — just actual hacking.</div><div class="yt-foot"><span class="yt-subs">600K+ SUBS</span><span class="yt-cta">▶ WATCH</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK WATCHED</button></div></div></a>
+        <a href="https://www.youtube.com/@HackerSploit" target="_blank" class="yt-card"><div class="yt-tw skel"><img class="yt-th" src="https://img.youtube.com/vi/xl2Xx5YmfUI/maxresdefault.jpg" style="opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('skel')" onerror="this.parentElement.classList.remove('skel');this.parentElement.style.background='linear-gradient(135deg,#0a1a2e,#03080f)';this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">🎯<span>HACKERSPLOIT</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">LINUX</span></div><div class="yt-body"><div class="yt-ch">PENTESTING · 900K SUBS</div><div class="yt-title">HackerSploit</div><div class="yt-desc">Structured ethical hacking covering Linux, Metasploit, web app hacking, and network pentesting. Excellent for learning the methodology behind professional pentests. Great companion to TCM Security.</div><div class="yt-foot"><span class="yt-subs">900K+ SUBS</span><span class="yt-cta">▶ WATCH</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK WATCHED</button></div></div></a>
+        <a href="https://www.youtube.com/@NahamSec" target="_blank" class="yt-card"><div class="yt-tw skel"><img class="yt-th" src="https://img.youtube.com/vi/g_mE3hgZmBw/maxresdefault.jpg" style="opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('skel')" onerror="this.parentElement.classList.remove('skel');this.parentElement.style.background='linear-gradient(135deg,#0a1a2e,#03080f)';this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">💰<span>NAHAMSEC</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">BUG BOUNTY</span></div><div class="yt-body"><div class="yt-ch">BUG BOUNTY · 200K SUBS</div><div class="yt-title">NahamSec</div><div class="yt-desc">Bug bounty community's most trusted educator. Ben Sadeghipour earned hundreds of thousands from bounties and shares his methodology openly. Live hacking sessions on real programs are invaluable.</div><div class="yt-foot"><span class="yt-subs">200K+ SUBS</span><span class="yt-cta">▶ WATCH</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK WATCHED</button></div></div></a>
+        <a href="https://www.youtube.com/@STOKfredrik" target="_blank" class="yt-card"><div class="yt-tw skel"><img class="yt-th" src="https://img.youtube.com/vi/2XPHi4mvQm4/maxresdefault.jpg" style="opacity:0;transition:opacity .4s ease" onload="this.style.opacity=1;this.parentElement.classList.remove('skel')" onerror="this.parentElement.classList.remove('skel');this.parentElement.style.background='linear-gradient(135deg,#0a1a2e,#03080f)';this.style.display='none';this.parentElement.querySelector('.yt-fall').style.display='flex'"><div class="yt-fall" style="display:none">🏆<span>STÖK</span></div><div class="yt-pb"></div><div class="yt-glow"></div><span class="yt-badge hack">BOUNTY LIFE</span></div><div class="yt-body"><div class="yt-ch">BUG BOUNTY · 180K SUBS</div><div class="yt-title">STÖK — Fredrik Alexandersson</div><div class="yt-desc">Real bug bounty methodology, recon techniques, and hunter mindset. Recon framework videos are essential. Pairs perfectly with NahamSec for a complete, practical bug bounty education at zero cost.</div><div class="yt-foot"><span class="yt-subs">180K+ SUBS</span><span class="yt-cta">▶ WATCH</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK WATCHED</button></div></div></a>
       </div>
     </div>
 
@@ -677,15 +892,15 @@ body.clk #CUR .dot{transform:translate(-50%,-50%) scale(3);}
     <div class="res-section" data-cat="courses">
       <div class="sh"><span class="sh-tag g">🎓 FREE COURSES</span><h2>Zero cost. Maximum value.</h2><div class="sh-line"></div></div>
       <div class="course-grid">
-        <a href="https://cs50.harvard.edu/python" target="_blank" class="course-card"><div class="course-ico">🐍</div><div class="course-plat">HARVARD · YOUTUBE · EDX</div><div class="course-name">CS50P — Python Programming</div><div class="course-desc">Harvard's free Python course. Functions, exceptions, libraries, file I/O, OOP. Gold standard. Essential before building any security tools.</div><div class="course-chips"><span class="rc-chip g">FREE</span><span class="rc-chip c">CERTIFICATE</span></div></a>
-        <a href="https://cs50.harvard.edu/x" target="_blank" class="course-card"><div class="course-ico">💻</div><div class="course-plat">HARVARD · EDX</div><div class="course-name">CS50x — Computer Science</div><div class="course-desc">World's most popular intro CS course. C, Python, SQL, web fundamentals. Gives you the foundation separating real hackers from script kiddies.</div><div class="course-chips"><span class="rc-chip g">FREE</span><span class="rc-chip c">FOUNDATIONAL</span></div></a>
-        <a href="https://www.coursera.org/professional-certificates/google-cybersecurity" target="_blank" class="course-card"><div class="course-ico">🔐</div><div class="course-plat">GOOGLE · COURSERA</div><div class="course-name">Google Cybersecurity Certificate</div><div class="course-desc">8-course professional cert. Apply for Coursera financial aid (approved 99% of the time). Industry-recognised qualification — completely free.</div><div class="course-chips"><span class="rc-chip gold">FINANCIAL AID</span><span class="rc-chip c">PROFESSIONAL</span></div></a>
-        <a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/sy0-701-comptia-security-plus-course/" target="_blank" class="course-card"><div class="course-ico">🎓</div><div class="course-plat">PROFESSORMESSER.COM</div><div class="course-name">CompTIA Security+ SY0-701</div><div class="course-desc">Complete Security+ video course, 100% free. Prepare now, budget Ksh 30K for exam in Year 2. Opens entry-level SOC doors globally.</div><div class="course-chips"><span class="rc-chip g">100% FREE</span><span class="rc-chip gold">CERT PREP</span></div></a>
-        <a href="https://tryhackme.com/path/outline/presecurity" target="_blank" class="course-card"><div class="course-ico">🎯</div><div class="course-plat">TRYHACKME</div><div class="course-name">Pre-Security Path (~40hrs)</div><div class="course-desc">Browser-based structured beginner cybersecurity content. Networks, Linux, web fundamentals. Start here before everything else. Free.</div><div class="course-chips"><span class="rc-chip g">FREE</span><span class="rc-chip c">START HERE</span></div></a>
-        <a href="https://portswigger.net/web-security" target="_blank" class="course-card"><div class="course-ico">🔬</div><div class="course-plat">PORTSWIGGER</div><div class="course-name">Web Security Academy</div><div class="course-desc">Every OWASP Top 10 vuln with free interactive labs. SQLi, XSS, SSRF, IDOR, XXE. Made by Burp Suite creators. Best web security training that exists — zero cost.</div><div class="course-chips"><span class="rc-chip g">100% FREE</span><span class="rc-chip c">LABS INCLUDED</span></div></a>
-        <a href="https://www.cybrary.it" target="_blank" class="course-card"><div class="course-ico">🏫</div><div class="course-plat">CYBRARY.IT</div><div class="course-name">Cybrary Free Courses</div><div class="course-desc">Dozens of free cybersecurity courses. Linux, Metasploit, networking, Kali. Free tier is genuinely substantial. Good filler between TryHackMe modules.</div><div class="course-chips"><span class="rc-chip g">FREE TIER</span><span class="rc-chip c">STRUCTURED</span></div></a>
-        <a href="https://ocw.mit.edu/courses/6-858-computer-systems-security-fall-2014/" target="_blank" class="course-card"><div class="course-ico">🏛️</div><div class="course-plat">MIT OPENCOURSEWARE</div><div class="course-name">MIT 6.858 — Systems Security</div><div class="course-desc">MIT's actual security course, free. Use at Month 3+ when foundations are solid. Transforms you from practitioner to someone who truly understands WHY things are vulnerable.</div><div class="course-chips"><span class="rc-chip g">FREE</span><span class="rc-chip gold">UNIVERSITY GRADE</span></div></a>
-        <a href="https://www.freecodecamp.org" target="_blank" class="course-card"><div class="course-ico">⌨️</div><div class="course-plat">FREECODECAMP.ORG</div><div class="course-name">Full Web Development Curriculum</div><div class="course-desc">HTML, CSS, JavaScript, React, Node.js — completely free. Building web apps makes you far better at finding web vulnerabilities. Double-value skill for a security hacker.</div><div class="course-chips"><span class="rc-chip g">100% FREE</span><span class="rc-chip c">CERTIFICATE</span></div></a>
+        <a href="https://cs50.harvard.edu/python" target="_blank" class="course-card"><div class="course-ico">🐍</div><div class="course-plat">HARVARD · YOUTUBE · EDX</div><div class="course-name">CS50P — Python Programming</div><div class="course-desc">Harvard's free Python course. Functions, exceptions, libraries, file I/O, OOP. Gold standard. Essential before building any security tools.</div><div class="course-chips"><span class="rc-chip g">FREE</span><span class="rc-chip c">CERTIFICATE</span></div><div style="margin-top:8px"><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK DONE</button></div></a>
+        <a href="https://cs50.harvard.edu/x" target="_blank" class="course-card"><div class="course-ico">💻</div><div class="course-plat">HARVARD · EDX</div><div class="course-name">CS50x — Computer Science</div><div class="course-desc">World's most popular intro CS course. C, Python, SQL, web fundamentals. Gives you the foundation separating real hackers from script kiddies.</div><div class="course-chips"><span class="rc-chip g">FREE</span><span class="rc-chip c">FOUNDATIONAL</span></div><div style="margin-top:8px"><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK DONE</button></div></a>
+        <a href="https://www.coursera.org/professional-certificates/google-cybersecurity" target="_blank" class="course-card"><div class="course-ico">🔐</div><div class="course-plat">GOOGLE · COURSERA</div><div class="course-name">Google Cybersecurity Certificate</div><div class="course-desc">8-course professional cert. Apply for Coursera financial aid (approved 99% of the time). Industry-recognised qualification — completely free.</div><div class="course-chips"><span class="rc-chip gold">FINANCIAL AID</span><span class="rc-chip c">PROFESSIONAL</span></div><div style="margin-top:8px"><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK DONE</button></div></a>
+        <a href="https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/sy0-701-comptia-security-plus-course/" target="_blank" class="course-card"><div class="course-ico">🎓</div><div class="course-plat">PROFESSORMESSER.COM</div><div class="course-name">CompTIA Security+ SY0-701</div><div class="course-desc">Complete Security+ video course, 100% free. Prepare now, budget Ksh 30K for exam in Year 2. Opens entry-level SOC doors globally.</div><div class="course-chips"><span class="rc-chip g">100% FREE</span><span class="rc-chip gold">CERT PREP</span></div><div style="margin-top:8px"><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK DONE</button></div></a>
+        <a href="https://tryhackme.com/path/outline/presecurity" target="_blank" class="course-card"><div class="course-ico">🎯</div><div class="course-plat">TRYHACKME</div><div class="course-name">Pre-Security Path (~40hrs)</div><div class="course-desc">Browser-based structured beginner cybersecurity content. Networks, Linux, web fundamentals. Start here before everything else. Free.</div><div class="course-chips"><span class="rc-chip g">FREE</span><span class="rc-chip c">START HERE</span></div><div style="margin-top:8px"><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK DONE</button></div></a>
+        <a href="https://portswigger.net/web-security" target="_blank" class="course-card"><div class="course-ico">🔬</div><div class="course-plat">PORTSWIGGER</div><div class="course-name">Web Security Academy</div><div class="course-desc">Every OWASP Top 10 vuln with free interactive labs. SQLi, XSS, SSRF, IDOR, XXE. Made by Burp Suite creators. Best web security training that exists — zero cost.</div><div class="course-chips"><span class="rc-chip g">100% FREE</span><span class="rc-chip c">LABS INCLUDED</span></div><div style="margin-top:8px"><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK DONE</button></div></a>
+        <a href="https://www.cybrary.it" target="_blank" class="course-card"><div class="course-ico">🏫</div><div class="course-plat">CYBRARY.IT</div><div class="course-name">Cybrary Free Courses</div><div class="course-desc">Dozens of free cybersecurity courses. Linux, Metasploit, networking, Kali. Free tier is genuinely substantial. Good filler between TryHackMe modules.</div><div class="course-chips"><span class="rc-chip g">FREE TIER</span><span class="rc-chip c">STRUCTURED</span></div><div style="margin-top:8px"><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK DONE</button></div></a>
+        <a href="https://ocw.mit.edu/courses/6-858-computer-systems-security-fall-2014/" target="_blank" class="course-card"><div class="course-ico">🏛️</div><div class="course-plat">MIT OPENCOURSEWARE</div><div class="course-name">MIT 6.858 — Systems Security</div><div class="course-desc">MIT's actual security course, free. Use at Month 3+ when foundations are solid. Transforms you from practitioner to someone who truly understands WHY things are vulnerable.</div><div class="course-chips"><span class="rc-chip g">FREE</span><span class="rc-chip gold">UNIVERSITY GRADE</span></div><div style="margin-top:8px"><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK DONE</button></div></a>
+        <a href="https://www.freecodecamp.org" target="_blank" class="course-card"><div class="course-ico">⌨️</div><div class="course-plat">FREECODECAMP.ORG</div><div class="course-name">Full Web Development Curriculum</div><div class="course-desc">HTML, CSS, JavaScript, React, Node.js — completely free. Building web apps makes you far better at finding web vulnerabilities. Double-value skill for a security hacker.</div><div class="course-chips"><span class="rc-chip g">100% FREE</span><span class="rc-chip c">CERTIFICATE</span></div><div style="margin-top:8px"><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK DONE</button></div></a>
       </div>
     </div>
 
@@ -693,18 +908,18 @@ body.clk #CUR .dot{transform:translate(-50%,-50%) scale(3);}
     <div class="res-section" data-cat="books">
       <div class="sh"><span class="sh-tag gold">📚 BOOKS LIBRARY</span><h2>The required reading list</h2><div class="sh-line"></div></div>
       <div class="books-grid">
-        <a href="https://www.goodreads.com/book/show/966769" target="_blank" class="book-card"><div class="book-spine trade"></div><div class="book-body"><div class="book-cat">TRADING · PSYCHOLOGY</div><div class="book-title">Trading in the Zone</div><div class="book-author">Mark Douglas</div><div class="book-desc">The single most important trading book ever written. Not about setups — about the mindset. Why you break your rules, how to stop. Read before your first live trade.</div></div><div class="book-footer"><span class="book-badge must">MUST READ #1</span><span class="book-pri">Goodreads →</span></div></a>
-        <a href="https://www.gutenberg.org" target="_blank" class="book-card"><div class="book-spine trade"></div><div class="book-body"><div class="book-cat">TRADING · HISTORY · FREE</div><div class="book-title">Reminiscences of a Stock Operator</div><div class="book-author">Edwin Lefèvre (Jesse Livermore)</div><div class="book-desc">The trading bible, 1923. Every mistake Livermore made, you will be tempted to make. More wisdom per page than any modern trading book. Public domain — free.</div></div><div class="book-footer"><span class="book-badge free">FREE PDF</span><span class="book-pri">Gutenberg →</span></div></a>
-        <a href="https://www.goodreads.com/book/show/966793" target="_blank" class="book-card"><div class="book-spine trade"></div><div class="book-body"><div class="book-cat">TRADING · INTERVIEWS</div><div class="book-title">Market Wizards</div><div class="book-author">Jack D. Schwager</div><div class="book-desc">Interviews with the world's best traders. Notice what they all share: risk management, discipline, systems. Nothing about perfect entries. Everything about surviving.</div></div><div class="book-footer"><span class="book-badge must">MUST READ</span><span class="book-pri">Goodreads →</span></div></a>
-        <a href="https://www.goodreads.com/book/show/41881472" target="_blank" class="book-card"><div class="book-spine fin"></div><div class="book-body"><div class="book-cat">FINANCE · MINDSET</div><div class="book-title">The Psychology of Money</div><div class="book-author">Morgan Housel</div><div class="book-desc">How people think about money and why. Compounding, patience, ego, risk. Short chapters, high insight density. Changes every financial decision you make permanently.</div></div><div class="book-footer"><span class="book-badge must">MUST READ</span><span class="book-pri">Goodreads →</span></div></a>
-        <a href="https://www.goodreads.com/book/show/7530316" target="_blank" class="book-card"><div class="book-spine hack"></div><div class="book-body"><div class="book-cat">HACKING · PENTESTING</div><div class="book-title">Penetration Testing</div><div class="book-author">Georgia Weidman</div><div class="book-desc">The practical starting point for ethical hacking. Lab-based, step by step. Recon, scanning, exploitation, post-exploitation, reporting. Start here for pentesting fundamentals.</div></div><div class="book-footer"><span class="book-badge must">START HERE</span><span class="book-pri">Goodreads →</span></div></a>
-        <a href="https://www.goodreads.com/book/show/1739375" target="_blank" class="book-card"><div class="book-spine hack"></div><div class="book-body"><div class="book-cat">HACKING · WEB SECURITY</div><div class="book-title">The Web Application Hacker's Handbook</div><div class="book-author">Stuttard &amp; Pinto</div><div class="book-desc">The definitive web hacking reference. Every vulnerability with attack methodology and remediation. If PortSwigger is your classroom, this is your textbook.</div></div><div class="book-footer"><span class="book-badge rec">RECOMMENDED</span><span class="book-pri">Goodreads →</span></div></a>
-        <a href="https://www.goodreads.com/book/show/28815122" target="_blank" class="book-card"><div class="book-spine hack"></div><div class="book-body"><div class="book-cat">HACKING · RED TEAM</div><div class="book-title">The Hacker Playbook 3</div><div class="book-author">Peter Kim</div><div class="book-desc">Red team tactics: phishing, lateral movement, AD attacks, evasion. The jump from CTF player to actual pentester starts with this book's methodology.</div></div><div class="book-footer"><span class="book-badge rec">MONTH 3+</span><span class="book-pri">Goodreads →</span></div></a>
-        <a href="https://www.goodreads.com/book/show/13651" target="_blank" class="book-card"><div class="book-spine hack"></div><div class="book-body"><div class="book-cat">HACKING · LOW-LEVEL</div><div class="book-title">Hacking: The Art of Exploitation</div><div class="book-author">Jon Erickson</div><div class="book-desc">C, shellcode, buffer overflows — deep technical foundation. For Month 3+. Separates hackers who understand from hackers who just run tools.</div></div><div class="book-footer"><span class="book-badge rec">ADVANCED</span><span class="book-pri">Goodreads →</span></div></a>
-        <a href="https://www.goodreads.com/book/show/40121378" target="_blank" class="book-card"><div class="book-spine mind"></div><div class="book-body"><div class="book-cat">MINDSET · SYSTEMS</div><div class="book-title">Atomic Habits</div><div class="book-author">James Clear</div><div class="book-desc">1% better every day = 37x better in a year. This entire dashboard is built on this logic. Read the first 50 pages and your daily routine will never be the same again.</div></div><div class="book-footer"><span class="book-badge must">READ WEEK 1</span><span class="book-pri">Goodreads →</span></div></a>
-        <a href="https://www.goodreads.com/book/show/25744928" target="_blank" class="book-card"><div class="book-spine mind"></div><div class="book-body"><div class="book-cat">MINDSET · FOCUS</div><div class="book-title">Deep Work</div><div class="book-author">Cal Newport</div><div class="book-desc">The ability to focus without distraction on cognitively demanding tasks. The 3-hour income blocks in your schedule only work if you do actual deep work. This book shows you exactly how.</div></div><div class="book-footer"><span class="book-badge must">REQUIRED</span><span class="book-pri">Goodreads →</span></div></a>
-        <a href="https://www.goodreads.com/book/show/58612786" target="_blank" class="book-card"><div class="book-spine mind"></div><div class="book-body"><div class="book-cat">BUSINESS · INCOME</div><div class="book-title">$100M Offers</div><div class="book-author">Alex Hormozi</div><div class="book-desc">Make offers so good people feel stupid saying no. Directly applicable to Fiverr, Upwork, and local client pitching. Makes your gig stand out from every competitor immediately.</div></div><div class="book-footer"><span class="book-badge rec">INCOME FOCUSED</span><span class="book-pri">Goodreads →</span></div></a>
-        <a href="https://www.goodreads.com/book/show/368593" target="_blank" class="book-card"><div class="book-spine mind"></div><div class="book-body"><div class="book-cat">FREELANCE · LIFESTYLE</div><div class="book-title">The 4-Hour Workweek</div><div class="book-author">Tim Ferriss</div><div class="book-desc">Remote work, outsourcing, location independence. The philosophy behind every Upwork proposal you'll write. Freelancing as a designed life, not just a survival hustle.</div></div><div class="book-footer"><span class="book-badge rec">FREELANCE BIBLE</span><span class="book-pri">Goodreads →</span></div></a>
+        <a href="https://www.goodreads.com/book/show/966769" target="_blank" class="book-card"><div class="book-spine trade"></div><div class="book-body"><div class="book-cat">TRADING · PSYCHOLOGY</div><div class="book-title">Trading in the Zone</div><div class="book-author">Mark Douglas</div><div class="book-desc">The single most important trading book ever written. Not about setups — about the mindset. Why you break your rules, how to stop. Read before your first live trade.</div></div><div class="book-footer"><span class="book-badge must">MUST READ #1</span><span class="book-pri">Goodreads →</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK READ</button></div></a>
+        <a href="https://www.gutenberg.org" target="_blank" class="book-card"><div class="book-spine trade"></div><div class="book-body"><div class="book-cat">TRADING · HISTORY · FREE</div><div class="book-title">Reminiscences of a Stock Operator</div><div class="book-author">Edwin Lefèvre (Jesse Livermore)</div><div class="book-desc">The trading bible, 1923. Every mistake Livermore made, you will be tempted to make. More wisdom per page than any modern trading book. Public domain — free.</div></div><div class="book-footer"><span class="book-badge free">FREE PDF</span><span class="book-pri">Gutenberg →</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK READ</button></div></a>
+        <a href="https://www.goodreads.com/book/show/966793" target="_blank" class="book-card"><div class="book-spine trade"></div><div class="book-body"><div class="book-cat">TRADING · INTERVIEWS</div><div class="book-title">Market Wizards</div><div class="book-author">Jack D. Schwager</div><div class="book-desc">Interviews with the world's best traders. Notice what they all share: risk management, discipline, systems. Nothing about perfect entries. Everything about surviving.</div></div><div class="book-footer"><span class="book-badge must">MUST READ</span><span class="book-pri">Goodreads →</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK READ</button></div></a>
+        <a href="https://www.goodreads.com/book/show/41881472" target="_blank" class="book-card"><div class="book-spine fin"></div><div class="book-body"><div class="book-cat">FINANCE · MINDSET</div><div class="book-title">The Psychology of Money</div><div class="book-author">Morgan Housel</div><div class="book-desc">How people think about money and why. Compounding, patience, ego, risk. Short chapters, high insight density. Changes every financial decision you make permanently.</div></div><div class="book-footer"><span class="book-badge must">MUST READ</span><span class="book-pri">Goodreads →</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK READ</button></div></a>
+        <a href="https://www.goodreads.com/book/show/7530316" target="_blank" class="book-card"><div class="book-spine hack"></div><div class="book-body"><div class="book-cat">HACKING · PENTESTING</div><div class="book-title">Penetration Testing</div><div class="book-author">Georgia Weidman</div><div class="book-desc">The practical starting point for ethical hacking. Lab-based, step by step. Recon, scanning, exploitation, post-exploitation, reporting. Start here for pentesting fundamentals.</div></div><div class="book-footer"><span class="book-badge must">START HERE</span><span class="book-pri">Goodreads →</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK READ</button></div></a>
+        <a href="https://www.goodreads.com/book/show/1739375" target="_blank" class="book-card"><div class="book-spine hack"></div><div class="book-body"><div class="book-cat">HACKING · WEB SECURITY</div><div class="book-title">The Web Application Hacker's Handbook</div><div class="book-author">Stuttard &amp; Pinto</div><div class="book-desc">The definitive web hacking reference. Every vulnerability with attack methodology and remediation. If PortSwigger is your classroom, this is your textbook.</div></div><div class="book-footer"><span class="book-badge rec">RECOMMENDED</span><span class="book-pri">Goodreads →</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK READ</button></div></a>
+        <a href="https://www.goodreads.com/book/show/28815122" target="_blank" class="book-card"><div class="book-spine hack"></div><div class="book-body"><div class="book-cat">HACKING · RED TEAM</div><div class="book-title">The Hacker Playbook 3</div><div class="book-author">Peter Kim</div><div class="book-desc">Red team tactics: phishing, lateral movement, AD attacks, evasion. The jump from CTF player to actual pentester starts with this book's methodology.</div></div><div class="book-footer"><span class="book-badge rec">MONTH 3+</span><span class="book-pri">Goodreads →</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK READ</button></div></a>
+        <a href="https://www.goodreads.com/book/show/13651" target="_blank" class="book-card"><div class="book-spine hack"></div><div class="book-body"><div class="book-cat">HACKING · LOW-LEVEL</div><div class="book-title">Hacking: The Art of Exploitation</div><div class="book-author">Jon Erickson</div><div class="book-desc">C, shellcode, buffer overflows — deep technical foundation. For Month 3+. Separates hackers who understand from hackers who just run tools.</div></div><div class="book-footer"><span class="book-badge rec">ADVANCED</span><span class="book-pri">Goodreads →</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK READ</button></div></a>
+        <a href="https://www.goodreads.com/book/show/40121378" target="_blank" class="book-card"><div class="book-spine mind"></div><div class="book-body"><div class="book-cat">MINDSET · SYSTEMS</div><div class="book-title">Atomic Habits</div><div class="book-author">James Clear</div><div class="book-desc">1% better every day = 37x better in a year. This entire dashboard is built on this logic. Read the first 50 pages and your daily routine will never be the same again.</div></div><div class="book-footer"><span class="book-badge must">READ WEEK 1</span><span class="book-pri">Goodreads →</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK READ</button></div></a>
+        <a href="https://www.goodreads.com/book/show/25744928" target="_blank" class="book-card"><div class="book-spine mind"></div><div class="book-body"><div class="book-cat">MINDSET · FOCUS</div><div class="book-title">Deep Work</div><div class="book-author">Cal Newport</div><div class="book-desc">The ability to focus without distraction on cognitively demanding tasks. The 3-hour income blocks in your schedule only work if you do actual deep work. This book shows you exactly how.</div></div><div class="book-footer"><span class="book-badge must">REQUIRED</span><span class="book-pri">Goodreads →</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK READ</button></div></a>
+        <a href="https://www.goodreads.com/book/show/58612786" target="_blank" class="book-card"><div class="book-spine mind"></div><div class="book-body"><div class="book-cat">BUSINESS · INCOME</div><div class="book-title">$100M Offers</div><div class="book-author">Alex Hormozi</div><div class="book-desc">Make offers so good people feel stupid saying no. Directly applicable to Fiverr, Upwork, and local client pitching. Makes your gig stand out from every competitor immediately.</div></div><div class="book-footer"><span class="book-badge rec">INCOME FOCUSED</span><span class="book-pri">Goodreads →</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK READ</button></div></a>
+        <a href="https://www.goodreads.com/book/show/368593" target="_blank" class="book-card"><div class="book-spine mind"></div><div class="book-body"><div class="book-cat">FREELANCE · LIFESTYLE</div><div class="book-title">The 4-Hour Workweek</div><div class="book-author">Tim Ferriss</div><div class="book-desc">Remote work, outsourcing, location independence. The philosophy behind every Upwork proposal you'll write. Freelancing as a designed life, not just a survival hustle.</div></div><div class="book-footer"><span class="book-badge rec">FREELANCE BIBLE</span><span class="book-pri">Goodreads →</span><button class="res-done-btn" onclick="toggleResDone(this,event)">MARK READ</button></div></a>
       </div>
     </div>
 
@@ -817,6 +1032,16 @@ body.clk #CUR .dot{transform:translate(-50%,-50%) scale(3);}
   </div>
 
 </div><!-- /app -->
+<div id="pomo-bar">
+  <div id="pomo-progress" style="width:100%"></div>
+  <span id="pomo-mode" style="color:var(--c)">FOCUS</span>
+  <span id="pomo-time">25:00</span>
+  <div style="display:flex;gap:6px;">
+    <button class="stk-btn s" id="pomo-start" style="color:var(--c)" onclick="pomoStartPause()">START</button>
+    <button class="stk-btn s" onclick="pomoReset()">RESET</button>
+  </div>
+  <div id="pomo-dots"></div>
+</div>
 <div id="toast"></div>
 <script>
 'use strict';
@@ -876,10 +1101,38 @@ function initHover(){
 })();
 
 // BOOT TERMINAL — runs on welcome screen before logo appears
-function runBoot(){
+let bootSkipped=false;
+function showWelcomeMain(){
   const term=document.getElementById('boot-term');
+  term.style.transition='opacity .4s';
+  term.style.opacity='0';
+  setTimeout(()=>{
+    term.style.display='none';
+    const wm=document.getElementById('w-main');
+    wm.style.display='flex';
+    wm.style.flexDirection='column';
+    wm.style.alignItems='center';
+    wm.style.justifyContent='center';
+    requestAnimationFrame(()=>wm.classList.add('show'));
+  },400);
+}
+function runBoot(){
+  // Return visit? Skip straight to logo screen
+  if(localStorage.getItem('ld3_visited')==='1'){
+    const wm=document.getElementById('w-main');
+    document.getElementById('boot-term').style.display='none';
+    wm.style.display='flex';
+    wm.style.flexDirection='column';
+    wm.style.alignItems='center';
+    wm.style.justifyContent='center';
+    setTimeout(()=>wm.classList.add('show'),50);
+    return;
+  }
+  const term=document.getElementById('boot-term');
+  const wel=document.getElementById('welcome');
+  wel.classList.add('skip-hint-show');
   const lines=[
-    {t:'INITIALISING LOCKDOWN OS v3.1...',cls:'',d:0},
+    {t:'INITIALISING LOCKDOWN OS v3.2...',cls:'',d:0},
     {t:'> LOADING RESOURCE DATABASE...',cls:'',d:300},
     {t:'  [OK] 82 ENTRIES VERIFIED AND INDEXED',cls:'ok',d:700},
     {t:'> RUNNING FRAUD DETECTION ALGORITHMS...',cls:'warn',d:1100},
@@ -889,28 +1142,27 @@ function runBoot(){
     {t:'> NAIROBI NODE CONNECTED  ✓',cls:'ok',d:2600},
     {t:'> ALL SYSTEMS OPERATIONAL  ▋',cls:'ok',d:3000}
   ];
+  const timers=[];
   lines.forEach(({t,cls,d})=>{
-    setTimeout(()=>{
+    timers.push(setTimeout(()=>{
+      if(bootSkipped)return;
       const el=document.createElement('div');
       el.className='bt-line'+(cls?' '+cls:'');
       el.textContent=t;
       term.appendChild(el);
-    },d);
+    },d));
   });
-  // After boot sequence, fade out terminal, show main welcome
-  setTimeout(()=>{
-    term.style.transition='opacity .6s';
-    term.style.opacity='0';
-    setTimeout(()=>{
-      term.style.display='none';
-      const wm=document.getElementById('w-main');
-      wm.style.display='flex';
-      wm.style.flexDirection='column';
-      wm.style.alignItems='center';
-      wm.style.justifyContent='center';
-      requestAnimationFrame(()=>wm.classList.add('show'));
-    },600);
-  },3600);
+  const finalTimer=setTimeout(showWelcomeMain,3600);
+  timers.push(finalTimer);
+  // Skip on click or key
+  function skipBoot(){
+    if(bootSkipped)return;
+    bootSkipped=true;
+    timers.forEach(clearTimeout);
+    showWelcomeMain();
+  }
+  document.getElementById('welcome').addEventListener('click',skipBoot,{once:true});
+  window.addEventListener('keydown',skipBoot,{once:true});
 }
 
 // Boot starts hidden, terminal runs first
@@ -919,10 +1171,12 @@ window.addEventListener('load',()=>setTimeout(runBoot,300));
 
 // Enter app from welcome screen
 function enterApp(){
+  localStorage.setItem('ld3_visited','1');
   document.getElementById('welcome').classList.add('exit');
   setTimeout(()=>{
     document.getElementById('welcome').style.display='none';
     document.getElementById('app').classList.add('show');
+    document.getElementById('pomo-bar').classList.add('show');
     boot();
   },1000);
 }
@@ -962,13 +1216,13 @@ function updateCal(d){
     }
     lastDay=day;
   }
-  const start=new Date('2025-05-12'),end=new Date('2025-09-01');
+  const {start,p2,p3,end}=getConfigDates();
   const elapsed=Math.max(0,Math.ceil((d-start)/864e5));
   document.getElementById('cal-n').textContent=Math.min(elapsed,Math.ceil((end-start)/864e5));
   const phases=[
-    {e:new Date('2025-06-15'),n:'PHASE 01: FOUNDATION'},
-    {e:new Date('2025-07-31'),n:'PHASE 02: BUILD & EARN'},
-    {e:new Date('2025-09-01'),n:'PHASE 03: SCALE UP'}
+    {e:p2,n:'PHASE 01: FOUNDATION'},
+    {e:p3,n:'PHASE 02: BUILD & EARN'},
+    {e:end,n:'PHASE 03: SCALE UP'}
   ];
   let ph='PHASE 03: SCALE UP';
   for(const p of phases){if(d<p.e){ph=p.n;break;}}
@@ -976,21 +1230,37 @@ function updateCal(d){
 }
 
 // DAYS LEFT counter
+function getConfigDates(){
+  return {
+    start:new Date(localStorage.getItem('ld3_start')||'2025-05-12'),
+    p2:new Date(localStorage.getItem('ld3_p2')||'2025-06-15'),
+    p3:new Date(localStorage.getItem('ld3_p3')||'2025-07-31'),
+    end:new Date(localStorage.getItem('ld3_end')||'2025-09-01')
+  };
+}
 function updateDays(){
-  const v=Math.max(0,Math.ceil((new Date('2025-09-01')-new Date())/864e5));
+  const {end}=getConfigDates();
+  const v=Math.max(0,Math.ceil((end-new Date())/864e5));
   ['s-days','n-days'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=v;});
+  // Update days remaining label
+  const el=document.getElementById('s-days');
+  if(el)el.parentElement.querySelector('.sc-s').textContent='until '+end.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
 }
 
 // PHASE HIGHLIGHT
 function updatePhase(){
   const now=new Date();
+  const {start,p2,p3,end}=getConfigDates();
+  const fmt=d=>d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
   const phases=[
-    {id:'ph1',s:new Date('2025-05-12'),e:new Date('2025-06-15'),n:'01',pn:'FOUNDATION'},
-    {id:'ph2',s:new Date('2025-06-15'),e:new Date('2025-07-31'),n:'02',pn:'BUILD & EARN'},
-    {id:'ph3',s:new Date('2025-07-31'),e:new Date('2025-09-01'),n:'03',pn:'SCALE UP'}
+    {id:'ph1',s:start,e:p2,n:'01',pn:'FOUNDATION',d:fmt(start)+' — '+fmt(p2)},
+    {id:'ph2',s:p2,e:p3,n:'02',pn:'BUILD & EARN',d:fmt(p2)+' — '+fmt(p3)},
+    {id:'ph3',s:p3,e:end,n:'03',pn:'SCALE UP',d:fmt(p3)+' — '+fmt(end)}
   ];
   phases.forEach(p=>{
     const el=document.getElementById(p.id),ti=document.getElementById(p.id+'t');
+    const dd=document.getElementById(p.id+'-d');
+    if(dd)dd.textContent=p.d;
     if(now>=p.s&&now<p.e){
       el.classList.add('now');
       if(ti)ti.textContent='NOW';
@@ -1118,12 +1388,16 @@ function swTab(id,btn){
   document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
   document.getElementById('tab-'+id).classList.add('on');
   btn.classList.add('on');
+  localStorage.setItem('ld3_tab',id);
   updateStats();
   if(id==='resources'){
     initRcGlow();
     initTilt();
     setTimeout(animCounters,100);
+    loadResourceDone();
   }
+  if(id==='incomelog') renderIncomeLog();
+  if(id==='tradelog') renderTradeLog();
 }
 
 // RESOURCE FILTER & SEARCH
@@ -1278,7 +1552,454 @@ function boot(){
   initRcGlow();
   initHover();
   initTilt();
+  initPomodoro();
+  loadConfigDates();
+  // Restore last active tab
+  const savedTab=localStorage.getItem('ld3_tab')||'income';
+  const panel=document.getElementById('tab-'+savedTab);
+  const btn=document.querySelector(`.tab[onclick*="${savedTab}"]`);
+  if(panel&&btn){
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+    panel.classList.add('on');
+    btn.classList.add('on');
+  }
+  if(savedTab==='incomelog') renderIncomeLog();
+  if(savedTab==='tradelog') renderTradeLog();
+  if(savedTab==='resources') loadResourceDone();
+  loadHideDone();
+  initSchedMode();
 }
+
+// ═══════════════════════════════════════════
+// v3.2 NEW FUNCTIONS
+// ═══════════════════════════════════════════
+
+// CONFIG DATES
+function loadConfigDates(){
+  const inputs={'d-start':'ld3_start','d-p2':'ld3_p2','d-p3':'ld3_p3','d-end':'ld3_end'};
+  Object.entries(inputs).forEach(([id,key])=>{
+    const v=localStorage.getItem(key);
+    const el=document.getElementById(id);
+    if(v&&el)el.value=v;
+  });
+}
+function toggleDates(){
+  const d=document.getElementById('dates-drawer');
+  d.classList.toggle('open');
+}
+function saveDates(){
+  const map={'d-start':'ld3_start','d-p2':'ld3_p2','d-p3':'ld3_p3','d-end':'ld3_end'};
+  Object.entries(map).forEach(([id,key])=>{
+    const v=document.getElementById(id)?.value;
+    if(v) localStorage.setItem(key,v);
+  });
+  updateDays();updatePhase();buildStreak();
+  const {start}=getConfigDates();
+  updateCal(new Date(new Date().toLocaleString('en-US',{timeZone:'Africa/Nairobi'})));
+  document.getElementById('dates-drawer').classList.remove('open');
+  showToast('DATES UPDATED');
+}
+
+// INCOME LOG
+function getIncomeEntries(){try{return JSON.parse(localStorage.getItem('ld3_income')||'[]');}catch{return[];}}
+function saveIncomeEntries(a){localStorage.setItem('ld3_income',JSON.stringify(a));}
+function saveILTarget(){
+  const v=document.getElementById('il-target-in')?.value;
+  if(v)localStorage.setItem('ld3_target',v);
+  renderIncomeLog();
+}
+function addIncomeEntry(){
+  const week=document.getElementById('il-week')?.value.trim();
+  const source=document.getElementById('il-source')?.value;
+  const amount=parseInt(document.getElementById('il-amount')?.value||'0');
+  const notes=document.getElementById('il-notes')?.value.trim();
+  if(!week){showToast('INCOME ENTRY MISSING WEEK');return;}
+  if(!amount||amount<=0){showToast('INCOME ENTRY MISSING AMOUNT');return;}
+  const entries=getIncomeEntries();
+  entries.push({id:Date.now(),week,source,amount,notes,date:new Date().toISOString()});
+  saveIncomeEntries(entries);
+  document.getElementById('il-week').value='';
+  document.getElementById('il-amount').value='';
+  document.getElementById('il-notes').value='';
+  renderIncomeLog();
+  showToast('INCOME LOGGED — Ksh '+amount.toLocaleString());
+}
+function deleteIncomeEntry(id){
+  const entries=getIncomeEntries().filter(e=>e.id!==id);
+  saveIncomeEntries(entries);
+  renderIncomeLog();
+}
+function renderIncomeLog(){
+  const entries=getIncomeEntries().slice().reverse();
+  const target=parseInt(localStorage.getItem('ld3_target')||'5000');
+  const tIn=document.getElementById('il-target-in');
+  if(tIn&&!tIn.value)tIn.value=target;
+  // Month total
+  const now=new Date();
+  const monthEntries=entries.filter(e=>{const d=new Date(e.date);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});
+  const monthTotal=monthEntries.reduce((s,e)=>s+e.amount,0);
+  const allTotal=entries.reduce((s,e)=>s+e.amount,0);
+  // Update progress
+  const pct=Math.min(Math.round(monthTotal/target*100),100);
+  const fill=document.getElementById('il-progress-fill');
+  if(fill){
+    fill.style.width=pct+'%';
+    if(pct>=100)fill.style.background='var(--green)';
+    else if(pct>=50)fill.style.background='var(--gold)';
+    else fill.style.background='linear-gradient(90deg,var(--c),var(--green),var(--c))';
+  }
+  const td=document.getElementById('il-target-disp');
+  if(td)td.textContent='Ksh '+target.toLocaleString();
+  const mt=document.getElementById('il-month-total');
+  if(mt)mt.textContent='Ksh '+monthTotal.toLocaleString();
+  // Table
+  const cont=document.getElementById('il-table-container');
+  if(!cont)return;
+  if(!entries.length){
+    cont.innerHTML='<div class="il-empty">// NO ENTRIES YET</div>';
+  } else {
+    const grandTotal=entries.reduce((s,e)=>s+e.amount,0);
+    let rows=entries.map(e=>`<tr>
+      <td>${new Date(e.date).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</td>
+      <td>${e.week}</td>
+      <td>${e.source}</td>
+      <td class="amount">Ksh ${e.amount.toLocaleString()}</td>
+      <td>${e.notes||'—'}</td>
+      <td><button class="il-del" onclick="deleteIncomeEntry(${e.id})">×</button></td>
+    </tr>`).join('');
+    cont.innerHTML=`<div class="il-table-wrap"><table class="il-table">
+      <thead><tr><th>DATE</th><th>WEEK</th><th>SOURCE</th><th>AMOUNT (Ksh)</th><th>NOTES</th><th></th></tr></thead>
+      <tbody>${rows}</tbody>
+      <tfoot><tr class="total-row"><td colspan="3" style="font-family:var(--fm);font-size:10px;letter-spacing:.12em;color:var(--t3);">TOTAL</td><td class="total-row" style="font-family:var(--fd);font-size:16px;color:var(--gold);">Ksh ${grandTotal.toLocaleString()}</td><td colspan="2"></td></tr></tfoot>
+    </table></div>`;
+  }
+  // Stats
+  const statTotal=document.getElementById('il-stat-total');
+  if(statTotal)statTotal.textContent='Ksh '+allTotal.toLocaleString();
+  const statMonth=document.getElementById('il-stat-month');
+  if(statMonth)statMonth.textContent='Ksh '+monthTotal.toLocaleString();
+  const statCount=document.getElementById('il-stat-count');
+  if(statCount)statCount.textContent=entries.length;
+  // Best week
+  const weekTotals={};
+  entries.forEach(e=>{weekTotals[e.week]=(weekTotals[e.week]||0)+e.amount;});
+  const bestWeek=Math.max(0,...Object.values(weekTotals));
+  const statBest=document.getElementById('il-stat-best');
+  if(statBest)statBest.textContent='Ksh '+bestWeek.toLocaleString();
+}
+
+// TRADE LOG
+function getTradeEntries(){try{return JSON.parse(localStorage.getItem('ld3_trades')||'[]');}catch{return[];}}
+function saveTradeEntries(a){localStorage.setItem('ld3_trades',JSON.stringify(a));}
+function calcTLRR(){
+  const entry=parseFloat(document.getElementById('tl-entry')?.value);
+  const sl=parseFloat(document.getElementById('tl-sl')?.value);
+  const tp=parseFloat(document.getElementById('tl-tp')?.value);
+  const disp=document.getElementById('tl-rr-disp');
+  if(!disp)return;
+  if(entry&&sl&&tp&&!isNaN(entry)&&!isNaN(sl)&&!isNaN(tp)){
+    const risk=Math.abs(entry-sl);
+    const reward=Math.abs(tp-entry);
+    if(risk>0){disp.textContent='1 : '+(reward/risk).toFixed(2);}
+    else disp.textContent='—';
+  } else {
+    disp.textContent='—';
+  }
+}
+function addTradeEntry(){
+  const date=document.getElementById('tl-date')?.value;
+  const pair=document.getElementById('tl-pair')?.value;
+  const session=document.getElementById('tl-session')?.value;
+  const result=document.getElementById('tl-result')?.value;
+  if(!date||!pair||!session||!result){showToast('TRADE MISSING REQUIRED FIELDS');return;}
+  const entry=parseFloat(document.getElementById('tl-entry')?.value)||null;
+  const sl=parseFloat(document.getElementById('tl-sl')?.value)||null;
+  const tp=parseFloat(document.getElementById('tl-tp')?.value)||null;
+  let rr=null;
+  if(entry&&sl&&tp){const risk=Math.abs(entry-sl);const reward=Math.abs(tp-entry);if(risk>0)rr=(reward/risk).toFixed(2);}
+  const trades=getTradeEntries();
+  trades.push({
+    id:Date.now(),date,pair,session,
+    d1bias:document.getElementById('tl-d1bias')?.value,
+    setup:document.getElementById('tl-setup')?.value,
+    entry,sl,tp,rr,result,
+    screenshot:document.getElementById('tl-screenshot')?.value,
+    notes:document.getElementById('tl-notes')?.value.trim()
+  });
+  saveTradeEntries(trades);
+  document.getElementById('tl-entry').value='';
+  document.getElementById('tl-sl').value='';
+  document.getElementById('tl-tp').value='';
+  document.getElementById('tl-notes').value='';
+  document.getElementById('tl-rr-disp').textContent='—';
+  renderTradeLog();
+  showToast('TRADE LOGGED · '+pair+' · '+result);
+}
+function deleteTradeEntry(id){
+  const trades=getTradeEntries().filter(t=>t.id!==id);
+  saveTradeEntries(trades);
+  renderTradeLog();
+}
+function renderTradeLog(){
+  const trades=getTradeEntries().slice().reverse();
+  // Stats
+  const wins=trades.filter(t=>t.result==='Win').length;
+  const losses=trades.filter(t=>t.result==='Loss').length;
+  const wr=wins+losses>0?Math.round(wins/(wins+losses)*100)+'%':'—';
+  const rrVals=trades.filter(t=>t.rr).map(t=>parseFloat(t.rr));
+  const avgRR=rrVals.length?( rrVals.reduce((s,v)=>s+v,0)/rrVals.length).toFixed(2):'—';
+  const winRRs=trades.filter(t=>t.result==='Win'&&t.rr).map(t=>parseFloat(t.rr));
+  const lossRRs=trades.filter(t=>t.result==='Loss'&&t.rr).map(t=>parseFloat(t.rr));
+  const pfNum=winRRs.reduce((s,v)=>s+v,0);
+  const pfDen=lossRRs.reduce((s,v)=>s+v,0);
+  const pf=pfDen>0?(pfNum/pfDen).toFixed(2):'—';
+  const setEl=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  setEl('tl-stat-total',trades.length);
+  setEl('tl-stat-wr',wr);
+  setEl('tl-stat-rr',avgRR==='—'?'—':'1:'+avgRR);
+  setEl('tl-stat-pf',pf);
+  // Table
+  const cont=document.getElementById('tl-table-container');
+  if(!cont)return;
+  if(!trades.length){
+    cont.innerHTML='<div class="il-empty">// NO TRADES LOGGED YET</div>';
+    return;
+  }
+  function resClass(r){if(r==='Win')return'win';if(r==='Loss')return'loss';if(r==='Breakeven')return'be';return'miss';}
+  const rows=trades.map(t=>`<tr>
+    <td>${new Date(t.date).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</td>
+    <td style="font-family:var(--fd);font-size:14px;color:var(--c)">${t.pair}</td>
+    <td>${t.session}</td>
+    <td style="font-size:10px;">${t.setup||'—'}</td>
+    <td style="font-family:var(--fd);font-size:14px;color:var(--gold)">${t.rr?'1:'+t.rr:'—'}</td>
+    <td><span class="tl-res ${resClass(t.result)}">${t.result}</span></td>
+    <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.notes||'—'}</td>
+    <td><button class="il-del" onclick="deleteTradeEntry(${t.id})">×</button></td>
+  </tr>`).join('');
+  cont.innerHTML=`<table class="tl-table">
+    <thead><tr><th>DATE</th><th>PAIR</th><th>SESSION</th><th>SETUP</th><th>R:R</th><th>RESULT</th><th>NOTES</th><th></th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+  // Set today default date
+  const dateIn=document.getElementById('tl-date');
+  if(dateIn&&!dateIn.value){
+    const now=new Date(new Date().toLocaleString('en-US',{timeZone:'Africa/Nairobi'}));
+    dateIn.value=now.toISOString().slice(0,10);
+  }
+}
+
+// POMODORO TIMER
+const POMO_STATE={mode:'focus',secs:1500,total:1500,sessions:0,running:false};
+let pomoInterval=null;
+function initPomodoro(){
+  buildPomoDots();
+  updatePomoDisplay();
+}
+function buildPomoDots(){
+  const d=document.getElementById('pomo-dots');
+  if(!d)return;
+  d.innerHTML='';
+  for(let i=0;i<4;i++){
+    const dot=document.createElement('div');
+    dot.className='pomo-dot'+(i<(POMO_STATE.sessions%4)?' done':'');
+    d.appendChild(dot);
+  }
+}
+function updatePomoDisplay(){
+  const m=Math.floor(POMO_STATE.secs/60).toString().padStart(2,'0');
+  const s=(POMO_STATE.secs%60).toString().padStart(2,'0');
+  const te=document.getElementById('pomo-time');
+  const tm=document.getElementById('pomo-mode');
+  const pb=document.getElementById('pomo-progress');
+  const st=document.getElementById('pomo-start');
+  if(te)te.textContent=m+':'+s;
+  if(te){
+    if(POMO_STATE.mode==='focus')te.style.color='var(--c)';
+    else if(POMO_STATE.mode==='break')te.style.color='var(--gold)';
+    else te.style.color='var(--green)';
+  }
+  if(tm){
+    const labels={'focus':'FOCUS','break':'BREAK','longbreak':'LONG BREAK'};
+    const colors={'focus':'var(--c)','break':'var(--gold)','longbreak':'var(--green)'};
+    tm.textContent=labels[POMO_STATE.mode]||'FOCUS';
+    tm.style.color=colors[POMO_STATE.mode]||'var(--c)';
+  }
+  if(pb){const pct=(POMO_STATE.secs/POMO_STATE.total*100);pb.style.width=pct+'%';pb.style.background=POMO_STATE.mode==='focus'?'var(--c)':POMO_STATE.mode==='break'?'var(--gold)':'var(--green)';}
+  if(st)st.textContent=POMO_STATE.running?'PAUSE':'START';
+}
+function playTone(freq){
+  try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    const osc=ctx.createOscillator();
+    const gain=ctx.createGain();
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.frequency.value=freq;
+    gain.gain.setValueAtTime(0.3,ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.15);
+    osc.start();osc.stop(ctx.currentTime+0.15);
+  }catch(e){}
+}
+function pomoTick(){
+  POMO_STATE.secs--;
+  if(POMO_STATE.secs<=0){
+    if(POMO_STATE.mode==='focus'){
+      POMO_STATE.sessions++;
+      playTone(440);
+      buildPomoDots();
+      const isLong=(POMO_STATE.sessions%4===0);
+      if(isLong){POMO_STATE.mode='longbreak';POMO_STATE.secs=900;POMO_STATE.total=900;}
+      else{POMO_STATE.mode='break';POMO_STATE.secs=300;POMO_STATE.total=300;}
+    } else {
+      playTone(POMO_STATE.mode==='break'?528:639);
+      POMO_STATE.mode='focus';POMO_STATE.secs=1500;POMO_STATE.total=1500;
+    }
+    showToast(POMO_STATE.mode==='focus'?'🎯 BREAK OVER — BACK TO WORK':POMO_STATE.mode==='longbreak'?'🔥 4 SESSIONS DONE — LONG BREAK':'⏱ FOCUS SESSION DONE — TAKE A BREAK');
+  }
+  updatePomoDisplay();
+}
+function pomoStartPause(){
+  if(POMO_STATE.running){
+    clearInterval(pomoInterval);pomoInterval=null;POMO_STATE.running=false;
+  } else {
+    POMO_STATE.running=true;
+    pomoInterval=setInterval(pomoTick,1000);
+  }
+  updatePomoDisplay();
+}
+function pomoReset(){
+  clearInterval(pomoInterval);pomoInterval=null;POMO_STATE.running=false;
+  POMO_STATE.mode='focus';POMO_STATE.secs=1500;POMO_STATE.total=1500;
+  updatePomoDisplay();
+}
+
+// RESOURCE DONE STATES
+function getResourceDone(){try{return JSON.parse(localStorage.getItem('ld3_resource_done')||'{}');}catch{return{};}}
+function saveResourceDone(o){localStorage.setItem('ld3_resource_done',JSON.stringify(o));}
+function resKey(btn){
+  const card=btn.closest('a,div.yt-card,div.book-card,div.course-card');
+  if(!card)return null;
+  const href=card.getAttribute('href');
+  if(href&&href!=='#')return href.slice(0,60);
+  const title=card.querySelector('.yt-title,.book-title,.course-name');
+  return title?title.textContent.slice(0,40):null;
+}
+function toggleResDone(btn,e){
+  e.stopPropagation();e.preventDefault();
+  const key=resKey(btn);
+  if(!key)return;
+  const done=getResourceDone();
+  done[key]=!done[key];
+  saveResourceDone(done);
+  applyResDone(btn,done[key]);
+  // Apply hide-done filter
+  const hide=localStorage.getItem('ld3_hide_done')==='1';
+  if(hide&&done[key]){
+    const card=btn.closest('.yt-card,.book-card,.course-card');
+    if(card)card.style.display='none';
+  }
+}
+function applyResDone(btn,isDone){
+  btn.textContent=isDone?(btn.classList.contains('book')?'✓ READ':btn.textContent.includes('WATCHED')?'✓ WATCHED':'✓ COMPLETED'):
+    (btn.textContent.includes('READ')||btn.closest('.book-card')?'MARK READ':btn.closest('.course-card')?'MARK DONE':'MARK WATCHED');
+  btn.classList.toggle('marked',isDone);
+  const card=btn.closest('.yt-card,.book-card,.course-card');
+  if(card)card.classList.toggle('res-done',isDone);
+}
+function loadResourceDone(){
+  const done=getResourceDone();
+  document.querySelectorAll('.res-done-btn').forEach(btn=>{
+    const key=resKey(btn);
+    if(key&&done[key])applyResDone(btn,true);
+  });
+  loadHideDone();
+}
+function loadHideDone(){
+  const hide=localStorage.getItem('ld3_hide_done')==='1';
+  const btn=document.getElementById('hide-done-btn');
+  if(btn)btn.textContent=hide?'SHOW ALL':'SHOW UNWATCHED ONLY';
+  if(btn)btn.classList.toggle('on',hide);
+  const done=getResourceDone();
+  if(hide){
+    document.querySelectorAll('.yt-card,.book-card,.course-card').forEach(card=>{
+      const btn2=card.querySelector('.res-done-btn');
+      if(!btn2)return;
+      const key=resKey(btn2);
+      if(key&&done[key])card.style.display='none';
+    });
+  } else {
+    document.querySelectorAll('.yt-card,.book-card,.course-card').forEach(c=>c.style.display='');
+  }
+}
+function toggleHideDone(){
+  const hide=localStorage.getItem('ld3_hide_done')==='1';
+  localStorage.setItem('ld3_hide_done',hide?'0':'1');
+  loadHideDone();
+}
+
+// WEEKEND SCHEDULE MODE
+function initSchedMode(){
+  const mode=localStorage.getItem('ld3_sched_mode')||'weekday';
+  applySchedMode(mode);
+}
+function setSchedMode(mode,btn){
+  localStorage.setItem('ld3_sched_mode',mode);
+  applySchedMode(mode);
+}
+function applySchedMode(mode){
+  const wk=document.getElementById('sched-weekday');
+  const we=document.getElementById('sched-weekend');
+  const bwk=document.getElementById('sched-btn-wk');
+  const bwe=document.getElementById('sched-btn-we');
+  if(mode==='weekend'){
+    if(wk)wk.style.display='none';
+    if(we)we.classList.add('show');
+    if(bwk)bwk.classList.remove('on');
+    if(bwe)bwe.classList.add('on');
+  } else {
+    if(wk)wk.style.display='';
+    if(we)we.classList.remove('show');
+    if(bwk)bwk.classList.add('on');
+    if(bwe)bwe.classList.remove('on');
+  }
+}
+
+// BACKUP & RESTORE
+function doBackup(){
+  const keys=['ld3_checks','ld3_ci','ld3_bs','ld3_notes','ld3_email','ld3_income','ld3_trades','ld3_resource_done','ld3_tab','ld3_target','ld3_sched_mode','ld3_hide_done','ld3_start','ld3_p2','ld3_p3','ld3_end','ld3_visited'];
+  const data={};
+  keys.forEach(k=>{const v=localStorage.getItem(k);if(v!==null)data[k]=v;});
+  const backup={version:'3.2',exported:new Date().toISOString(),data};
+  const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  const d=new Date();
+  a.download=`lockdown-os-backup-${d.toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('BACKUP DOWNLOADED ✓');
+}
+function doRestore(event){
+  const file=event.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const parsed=JSON.parse(e.target.result);
+      if(!parsed.data||!parsed.version)throw new Error('Invalid');
+      if(confirm('This will overwrite your current data. Continue?')){
+        Object.entries(parsed.data).forEach(([k,v])=>localStorage.setItem(k,v));
+        location.reload();
+      }
+    } catch(err){
+      showToast('INVALID BACKUP FILE');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value='';
+}
+
 </script>
 </body>
 </html>
