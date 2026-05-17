@@ -495,7 +495,26 @@ body.theme-fx *,body.theme-fx *::before,body.theme-fx *::after{
 .th-dot:hover::after{opacity:1;}
 .th-dot:hover{transform:scale(1.3);border-color:rgba(255,255,255,.5);}
 .th-dot.active{transform:scale(1.35);box-shadow:0 0 0 2px rgba(255,255,255,.5),0 0 14px var(--th-glow,rgba(0,229,255,.6));}
-#theme-lbl{font-family:var(--fm);font-size:8px;color:var(--t3);letter-spacing:.2em;text-align:center;}</style>
+#theme-lbl{font-family:var(--fm);font-size:8px;color:var(--t3);letter-spacing:.2em;text-align:center;}
+/* QUOTE WIDGET */
+.qw{background:linear-gradient(135deg,rgba(6,17,30,.95),rgba(3,8,15,.98));border:1px solid var(--b2);border-left:4px solid var(--c);padding:26px 28px 20px;margin:28px 0;position:relative;overflow:hidden;transition:border-left-color .6s ease,transform .25s ease,box-shadow .25s ease;backdrop-filter:blur(10px);}
+.qw::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--cg2),transparent 60%);pointer-events:none;}
+.qw:hover{transform:translateX(5px);box-shadow:0 0 36px rgba(0,229,255,.1);}
+.qw-icon{position:absolute;top:16px;right:20px;font-size:32px;opacity:.18;}
+.qw-text{font-family:var(--fb);font-size:clamp(17px,2.3vw,24px);font-weight:700;color:#fff;line-height:1.42;min-height:68px;letter-spacing:.01em;transition:opacity .45s ease,transform .45s ease;}
+.qw-text.fade{opacity:0;transform:translateY(10px);}
+.qw-author{font-family:var(--fm);font-size:12px;color:var(--c);letter-spacing:.2em;margin-top:14px;transition:opacity .45s ease;font-weight:600;}
+.qw-author.fade{opacity:0;}
+.qw-cat{font-family:var(--fm);font-size:10px;color:var(--t3);letter-spacing:.16em;margin-top:5px;font-weight:600;}
+.qw-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:16px;flex-wrap:wrap;gap:10px;}
+.qw-dots{display:flex;gap:6px;}
+.qw-dot{width:7px;height:7px;border-radius:50%;background:var(--t3);cursor:none;transition:all .3s;}
+.qw-dot.on{background:var(--c);box-shadow:0 0 8px var(--c);}
+.qw-arrows{display:flex;gap:6px;}
+.qw-arr{font-family:var(--fm);font-size:10px;padding:4px 12px;background:transparent;border:1px solid var(--b2);color:var(--t2);cursor:none;transition:all .25s;letter-spacing:.1em;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%);}
+.qw-arr:hover{border-color:var(--c);color:var(--c);}
+.qw-prog{position:absolute;bottom:0;left:0;height:2px;background:var(--c);width:0%;box-shadow:0 0 8px var(--c);}
+</style>
 </head>
 <body>
 <div id="sbar"></div>
@@ -576,7 +595,21 @@ body.theme-fx *,body.theme-fx *::before,body.theme-fx *::after{
     <span class="ti">ORDER BLOCKS <b>→</b></span><span class="ti">FAIR VALUE GAPS <b>→</b></span><span class="ti">LIQUIDITY SWEEPS <b>→</b></span><span class="ti gold">PHOTON TRADING <b>→</b></span><span class="ti">BOS / CHOCH <b>→</b></span><span class="ti">PREMIUM vs DISCOUNT <b>→</b></span><span class="ti gr">TRYHACKME DAILY <b>→</b></span><span class="ti">LONDON OPEN 10AM EAT <b>→</b></span><span class="ti">NY OPEN 3PM EAT <b>→</b></span><span class="ti gold">FIVERR · UPWORK · INCOME <b>→</b></span><span class="ti gr">PORTSWIGGER LABS FREE <b>→</b></span><span class="ti gr">BUG BOUNTIES = REAL USD <b>→</b></span><span class="ti">DARKNET DIARIES PODCAST <b>→</b></span><span class="ti gold">TRADING IN THE ZONE — READ IT <b>→</b></span><span class="ti gr">IHUB NAIROBI EVENTS FREE <b>→</b></span><span class="ti">CS50P FREE PYTHON COURSE <b>→</b></span><span class="ti gold">1:3 R:R MINIMUM NO EXCEPTIONS <b>→</b></span><span class="ti gr">HTB EASY MACHINES = PORTFOLIO <b>→</b></span><span class="ti gold">PAYONEER · M-PESA · USD <b>→</b></span><span class="ti">DISPLACEMENT + FVG = ENTRY <b>→</b></span>
   </div></div>
 
-  <div class="master reveal"><div class="ml">PROGRESS</div><div class="mtrack"><div class="mbg"><div class="mfill" id="mfill" style="width:0%"></div></div></div><div class="mpct" id="mpct">0%</div></div>
+  <!-- QUOTE WIDGET -->
+  <div class="qw" id="qw">
+    <div class="qw-icon" id="qw-icon">💬</div>
+    <div class="qw-text" id="qw-text">Loading...</div>
+    <div class="qw-author" id="qw-author">—</div>
+    <div class="qw-cat" id="qw-cat"></div>
+    <div class="qw-bottom">
+      <div class="qw-dots" id="qw-dots"></div>
+      <div class="qw-arrows">
+        <button class="qw-arr" onclick="qPrev()">← PREV</button>
+        <button class="qw-arr" onclick="qNext()">NEXT →</button>
+      </div>
+    </div>
+    <div class="qw-prog" id="qw-prog"></div>
+  </div><div class="ml">PROGRESS</div><div class="mtrack"><div class="mbg"><div class="mfill" id="mfill" style="width:0%"></div></div></div><div class="mpct" id="mpct">0%</div></div>
   <div class="stats reveal">
     <div class="sc"><div class="sc-l">TASKS COMPLETE</div><div class="sc-v c" id="s-done">0</div><div class="sc-s">of <span id="s-total">0</span></div></div>
     <div class="sc"><div class="sc-l">DAYS REMAINING</div><div class="sc-v gold" id="s-days">—</div><div class="sc-s">until Sep 1</div></div>
@@ -1931,6 +1964,7 @@ function boot(){
   initTilt();
   initPomodoro();
   loadConfigDates();
+  initQuotes();
   // Restore last active tab
   const savedTab=localStorage.getItem('ld3_tab')||'income';
   const panel=document.getElementById('tab-'+savedTab);
@@ -2376,6 +2410,58 @@ function doRestore(event){
   reader.readAsText(file);
   event.target.value='';
 }
+
+// ── QUOTE SYSTEM ──────────────────────────────────────
+const QUOTES=[
+  {t:`"Patience is active waiting — staying sharp, marking levels, ready to execute when the market presents the exact setup."`,a:"Matt Donlevey — Photon Trading",c:"SMC TRADING · PATIENCE",ic:"📈",col:"var(--green)"},
+  {t:`"The market doesn't reward how hard you worked on your analysis. It rewards the quality of your next trade decision."`,a:"Matt Donlevey — Photon Trading",c:"TRADING MINDSET · EXECUTION",ic:"🎯",col:"var(--green)"},
+  {t:`"Hackers are problem solvers. We don't break things out of malice — we see how systems work and find the paths others missed."`,a:"Kevin Mitnick",c:"HACKING ETHOS · CURIOSITY",ic:"🔐",col:"var(--c)"},
+  {t:`"The biggest threat to an organisation isn't hackers. It's insiders who don't understand what they're protecting or why."`,a:"Kevin Mitnick",c:"CYBERSECURITY · AWARENESS",ic:"🛡️",col:"var(--c)"},
+  {t:`"Systems beat willpower. You do not rise to the level of your goals — you fall to the level of your systems."`,a:"James Clear — Atomic Habits",c:"DISCIPLINE · SYSTEMS",ic:"⚙️",col:"var(--gold)"},
+  {t:`"Every action you take is a vote for the type of person you wish to become. Small decisions compound into identity."`,a:"James Clear — Atomic Habits",c:"IDENTITY · HABITS",ic:"🗳️",col:"var(--gold)"},
+  {t:`"Price is what you pay. Value is what you get. Never confuse the two — in markets or in life."`,a:"Warren Buffett",c:"RISK MANAGEMENT · VALUE",ic:"💰",col:"var(--gold)"},
+  {t:`"Risk comes from not knowing what you are doing. Study until you know exactly what you are doing."`,a:"Warren Buffett",c:"RISK MANAGEMENT · EDUCATION",ic:"⚡",col:"var(--gold)"},
+  {t:`"The stock market is a device for transferring money from the impatient to the patient."`,a:"Warren Buffett",c:"TRADING PSYCHOLOGY · PATIENCE",ic:"⏳",col:"var(--gold)"},
+  {t:`"The goal of a trader is not to be right — it is to make money. Those are not the same thing. A wrong trade managed well beats a right trade managed poorly."`,a:"Mark Douglas — Trading in the Zone",c:"TRADING PSYCHOLOGY · MINDSET",ic:"🧠",col:"var(--c)"},
+  {t:`"Successful trading is not about predicting the market. It is about managing your reaction to uncertainty with a consistent, rules-based process."`,a:"Jared Tendler — Mental Game of Trading",c:"TRADING PSYCHOLOGY · TILT",ic:"🎮",col:"var(--c)"},
+  {t:`"Knowledge is the only asset that compounds without losing value. Invest there first."`,a:"Peter Drucker",c:"SELF-INVESTMENT · LEARNING",ic:"📚",col:"var(--gold)"},
+  {t:`"The best time to plant a tree was 20 years ago. The second best time is right now. Stop waiting for the perfect moment."`,a:"Chinese Proverb",c:"ACTION · STARTING NOW",ic:"🌱",col:"var(--green)"},
+  {t:`"Build it once. Practice daily. Master both red and blue team operations. That is the mindset that gets hired."`,a:"Security Community Wisdom",c:"CYBERSECURITY · HOME LAB",ic:"🧪",col:"var(--c)"},
+  {t:`"If you can't explain it simply, you don't understand it well enough. Simplicity is the ultimate sophistication."`,a:"Albert Einstein",c:"MASTERY · CLARITY",ic:"💡",col:"var(--green)"},
+  {t:`"In trading, the one who controls their emotions controls their destiny. The market will test your psychology before your strategy."`,a:"Trading Community Wisdom",c:"TRADING PSYCHOLOGY · CONTROL",ic:"🧘",col:"var(--c)"},
+  {t:`"First, solve the problem. Then write the code. Understanding the vulnerability matters more than knowing the exploit."`,a:"Security Engineering Principle",c:"HACKING · PROBLEM SOLVING",ic:"💻",col:"var(--c)"},
+  {t:`"Hard work beats talent when talent doesn't work hard. But hard work on the right things beats everything else entirely."`,a:"Tim Notke",c:"DISCIPLINE · GRIND",ic:"💪",col:"var(--green)"},
+  {t:`"You will never always be motivated. So you must learn to be disciplined. Motivation is a feeling. Discipline is a decision."`,a:"Unknown",c:"DISCIPLINE · CONSISTENCY",ic:"🔒",col:"var(--gold)"},
+  {t:`"Security is always excessive — until the day it's not enough. Build the habit of thinking like an attacker every single day."`,a:"Cybersecurity Principle",c:"ETHICAL HACKING · MINDSET",ic:"🛡️",col:"var(--red)"},
+  {t:`"Opportunities don't happen. You create them. The freelance client isn't going to find you — you have to find them."`,a:"Chris Grosser",c:"INCOME · FREELANCING",ic:"⚡",col:"var(--green)"},
+  {t:`"The man who moves a mountain begins by carrying away small stones. One TryHackMe room. One demo trade. One proposal."`,a:"Confucius",c:"CONSISTENCY · PROGRESS",ic:"🏔️",col:"var(--gold)"},
+  {t:`"Compounding works in skills the same way it works in money. Small, consistent daily inputs create results that look like magic from the outside."`,a:"LOCKDOWN OS",c:"SKILL BUILDING · CONSISTENCY",ic:"📈",col:"var(--c)"},
+  {t:`"Your lab is your dojo. Every room you solve, every machine you hack, every SMC setup you mark — all of it is training for the real world."`,a:"LOCKDOWN OS",c:"PRACTICE · MASTERY",ic:"🧪",col:"var(--green)"}
+];
+let qIdx=Math.floor(Math.random()*QUOTES.length),qTimer,qPTimer;
+function showQ(i,anim=true){
+  const q=QUOTES[i];
+  const t=document.getElementById('qw-text'),a=document.getElementById('qw-author');
+  if(anim){t.classList.add('fade');a.classList.add('fade');}
+  setTimeout(()=>{
+    t.textContent=q.t;
+    document.getElementById('qw-author').textContent='— '+q.a;
+    document.getElementById('qw-cat').textContent='// '+q.c;
+    document.getElementById('qw-icon').textContent=q.ic;
+    document.getElementById('qw').style.borderLeftColor=q.col;
+    if(anim){t.classList.remove('fade');a.classList.remove('fade');}
+    // dots
+    const dc=document.getElementById('qw-dots');dc.innerHTML='';
+    const show=Math.min(8,QUOTES.length);
+    for(let j=0;j<show;j++){const d=document.createElement('div');d.className='qw-dot'+(j===i%show?' on':'');d.onclick=(()=>{const ii=j;return()=>{qIdx=ii;showQ(ii);resetQT();}})();dc.appendChild(d);}
+    // progress bar
+    const p=document.getElementById('qw-prog');p.style.transition='none';p.style.width='0%';setTimeout(()=>{p.style.transition='width 10s linear';p.style.width='100%';},50);
+  },anim?300:0);
+}
+function resetQT(){clearInterval(qTimer);qTimer=setInterval(()=>{qIdx=(qIdx+1)%QUOTES.length;showQ(qIdx);},10000);}
+function qNext(){qIdx=(qIdx+1)%QUOTES.length;showQ(qIdx);resetQT();}
+function qPrev(){qIdx=(qIdx-1+QUOTES.length)%QUOTES.length;showQ(qIdx);resetQT();}
+function initQuotes(){showQ(qIdx,false);resetQT();}
 
 </script>
 </body>
