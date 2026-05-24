@@ -649,6 +649,7 @@ body.theme-fx *,body.theme-fx *::before,body.theme-fx *::after{
     <button class="tab" onclick="swTab('resources',this)">📚 RESOURCES <span class="tab-cnt">82</span></button>
     <button class="tab" onclick="swTab('reminders',this)">🔔 REMINDERS</button>
     <button class="tab" onclick="swTab('notes',this)">📝 NOTES</button>
+    <button class="tab" onclick="swTab('socialmedia',this)">📱 SOCIAL MEDIA</button>
   </div>
 
   <!-- INCOME TAB -->
@@ -1257,6 +1258,173 @@ body.theme-fx *,body.theme-fx *::before,body.theme-fx *::after{
       <span id="notes-status" style="font-family:var(--fm);font-size:10px;color:var(--t3);letter-spacing:.1em;"></span>
     </div>
   </div>
+
+  <!-- SOCIAL MEDIA TAB -->
+  <div id="tab-socialmedia" class="panel">
+    <div class="sh"><span class="sh-tag c">2026 RESEARCH · 52M POSTS ANALYSED</span><h2>Social Media Intelligence</h2><div class="sh-line"></div></div>
+
+    <!-- sub-tabs -->
+    <div class="tabs" style="margin-bottom:20px;">
+      <button class="tab on" onclick="smShow('algo',this)">⚙ ALGORITHMS</button>
+      <button class="tab" onclick="smShow('niches',this)">📈 HOT NICHES</button>
+      <button class="tab" onclick="smShow('timing',this)">🕐 TIMING</button>
+      <button class="tab" onclick="smShow('hooks',this)">⚡ HOOKS</button>
+      <button class="tab" onclick="smShow('bench',this)">📊 BENCHMARKS</button>
+    </div>
+
+    <!-- ALGORITHMS -->
+    <div id="sm-algo" class="sm-sec">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:16px;">
+
+        <div class="smc-card" style="border-left-color:#dc1414;">
+          <h4 style="color:#dc1414;">▶ YOUTUBE</h4>
+          <p style="margin-bottom:0;">
+            <span style="color:var(--t3);font-family:var(--fm);font-size:9px;letter-spacing:.1em;">TOP SIGNAL ·</span> Watch time + viewer satisfaction<br>
+            <span style="color:var(--t3);font-family:var(--fm);font-size:9px;letter-spacing:.1em;">CTR BENCHMARK ·</span> Strong = 8–12%<br>
+            <span style="color:var(--t3);font-family:var(--fm);font-size:9px;letter-spacing:.1em;">FAST GROWTH ·</span> Shorts + long-form combo<br>
+            <span style="color:var(--t3);font-family:var(--fm);font-size:9px;letter-spacing:.1em;">IDEAL LENGTH ·</span> 15–30 min long-form<br>
+            <span style="color:var(--t3);font-family:var(--fm);font-size:9px;letter-spacing:.1em;">2026 FEATURE ·</span> Hype — boosts early engagement spikes<br>
+            <span style="color:var(--t3);font-family:var(--fm);font-size:9px;letter-spacing:.1em;">ALGO READS ·</span> Voice, captions, visuals (AI-powered)
+          </p>
+        </div>
+
+        <div class="smc-card" style="border-left-color:var(--c);">
+          <h4>♪ TIKTOK</h4>
+          <p style="margin-bottom:0;">
+            <span style="color:var(--t3);font-family:var(--fm);font-size:9px;letter-spacing:.1em;">TOP SIGNAL ·</span> Completion rate — 70% threshold<br>
+            <span style="color:var(--t3);font-family:var(--fm);font-size:9px;letter-spacing:.1em;">2026 CHANGE ·</span> Shows to followers first, then expands<br>
+            <span style="color:var(--t3);font-family:var(--fm);font-size:9px;letter-spacing:.1em;">NEW ACCOUNTS ·</span> Skip follower test — go direct<br>
+            <span style="color:var(--t3);font-family:var(--fm);font-size:9px;letter-spacing:.1em;">SMALL ACCOUNT ·</span> 269% faster growth than large<br>
+            <span style="color:var(--t3);font-family:var(--fm);font-size:9px;letter-spacing:.1em;">SECONDARY ·</span> Shares, saves, repeat views, comments<br>
+            <span style="color:var(--t3);font-family:var(--fm);font-size:9px;letter-spacing:.1em;">VELOCITY ·</span> First 1–2 hours are critical
+          </p>
+        </div>
+
+        <div class="smc-card" style="border-left-color:#c13584;">
+          <h4 style="color:#c13584;">◈ INSTAGRAM</h4>
+          <p style="margin-bottom:0;">
+            <span style="color:var(--t3);font-family:var(--fm);font-size:9px;letter-spacing:.1em;">TOP SIGNAL ·</span> DM shares (Sends per Reach)<br>
+            <span style="color:var(--t3);font-family:var(--fm);font-size:9px;letter-spacing:.1em;">DM WEIGHT ·</span> 3–5× higher than likes<br>
+            <span style="color:var(--t3);font-family:var(--fm);font-size:9px;letter-spacing:.1em;">SAVES WEIGHT ·</span> 3× the weight of likes<br>
+            <span style="color:var(--t3);font-family:var(--fm);font-size:9px;letter-spacing:.1em;">BEST FORMAT ·</span> Reels (reach) + Carousels (saves)<br>
+            <span style="color:var(--t3);font-family:var(--fm);font-size:9px;letter-spacing:.1em;">NOTE ·</span> Separate systems: Feed, Reels, Explore, Stories<br>
+            <span style="color:var(--t3);font-family:var(--fm);font-size:9px;letter-spacing:.1em;">2026 FEATURE ·</span> Trial Reels — test before publishing
+          </p>
+        </div>
+      </div>
+      <div class="rem-box" style="margin-bottom:0;">
+        <h3 style="color:var(--c);font-size:16px;margin-bottom:6px;">// CROSS-PLATFORM PATTERN</h3>
+        <p style="margin-bottom:0;">All three platforms now use <strong>AI to read video content directly</strong> — not just titles and hashtags. Authenticity, retention, and early engagement velocity are rewarded everywhere. Content that gets people <strong>talking, sharing, or re-watching</strong> consistently beats content optimised for views alone.</p>
+      </div>
+    </div>
+
+    <!-- NICHES -->
+    <div id="sm-niches" class="sm-sec" style="display:none;">
+      <div class="stats" style="margin-bottom:16px;">
+        <div class="sc"><div class="sc-l">TIGHT NICHE GROWTH</div><div class="sc-v c">3×</div><div class="sc-s">faster than broad content</div></div>
+        <div class="sc"><div class="sc-l">FINANCE CPM</div><div class="sc-v gold">$12–22</div><div class="sc-s">highest-paying niche</div></div>
+        <div class="sc"><div class="sc-l">RURAL/SCI HUMOUR</div><div class="sc-v g">16×</div><div class="sc-s">growth rate multiplier</div></div>
+        <div class="sc"><div class="sc-l">CREATORS $100K+</div><div class="sc-v" style="color:#c13584">4%</div><div class="sc-s">stack 3+ income streams</div></div>
+      </div>
+      <div class="rem-box" style="padding:18px 22px;">
+        <h3 style="font-size:14px;margin-bottom:12px;color:var(--t2);">TOP TRENDING NICHES 2026</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:13px;font-weight:700;min-width:190px;">Personal finance (Gen Z)</span><div style="flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;"><div style="width:95%;height:4px;background:var(--gold);border-radius:2px;"></div></div><div style="display:flex;gap:4px;"><span class="ctag gold">YT</span><span class="ctag c">TT</span></div></div>
+          <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:13px;font-weight:700;min-width:190px;">AI tools &amp; workflows</span><div style="flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;"><div style="width:90%;height:4px;background:var(--c);border-radius:2px;"></div></div><div style="display:flex;gap:4px;"><span class="ctag c">YT</span><span class="ctag c">TT</span><span class="ctag c">IG</span></div></div>
+          <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:13px;font-weight:700;min-width:190px;">Fitness / wellness (specific)</span><div style="flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;"><div style="width:82%;height:4px;background:#c13584;border-radius:2px;"></div></div><div style="display:flex;gap:4px;"><span class="ctag c">IG</span><span class="ctag c">TT</span></div></div>
+          <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:13px;font-weight:700;min-width:190px;">Sustainability / eco living</span><div style="flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;"><div style="width:78%;height:4px;background:var(--green);border-radius:2px;"></div></div><div style="display:flex;gap:4px;"><span class="ctag c">IG</span><span class="ctag c">TT</span></div></div>
+          <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:13px;font-weight:700;min-width:190px;">Tech reviews &amp; gadgets</span><div style="flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;"><div style="width:75%;height:4px;background:var(--c);border-radius:2px;"></div></div><div style="display:flex;gap:4px;"><span class="ctag c">YT</span><span class="ctag c">TT</span></div></div>
+          <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:13px;font-weight:700;min-width:190px;">Gaming (mobile + VR)</span><div style="flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;"><div style="width:72%;height:4px;background:var(--c);border-radius:2px;"></div></div><div style="display:flex;gap:4px;"><span class="ctag c">YT</span><span class="ctag c">TT</span></div></div>
+          <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:13px;font-weight:700;min-width:190px;">Short-form education</span><div style="flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;"><div style="width:70%;height:4px;background:var(--gold);border-radius:2px;"></div></div><div style="display:flex;gap:4px;"><span class="ctag c">TT</span><span class="ctag c">IG</span></div></div>
+          <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:13px;font-weight:700;min-width:190px;">Food (specific angle)</span><div style="flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;"><div style="width:60%;height:4px;background:#c13584;border-radius:2px;"></div></div><div style="display:flex;gap:4px;"><span class="ctag c">YT</span><span class="ctag c">IG</span></div></div>
+          <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:13px;font-weight:700;min-width:190px;">Fashion / style (preloved)</span><div style="flex:1;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;"><div style="width:58%;height:4px;background:#c13584;border-radius:2px;"></div></div><div style="display:flex;gap:4px;"><span class="ctag c">IG</span><span class="ctag c">TT</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIMING -->
+    <div id="sm-timing" class="sm-sec" style="display:none;">
+      <div class="stats" style="margin-bottom:16px;grid-template-columns:repeat(3,1fr);">
+        <div class="sc"><div class="sc-l">TIKTOK POSTS/WEEK</div><div class="sc-v c">2–5×</div><div class="sc-s">for best reach lift</div></div>
+        <div class="sc"><div class="sc-l">YOUTUBE VIDEOS/WEEK</div><div class="sc-v g">1–2×</div><div class="sc-s">quality over volume</div></div>
+        <div class="sc"><div class="sc-l">INSTAGRAM REELS/WEEK</div><div class="sc-v" style="color:#c13584">3–5×</div><div class="sc-s">optimal for growth</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">
+        <div class="smc-card" style="border-left-color:#dc1414;">
+          <h4 style="color:#dc1414;">▶ YOUTUBE</h4>
+          <p style="margin-bottom:0;font-family:var(--fm);font-size:10px;line-height:2;">
+            BEST DAYS · <strong>Thu – Sat</strong><br>
+            PEAK WINDOW · <strong>2 PM – 9 PM local</strong><br>
+            SHORTS CADENCE · <strong>Up to 3/day</strong><br>
+            LONG-FORM · <strong>1–2/week</strong><br>
+            KEY NOTE · <strong>Upload early — needs processing time</strong>
+          </p>
+        </div>
+        <div class="smc-card" style="border-left-color:var(--c);">
+          <h4>♪ TIKTOK</h4>
+          <p style="margin-bottom:0;font-family:var(--fm);font-size:10px;line-height:2;">
+            BEST DAYS · <strong>Tue–Thu, Sat–Sun</strong><br>
+            PEAK (EST) · <strong>Fri &amp; Sat 8 PM</strong><br>
+            BEST SLOT · <strong>Tue–Thu, 10 AM–1 PM EST</strong><br>
+            PRO TIP · <strong>Post 1–2 hrs before peak</strong><br>
+            KEY NOTE · <strong>First 60 min = 80% of success</strong>
+          </p>
+        </div>
+        <div class="smc-card" style="border-left-color:#c13584;">
+          <h4 style="color:#c13584;">◈ INSTAGRAM</h4>
+          <p style="margin-bottom:0;font-family:var(--fm);font-size:10px;line-height:2;">
+            BEST DAYS · <strong>Wed &amp; Thu</strong><br>
+            PEAK WINDOW · <strong>6 PM – 11 PM local</strong><br>
+            REELS CADENCE · <strong>3–4/week</strong><br>
+            CAROUSELS · <strong>2–3/week</strong><br>
+            KEY NOTE · <strong>Check Insights for your audience</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOOKS -->
+    <div id="sm-hooks" class="sm-sec" style="display:none;">
+      <div class="cl">
+        <div class="ci"><div class="cb" style="border-color:var(--c);background:var(--cg2);color:var(--c);font-family:var(--fd);font-size:14px;display:flex;align-items:center;justify-content:center;">01</div><div class="cc"><div class="ct">Start with the payoff, not the setup.</div><div class="cm">71% of users decide within the first 3 seconds. 63% of high-performing videos hook within that window. Open with your most compelling moment — not an intro.</div></div><span class="ctag c">ALL PLATFORMS</span></div>
+        <div class="ci"><div class="cb" style="border-color:var(--c);background:var(--cg2);color:var(--c);font-family:var(--fd);font-size:14px;display:flex;align-items:center;justify-content:center;">02</div><div class="cc"><div class="ct">Use a strong question or emotional trigger.</div><div class="cm">Hooks that make viewers feel something — curiosity, surprise, relatability — drive the highest completion rates across all 3 platforms.</div></div><span class="ctag c">ALL PLATFORMS</span></div>
+        <div class="ci"><div class="cb" style="border-color:var(--c);background:var(--cg2);color:var(--c);font-family:var(--fd);font-size:14px;display:flex;align-items:center;justify-content:center;">03</div><div class="cc"><div class="ct">Use trending audio wisely on TikTok &amp; Reels.</div><div class="cm">Trending sounds give algorithm boosts — but only when they fit naturally. Forced audio use penalises authenticity scores.</div></div><span class="ctag c">TT · IG</span></div>
+        <div class="ci"><div class="cb" style="border-color:var(--c);background:var(--cg2);color:var(--c);font-family:var(--fd);font-size:14px;display:flex;align-items:center;justify-content:center;">04</div><div class="cc"><div class="ct">On Instagram, captions matter.</div><div class="cm">Write the first line like a magazine headline — strongest sentence first. The algorithm rewards captions that hold attention long enough to earn a save or share.</div></div><span class="ctag c">IG</span></div>
+        <div class="ci"><div class="cb" style="border-color:var(--c);background:var(--cg2);color:var(--c);font-family:var(--fd);font-size:14px;display:flex;align-items:center;justify-content:center;">05</div><div class="cc"><div class="ct">On YouTube, thumbnail + title = everything.</div><div class="cm">Average CTR is 3–5%. Strong channels hit 8–12%. Invest disproportionate effort here — a great video with a weak thumbnail dies on the shelf.</div></div><span class="ctag gold">YT</span></div>
+        <div class="ci"><div class="cb" style="border-color:var(--c);background:var(--cg2);color:var(--c);font-family:var(--fd);font-size:14px;display:flex;align-items:center;justify-content:center;">06</div><div class="cc"><div class="ct">Reply to every comment, especially early.</div><div class="cm">Comment activity in the first hours signals engagement velocity to TikTok and Instagram. Use video replies on TikTok — they create new content pieces.</div></div><span class="ctag c">TT · IG</span></div>
+        <div class="ci"><div class="cb" style="border-color:var(--c);background:var(--cg2);color:var(--c);font-family:var(--fd);font-size:14px;display:flex;align-items:center;justify-content:center;">07</div><div class="cc"><div class="ct">Never delete underperforming videos.</div><div class="cm">Every post is data. TikTok can resurface old content weeks later. Deletion removes a data point that could teach you what to improve.</div></div><span class="ctag c">ALL PLATFORMS</span></div>
+      </div>
+      <div class="rem-box" style="border-left:3px solid var(--red);margin-top:12px;">
+        <h3 style="color:var(--red);font-size:14px;margin-bottom:6px;">⚠ INSTAGRAM ORIGINALITY WARNING · 2026</h3>
+        <p style="margin-bottom:0;">Instagram's 2026 algorithm applies an <strong>Originality Score</strong>. Reposting TikTok videos with watermarks or recycled clips significantly reduces Reels reach. Always add your unique spin or create original content per platform.</p>
+      </div>
+    </div>
+
+    <!-- BENCHMARKS -->
+    <div id="sm-bench" class="sm-sec" style="display:none;">
+      <div class="stats" style="margin-bottom:16px;">
+        <div class="sc"><div class="sc-l">YT SHORTS ENG. RATE</div><div class="sc-v g">5.91%</div><div class="sc-s">highest of any short-form format</div></div>
+        <div class="sc"><div class="sc-l">TIKTOK AVG ENG.</div><div class="sc-v c">3.70%</div><div class="sc-s">creator accounts</div></div>
+        <div class="sc"><div class="sc-l">IG REELS (UNDER 5K)</div><div class="sc-v" style="color:#c13584">3.79%</div><div class="sc-s">avg engagement rate</div></div>
+        <div class="sc"><div class="sc-l">TIKTOK COMPLETION GATE</div><div class="sc-v gold">70%</div><div class="sc-s">needed for wide distribution</div></div>
+      </div>
+      <div class="rem-box" style="margin-bottom:12px;">
+        <h3 style="font-size:14px;color:var(--t2);margin-bottom:12px;">GROWTH TIMELINES — REALISTIC</h3>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div><div style="display:flex;justify-content:space-between;font-family:var(--fm);font-size:9px;color:var(--t3);margin-bottom:3px;"><span>TikTok — 1K followers</span><span>4–8 weeks</span></div><div style="height:5px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;"><div style="width:75%;height:5px;background:var(--c);border-radius:2px;"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-family:var(--fm);font-size:9px;color:var(--t3);margin-bottom:3px;"><span>TikTok — 10K followers</span><span>3–6 months</span></div><div style="height:5px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;"><div style="width:55%;height:5px;background:var(--c);border-radius:2px;"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-family:var(--fm);font-size:9px;color:var(--t3);margin-bottom:3px;"><span>TikTok — 100K followers</span><span>6–18 months (viral needed)</span></div><div style="height:5px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;"><div style="width:35%;height:5px;background:var(--c);border-radius:2px;"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-family:var(--fm);font-size:9px;color:var(--t3);margin-bottom:3px;"><span>YouTube — first 100 subs</span><span>30–60 days</span></div><div style="height:5px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;"><div style="width:70%;height:5px;background:#dc1414;border-radius:2px;"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;font-family:var(--fm);font-size:9px;color:var(--t3);margin-bottom:3px;"><span>Instagram — meaningful reach under 5K</span><span>60–90 days consistent Reels</span></div><div style="height:5px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;"><div style="width:62%;height:5px;background:#c13584;border-radius:2px;"></div></div></div>
+        </div>
+      </div>
+      <div class="rem-box" style="border-left:3px solid var(--green);margin-bottom:0;">
+        <h3 style="color:var(--green);font-size:14px;margin-bottom:8px;">// KEY INSIGHT — SMALL ACCOUNTS WIN</h3>
+        <p style="margin-bottom:0;">Smaller accounts consistently outperform larger ones in engagement rate on every platform. Most accounts need <strong>20–30 videos</strong> before finding what works. YouTube has <strong>compounding upside</strong> — a video posted today can generate views for 5+ years. TikTok and Reels have viral ceilings but much faster early exposure. <span style="color:var(--t3);font-family:var(--fm);font-size:9px;"> · Sources: Buffer 52M posts · Socialinsider · TrueFuture Media · 2026</span></p>
+      </div>
+    </div>
+
+  </div><!-- /tab-socialmedia -->
 
 </div><!-- /app -->
 <div id="pomo-bar">
@@ -2462,6 +2630,14 @@ function resetQT(){clearInterval(qTimer);qTimer=setInterval(()=>{qIdx=(qIdx+1)%Q
 function qNext(){qIdx=(qIdx+1)%QUOTES.length;showQ(qIdx);resetQT();}
 function qPrev(){qIdx=(qIdx-1+QUOTES.length)%QUOTES.length;showQ(qIdx);resetQT();}
 function initQuotes(){showQ(qIdx,false);resetQT();}
+
+// ── SOCIAL MEDIA SUB-TABS ──────────────────────────────
+function smShow(id, btn){
+  document.querySelectorAll('.sm-sec').forEach(s=>s.style.display='none');
+  document.querySelectorAll('#tab-socialmedia .tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('sm-'+id).style.display='block';
+  btn.classList.add('on');
+}
 
 </script>
 </body>
